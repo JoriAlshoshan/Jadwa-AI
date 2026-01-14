@@ -112,7 +112,7 @@ Cloud deployment ensures reliability, real-world applicability, and future scala
 ## Team Members
 
 **Jori Alshoshan**  
-📧 jori.alshoshan@gmail.com  
+jori.alshoshan@gmail.com  
 
 **Rahaf Alharbi**  
 
@@ -120,4 +120,4 @@ Cloud deployment ensures reliability, real-world applicability, and future scala
 
 ---
 
-© 2026 Jadwa AI – Graduation Project
+© 2026 Jadwa AI 
