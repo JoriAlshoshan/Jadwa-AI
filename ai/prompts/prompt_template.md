@@ -20,7 +20,7 @@ Project Data:
 type_project: {type_project}
 region_project: {region_project}
 budget_project (SAR): {budget_project}
-duration_project (days): {duration_project}
+project_duration_days (days): {project_duration_days}
 num_saudi_employees: {num_saudi_employees}
 num_enterprises: {num_enterprises}
 economic_indicator: {economic_indicator}

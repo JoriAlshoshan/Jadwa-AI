@@ -1,4 +1,5 @@
 from ai.services.feasibility import predict_project
+from ai.services.recommendations import build_prompt
 
 project = {
     "type_project": "Service",
@@ -10,5 +11,9 @@ project = {
     "economic_indicator": 2   
 }
 
-result = predict_project(project)
-print(result)
+ml_result = predict_project(project)
+print("ML Result:", ml_result)
+
+prompt = build_prompt(project, ml_result)
+print("\n--- Prompt Ready ---\n")
+print(prompt)
