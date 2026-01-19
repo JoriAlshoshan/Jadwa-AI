@@ -1,5 +1,4 @@
-from ai.services.feasibility import predict_project
-from ai.services.recommendations import build_prompt
+from ai.services.analyzer import analyze_project
 
 project = {
     "type_project": "Service",
@@ -8,12 +7,12 @@ project = {
     "project_duration_days": 180,
     "num_saudi_employees": 8,
     "num_enterprises": 85,
-    "economic_indicator": 2   
+    "economic_indicator": 2
 }
 
-ml_result = predict_project(project)
-print("ML Result:", ml_result)
+result = analyze_project(project)
 
-prompt = build_prompt(project, ml_result)
-print("\n--- Prompt Ready ---\n")
-print(prompt)
+with open("jadwa_output.txt", "w", encoding="utf-8") as f:
+    f.write(result["recommendations"])
+
+print("Analysis complete and saved.")
