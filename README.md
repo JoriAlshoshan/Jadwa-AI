@@ -115,9 +115,9 @@ Cloud deployment ensures reliability, real-world applicability, and future scala
 jori.alshoshan@gmail.com  
 
 **Rahaf Alharbi**  
-r22581919@gmail.com
+ r22581919@gmail.com
 **Sura Alkuzaim**  
-sura.abdullah2003@gmail.com
+ sura.abdullah2003@gmail.com
 ---
 
 © 2026 Jadwa AI 
