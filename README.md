@@ -114,8 +114,8 @@ Cloud deployment ensures reliability, real-world applicability, and future scala
 **Jori Alshoshan**  
 jori.alshoshan@gmail.com  
 
-**Rahaf Alharbi** 
-r22581919@gmail.com
+**Rahaf Alharbi**  
+ r22581919@gmail.com
   
 **Sura Alkuzaim**   
 sura.abdullah2003@gmail.com
