@@ -14,13 +14,16 @@ FEATURES_PATH = os.path.join(AI_DIR, "models", "feature_columns.pkl")
 model = joblib.load(MODEL_PATH)
 feature_columns = joblib.load(FEATURES_PATH)
 
+
 def dynamic_threshold(budget):
-    if budget < 500000:
-        return 0.5
-    elif budget < 5000000:
-        return 0.6
+    if budget < 100000:
+        return 0.90   # Micro-scale (high risk)
+    elif budget < 500000:
+        return 0.85   # Small-scale (still risky)
     else:
-        return 0.7
+        return 0.60   # Medium & Large-scale
+
+
 
 def predict_project(project_dict):
     # Convert input to DataFrame
@@ -33,7 +36,7 @@ def predict_project(project_dict):
 
     # Reorder columns
     x = x[feature_columns]
-
+    x = x.fillna(0)
     # Predict probability
     probability = float(model.predict_proba(x)[0][1])
 
