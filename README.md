@@ -43,10 +43,8 @@ The platform aims to reduce uncertainty, support informed decision-making, and p
   - Small projects → balanced threshold (0.85)
   - Medium & large projects → lower threshold (0.60)
 - Decision Rule:
-  
-If feasibility probability ≥ threshold → **Feasible**
-
-Otherwise → **Not Feasible**
+  - If feasibility probability ≥ threshold → **Feasible**
+  - Otherwise → **Not Feasible**
 
 
 ### 5. AI-Based Recommendations (Generative AI)
