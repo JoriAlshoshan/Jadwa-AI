@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.shortcuts import render
 
-def home(request):
-    return HttpResponse("Jadwa AI is running")
+def landing(request):
+    return render(request, "pages/landing.html")

@@ -1,0 +1,162 @@
+body{
+  margin:0;
+  font-family:"Montserrat",Arial,sans-serif;
+  background:#fff;
+  color:#111;
+}
+
+.container{
+  width:min(1100px,92%);
+  margin:0 auto;
+}
+
+/* ================= NAVBAR ================= */
+.nav{
+  border-bottom:1px solid #eee;
+  padding:14px 0;
+  position:sticky;
+  top:0;
+  background:#fff;
+  z-index:100;
+}
+
+/* تقسيم الناف بار: يسار | وسط | يمين */
+.nav-inner{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+}
+
+/* يسار */
+.nav-left{
+  justify-self:start;
+}
+
+/* الوسط */
+.nav-center{
+  justify-self:center;
+}
+
+/* يمين */
+.nav-right{
+  justify-self:end;
+}
+
+.brand-logo{
+  height:80px;   /* غيري الرقم لو تبينه أكبر */
+  width:auto;
+}
+
+
+.brand-title-img{
+  height:50px;     /* هذا اللي يكبرها */
+  width:auto;
+  display:block;
+}
+
+
+.links a{
+  margin:0 8px;
+  text-decoration:none;
+  color:#111;
+  opacity:.8;
+  font-weight:500;
+}
+
+.links a:hover{
+  opacity:1;
+}
+
+/* ================= HERO ================= */
+.hero{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  background-image:url("../img/hero-bg.png");
+  background-repeat:no-repeat;
+  background-position:left center;
+  background-size:contain;
+}
+
+.hero .container{
+  margin-left:auto;
+  margin-right:80px;
+  max-width:520px;
+}
+
+.hero p{
+  max-width:520px;
+  font-size:18px;
+  line-height:1.8;
+  color:#1e40ff;
+}
+
+/* ================= BUTTONS ================= */
+.hero-actions{
+  margin-top:24px;
+  display:flex;
+  gap:14px;
+}
+
+.btn{
+  background:#1e40ff;
+  color:#fff;
+  padding:14px 22px;
+  border-radius:14px;
+  text-decoration:none;
+  display:inline-block;
+  font-weight:500;
+}
+
+.btn-outline{
+  background:transparent;
+  color:#1e40ff;
+  border:1px solid #1e40ff;
+}
+
+/* ================= SECTIONS ================= */
+.section{
+  padding:60px 0;
+  border-top:1px solid #f2f2f2;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.card{
+  border:1px solid #eee;
+  border-radius:18px;
+  padding:24px;
+  background:#fff;
+}
+
+/* ================= FOOTER ================= */
+.footer{
+  border-top:1px solid #eee;
+  padding:24px 0;
+  margin-top:60px;
+  opacity:.6;
+  font-size:14px;
+  text-align:right;   /* ← هذا المهم */
+}
+
+.hero-tagline{
+  display:block;
+  font-size:14px;
+  letter-spacing:2px;
+  color:#6b7280;
+  margin-bottom:12px;
+  text-transform:uppercase;
+}
+.footer-inner{
+  display:flex;
+  justify-content:flex-end;
+}
+
+.copyright{
+  text-align:right;
+}
+

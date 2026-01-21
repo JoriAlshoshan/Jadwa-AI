@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- NAVBAR -->
+<nav class="nav">
+  <div class="container nav-inner">
+
+    <!-- LEFT : LOGO -->
+    <div class="nav-left">
+      <img src="{% static 'img/jadwa-logo.png' %}" class="brand-logo" alt="Jadwa Logo">
+    </div>
+
+    <!-- CENTER : TITLE IMAGE -->
+    <div class="nav-center">
+      <img src="{% static 'img/hero-title.png' %}" class="brand-title-img" alt="Jadwa AI">
+    </div>
+
+    <!-- RIGHT : LINKS -->
+    <div class="nav-right links">
+      <a href="#">Product</a>
+      <a href="#">How it Works</a>
+      <a href="#">Contact</a>
+    </div>
+
+  </div>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="hero">
+  <div class="container hero-content">
+
+    <!-- OPTIONAL TAGLINE (جاهزة لو تبين تفعلينها لاحقًا) -->
+    <!--
+    <span class="hero-tagline">AI-Powered Feasibility Platform</span>
+    -->
+
+    <h1>
+      Business Feasibility<br>
+      Powered by AI
+    </h1>
+
+    <p>
+      Jadwa AI helps entrepreneurs evaluate business ideas using artificial intelligence.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#" class="btn">Get Started</a>
+      <a href="#" class="btn btn-outline">Learn More</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <p class="copyright">
+      © 2026 Jadwa AI. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+{% endblock %}
