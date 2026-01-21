@@ -39,12 +39,13 @@ The platform aims to reduce uncertainty, support informed decision-making, and p
 
 ### 4. Decision Logic (Dynamic Threshold)
 - Applies adaptive decision thresholds based on project budget:
- - Micro projects → strict threshold (0.90)
- - Small projects → balanced threshold (0.85)
- - Medium & large projects → lower threshold (0.60)
+  - Micro projects → strict threshold (0.90)
+  - Small projects → balanced threshold (0.85)
+  - Medium & large projects → lower threshold (0.60)
 - Decision Rule:
   
 If feasibility probability ≥ threshold → **Feasible**
+
 Otherwise → **Not Feasible**
 
 
