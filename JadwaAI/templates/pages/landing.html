@@ -3,45 +3,29 @@
 
 {% block content %}
 
-<!-- NAVBAR -->
 <nav class="nav">
   <div class="container nav-inner">
-
-    <!-- LEFT : LOGO -->
     <div class="nav-left">
       <img src="{% static 'img/jadwa-logo.png' %}" class="brand-logo" alt="Jadwa Logo">
     </div>
 
-    <!-- CENTER : TITLE IMAGE -->
-    <div class="nav-center">
-      <img src="{% static 'img/hero-title.png' %}" class="brand-title-img" alt="Jadwa AI">
-    </div>
-
-    <!-- RIGHT : LINKS -->
     <div class="nav-right links">
       <a href="#">Product</a>
       <a href="#">How it Works</a>
       <a href="#">Contact</a>
     </div>
-
   </div>
 </nav>
 
-<!-- HERO SECTION -->
 <section class="hero">
+  <div class="hero-center-logo">
+    <img src="{% static 'img/hero-title.png' %}" class="hero-title-img" alt="Jadwa AI">
+  </div>
+
   <div class="container hero-content">
+    <h1 class="hero-title">Business Feasibility Powered by AI</h1>
 
-    <!-- OPTIONAL TAGLINE (جاهزة لو تبين تفعلينها لاحقًا) -->
-    <!--
-    <span class="hero-tagline">AI-Powered Feasibility Platform</span>
-    -->
-
-    <h1>
-      Business Feasibility<br>
-      Powered by AI
-    </h1>
-
-    <p>
+    <p class="hero-subtitle">
       Jadwa AI helps entrepreneurs evaluate business ideas using artificial intelligence.
     </p>
 
@@ -49,11 +33,61 @@
       <a href="#" class="btn">Get Started</a>
       <a href="#" class="btn btn-outline">Learn More</a>
     </div>
+  </div>
+</section>
+
+<section class="section success-stories">
+  <div class="container">
+
+    <h2 class="section-title">Saudi Success Stories</h2>
+
+    <p class="section-desc">
+      Real Saudi businesses that started with an idea and succeeded through smart feasibility decisions.
+    </p>
+
+    <div class="stories-wrapper">
+
+      <div class="story-card">
+        <img src="{% static 'img/tamara.jpg' %}" alt="Tamara">
+        <div class="story-content">
+          <h3>Tamara</h3>
+          <p>
+            A Saudi fintech startup that validated customer demand early and scaled responsibly
+            by managing financial and market risks.
+          </p>
+          <span class="story-tag">FinTech · Scalable</span>
+        </div>
+      </div>
+
+      <div class="story-card">
+        <img src="{% static 'img/jahez.jpg' %}" alt="Jahez">
+        <div class="story-content">
+          <h3>Jahez</h3>
+          <p>
+            A local food delivery platform that focused on operational feasibility and
+            expanded step by step across Saudi cities.
+          </p>
+          <span class="story-tag">Logistics · High Demand</span>
+        </div>
+      </div>
+
+      <div class="story-card">
+        <img src="{% static 'img/stcpay.jpg' %}" alt="STC Pay">
+        <div class="story-content">
+          <h3>STC Pay</h3>
+          <p>
+            A digital payments solution that succeeded by addressing real user needs
+            while ensuring regulatory and technical readiness.
+          </p>
+          <span class="story-tag">Digital Payments · Trusted</span>
+        </div>
+      </div>
+
+    </div>
 
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer class="footer">
   <div class="container footer-inner">
     <p class="copyright">
@@ -61,5 +95,22 @@
     </p>
   </div>
 </footer>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const cards = document.querySelectorAll(".story-card");
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("is-visible");
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    cards.forEach((card) => io.observe(card));
+  });
+</script>
 
 {% endblock %}
