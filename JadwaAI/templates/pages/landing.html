@@ -6,23 +6,28 @@
 <nav class="nav">
   <div class="container nav-inner">
     <div class="nav-left">
-      <img src="{% static 'img/jadwa-logo.png' %}" class="brand-logo" alt="Jadwa Logo">
+      <a href="#home" class="brand">
+        <img src="{% static 'img/jadwa-logo.png' %}" class="brand-logo" alt="Jadwa Logo">
+      </a>
     </div>
 
     <div class="nav-right links">
-      <a href="#">Product</a>
-      <a href="#">How it Works</a>
-      <a href="#">Contact</a>
+      <a href="#product">Product</a>
+      <a href="#how">How it Works</a>
+      <a href="#stories">Success Stories</a>
+      <a href="#contact">Contact</a>
     </div>
   </div>
 </nav>
 
-<section class="hero">
+<section class="hero" id="home">
   <div class="hero-center-logo">
     <img src="{% static 'img/hero-title.png' %}" class="hero-title-img" alt="Jadwa AI">
   </div>
 
   <div class="container hero-content">
+    <!-- <h1 class="hero-title">Turn Business Ideas into Data-Driven Decisions</h1> -->
+<div class="container hero-content">
     <h1 class="hero-title">Business Feasibility Powered by AI</h1>
 
     <p class="hero-subtitle">
@@ -30,33 +35,155 @@
     </p>
 
     <div class="hero-actions">
-      <a href="#" class="btn">Get Started</a>
-      <a href="#" class="btn btn-outline">Learn More</a>
+      <a href="#" class="btn">Start Feasibility Analysis</a>
+      <a href="#how" class="btn btn-outline">See How It Works</a>
+    </div>
+
+    <!-- <div class="hero-metrics" aria-label="Key highlights">
+      <div class="metric">
+        <div class="metric-top">
+          <span class="dot"></span>
+          <span class="metric-title">Saudi-ready</span>
+        </div>
+        <div class="metric-sub">Designed for regional context</div>
+      </div> -->
+<!-- 
+      <div class="metric">
+        <div class="metric-top">
+          <span class="dot"></span>
+          <span class="metric-title">Explainable</span>
+        </div>
+        <div class="metric-sub">Clear insights & recommendations</div>
+      </div> -->
+
+      <!-- <div class="metric">
+        <div class="metric-top">
+          <span class="dot"></span>
+          <span class="metric-title">Shareable</span>
+        </div>
+        <div class="metric-sub">Professional PDF export</div>
+      </div> -->
     </div>
   </div>
 </section>
 
-<section class="section success-stories">
+<section class="product" id="product">
   <div class="container">
+    <div class="section-head">
+      <span class="badge">Product</span>
+      <h2 class="section-title">What You Get with Jadwa AI</h2>
+      <p class="section-desc">A professional feasibility experience designed for Saudi entrepreneurs.</p>
+    </div>
 
-    <h2 class="section-title">Saudi Success Stories</h2>
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="icon">AI</div>
+        <h3>Feasibility Decision</h3>
+        <p>Get a clear feasibility status with a confidence score based on your inputs.</p>
+      </div>
 
-    <p class="section-desc">
-      Real Saudi businesses that started with an idea and succeeded through smart feasibility decisions.
-    </p>
+      <div class="product-card">
+        <div class="icon">ML</div>
+        <h3>ML Scoring Engine</h3>
+        <p>Random Forest evaluates key signals like budget, region, duration, and indicators.</p>
+      </div>
 
-    <div class="stories-wrapper">
+      <div class="product-card">
+        <div class="icon">REC</div>
+        <h3>Actionable Recommendations</h3>
+        <p>Practical steps to reduce risk, refine the plan, and improve success chances.</p>
+      </div>
 
+      <div class="product-card">
+        <div class="icon">PDF</div>
+        <h3>Exportable Report</h3>
+        <p>Download a clean report ready to share with partners and stakeholders.</p>
+      </div>
+
+      <div class="product-card">
+        <div class="icon">DB</div>
+        <h3>Saved Analyses</h3>
+        <p>Track projects, revisit results, and compare feasibility outcomes over time.</p>
+      </div>
+
+      <div class="product-card">
+        <div class="icon">KSA</div>
+        <h3>Saudi Context</h3>
+        <p>Built with Saudi market needs and decision-making flow in mind.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="container">
+    <div class="section-head">
+      <span class="badge">How it works</span>
+      <h2 class="section-title">How Jadwa AI Works</h2>
+      <p class="section-desc">A clear, guided flow that turns your idea into a feasibility decision.</p>
+    </div>
+
+    <div class="how-steps">
+      <article class="how-step">
+        <div class="how-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M8 3h8a2 2 0 0 1 2 2v14l-6-3-6 3V5a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="how-meta">
+          <div class="how-kicker">Step 01</div>
+          <h3 class="how-step-title">Enter Project Details</h3>
+          <p class="how-step-desc">Provide budget, region, duration, and project type in a structured form.</p>
+        </div>
+      </article>
+
+      <article class="how-step">
+        <div class="how-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 19V5M4 19H20M7 16l3-4 3 2 4-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M17.5 8.5H20V6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="how-meta">
+          <div class="how-kicker">Step 02</div>
+          <h3 class="how-step-title">Run AI Feasibility</h3>
+          <p class="how-step-desc">We compute a feasibility score using ML + Saudi market indicators.</p>
+        </div>
+      </article>
+
+      <article class="how-step">
+        <div class="how-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M8 8h8M8 12h8M8 16h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="how-meta">
+          <div class="how-kicker">Step 03</div>
+          <h3 class="how-step-title">Get Insights & Report</h3>
+          <p class="how-step-desc">Receive recommendations and export a clean PDF report for sharing.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="stories" id="stories">
+  <div class="container">
+    <div class="section-head">
+      <span class="badge">Success stories</span>
+      <h2 class="section-title">Saudi Success Stories</h2>
+      <p class="section-desc">Examples of strong execution backed by smart feasibility decisions.</p>
+    </div>
+
+    <div class="stories-grid">
       <div class="story-card">
         <div class="story-logo">
           <img src="{% static 'img/tamara.jpg' %}" alt="Tamara">
         </div>
         <div class="story-content">
           <h3>Tamara</h3>
-          <p>
-            A Saudi fintech startup that validated customer demand early and scaled responsibly
-            by managing financial and market risks.
-          </p>
+          <p>A Saudi fintech startup that validated demand early and scaled responsibly.</p>
           <span class="story-tag">FinTech · Scalable</span>
         </div>
       </div>
@@ -67,10 +194,7 @@
         </div>
         <div class="story-content">
           <h3>Jahez</h3>
-          <p>
-            A local food delivery platform that focused on operational feasibility and
-            expanded step by step across Saudi cities.
-          </p>
+          <p>A local delivery platform that focused on operational feasibility and expanded step by step.</p>
           <span class="story-tag">Logistics · High Demand</span>
         </div>
       </div>
@@ -81,31 +205,100 @@
         </div>
         <div class="story-content">
           <h3>STC Pay</h3>
-          <p>
-            A digital payments solution that succeeded by addressing real user needs
-            while ensuring regulatory and technical readiness.
-          </p>
+          <p>A digital payments solution that grew by addressing user needs with strong readiness.</p>
           <span class="story-tag">Digital Payments · Trusted</span>
         </div>
       </div>
-
     </div>
 
+    <div class="stories-cta">
+      <a class="text-link" href="#">View more success stories <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="contact-wrap">
+      <div class="contact-left">
+        <span class="badge">Contact</span>
+        <h2 class="contact-title">Talk to the Team</h2>
+        <p class="contact-sub">
+          Have a question, partnership idea, or want a demo? Send us a message.
+        </p>
+
+        <div class="contact-cards">
+          <div class="contact-card">
+            <div class="contact-label">Email</div>
+            <div class="contact-value">info@jadwa.ai</div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-label">Location</div>
+            <div class="contact-value">Saudi Arabia</div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-label">Response</div>
+            <div class="contact-value">Within 24–48 hours</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-right">
+        <form class="contact-form" method="post" action="#">
+          {% csrf_token %}
+          <div class="form-row">
+            <label class="form-label" for="name">Full name</label>
+            <input class="form-input" id="name" name="name" type="text" placeholder="Your name" required>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-input" id="email" name="email" type="email" placeholder="you@email.com" required>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label" for="topic">Topic</label>
+            <select class="form-input" id="topic" name="topic" required>
+              <option value="" selected disabled>Select a topic</option>
+              <option value="demo">Request a demo</option>
+              <option value="support">Support</option>
+              <option value="partnership">Partnership</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label" for="message">Message</label>
+            <textarea class="form-input form-textarea" id="message" name="message" placeholder="Write your message..." required></textarea>
+          </div>
+
+          <button class="btn btn-full" type="submit">Send Message</button>
+          <div class="form-note">By sending, you agree to be contacted back regarding your request.</div>
+        </form>
+      </div>
+    </div>
   </div>
 </section>
 
 <footer class="footer">
   <div class="container footer-inner">
-    <p class="copyright">
-      © 2026 Jadwa AI. All rights reserved.
-    </p>
+    <p>© 2026 Jadwa AI. All rights reserved.</p>
   </div>
 </footer>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    const cards = document.querySelectorAll(".story-card");
+    document.querySelectorAll('a[href^="#"]').forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const targetId = link.getAttribute("href");
+        const target = document.querySelector(targetId);
+        if (!target) return;
+        e.preventDefault();
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
 
+    const cards = document.querySelectorAll(".story-card");
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         if (e.isIntersecting) {
@@ -113,7 +306,7 @@
           io.unobserve(e.target);
         }
       });
-    }, { threshold: 0.2 });
+    }, { threshold: 0.18 });
 
     cards.forEach((card) => io.observe(card));
   });
