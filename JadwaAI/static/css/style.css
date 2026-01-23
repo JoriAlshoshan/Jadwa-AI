@@ -32,7 +32,7 @@ body{
 }
 
 .brand-logo{
-  height:72px;
+  height:88px;
 }
 
 .links a{
@@ -71,7 +71,8 @@ body{
   position:absolute;
   top:45%;
   left:50%;
-  transform:translate(-50%, -260%) scale(0.96);
+  transform:translate(-50%, -200%) scale(0.96);
+
   z-index:1;
   pointer-events:none;
   opacity:0;
@@ -84,7 +85,7 @@ body{
   display:block;
 }
 
-.hero h1{
+.hero-title{
   font-size:46px;
   font-weight:600;
   line-height:1.25;
@@ -97,7 +98,7 @@ body{
   animation-delay:0.1s;
 }
 
-.hero p{
+.hero-subtitle{
   font-size:18px;
   line-height:1.8;
   color:#0a2fbf;
@@ -150,7 +151,9 @@ body{
 @keyframes logoIntro{
   to{
     opacity:1;
-    transform:translate(-50%, -240%) scale(1);
+    /* transform:translate(-50%, -240%) scale(1); */
+    transform:translate(-50%, -130%) scale(1);
+
   }
 }
 
@@ -218,12 +221,21 @@ body{
   box-shadow:0 28px 60px rgba(0,0,0,0.08);
 }
 
-.story-card img{
-  width:100%;
-  height:160px;
-  object-fit:contain;
-  padding:24px 32px;
+.story-logo{
+  height:200px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:28px 36px;
   background:#ffffff;
+}
+
+.story-logo img{
+  max-height:90px;
+  max-width:280px;
+  width:auto;
+  height:auto;
+  object-fit:contain;
   display:block;
 }
 
@@ -268,7 +280,7 @@ body{
 }
 
 @media (max-width:900px){
-  .hero h1{
+  .hero-title{
     white-space:normal;
     font-size:40px;
   }
@@ -279,18 +291,26 @@ body{
 
 @media (max-width:520px){
   .brand-logo{
-    height:60px;
+    height:100px;
   }
   .hero-title-img{
     height:120px;
   }
-  .hero h1{
+  .hero-title{
     font-size:34px;
   }
-  .hero p{
+  .hero-subtitle{
     font-size:16px;
   }
   .btn{
     padding:12px 18px;
+  }
+  .story-logo{
+    height:180px;
+    padding:22px 24px;
+  }
+  .story-logo img{
+    max-height:76px;
+    max-width:240px;
   }
 }
