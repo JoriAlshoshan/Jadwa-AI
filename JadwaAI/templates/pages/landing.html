@@ -3,19 +3,45 @@
 
 {% block content %}
 
+{% with lang=request.GET.lang|default:"en" %}
+<div class="page {% if lang == 'ar' %}lang-ar{% else %}lang-en{% endif %}">
+
 <nav class="nav">
   <div class="container nav-inner">
+
     <div class="nav-left">
-      <a href="#home" class="brand">
-        <img src="{% static 'img/jadwa-logo.png' %}" class="brand-logo" alt="Jadwa Logo">
+      <a href="#home" class="brand" aria-label="Jadwa AI Home">
+        <img src="{% static 'img/jadwa-logo.png' %}" class="brand-logo" alt="Jadwa AI">
       </a>
     </div>
 
-    <div class="nav-right links">
-      <a href="#product">Product</a>
-      <a href="#how">How it Works</a>
-      <a href="#stories">Success Stories</a>
-      <a href="#contact">Contact</a>
+    <div class="nav-right">
+      <div class="links">
+        <a href="#product">Product</a>
+        <a href="#how">How it Works</a>
+        <a href="#stories">Success Stories</a>
+        <a href="#contact">Contact</a>
+      </div>
+
+      <div class="nav-actions" role="navigation" aria-label="Language and account">
+        <a
+          class="nav-lang"
+          href="?lang={% if lang == 'ar' %}en{% else %}ar{% endif %}#home"
+          aria-label="Change language"
+        >
+          {% if lang == 'ar' %}English{% else %}عربي{% endif %}
+        </a>
+
+        <span class="nav-divider" aria-hidden="true"></span>
+
+        <a href="#" class="nav-icon" aria-label="Account">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+        </a>
+      </div>
+
     </div>
   </div>
 </nav>
@@ -26,10 +52,7 @@
   </div>
 
   <div class="container hero-content">
-    <!-- <h1 class="hero-title">Turn Business Ideas into Data-Driven Decisions</h1> -->
-<div class="container hero-content">
     <h1 class="hero-title">Business Feasibility Powered by AI</h1>
-
     <p class="hero-subtitle">
       Jadwa AI helps entrepreneurs evaluate business ideas using artificial intelligence.
     </p>
@@ -37,32 +60,6 @@
     <div class="hero-actions">
       <a href="#" class="btn">Start Feasibility Analysis</a>
       <a href="#how" class="btn btn-outline">See How It Works</a>
-    </div>
-
-    <!-- <div class="hero-metrics" aria-label="Key highlights">
-      <div class="metric">
-        <div class="metric-top">
-          <span class="dot"></span>
-          <span class="metric-title">Saudi-ready</span>
-        </div>
-        <div class="metric-sub">Designed for regional context</div>
-      </div> -->
-<!-- 
-      <div class="metric">
-        <div class="metric-top">
-          <span class="dot"></span>
-          <span class="metric-title">Explainable</span>
-        </div>
-        <div class="metric-sub">Clear insights & recommendations</div>
-      </div> -->
-
-      <!-- <div class="metric">
-        <div class="metric-top">
-          <span class="dot"></span>
-          <span class="metric-title">Shareable</span>
-        </div>
-        <div class="metric-sub">Professional PDF export</div>
-      </div> -->
     </div>
   </div>
 </section>
@@ -223,9 +220,7 @@
       <div class="contact-left">
         <span class="badge">Contact</span>
         <h2 class="contact-title">Talk to the Team</h2>
-        <p class="contact-sub">
-          Have a question, partnership idea, or want a demo? Send us a message.
-        </p>
+        <p class="contact-sub">Have a question, partnership idea, or want a demo? Send us a message.</p>
 
         <div class="contact-cards">
           <div class="contact-card">
@@ -280,9 +275,45 @@
   </div>
 </section>
 
-<footer class="footer">
-  <div class="container footer-inner">
-    <p>© 2026 Jadwa AI. All rights reserved.</p>
+<footer class="footer-pro">
+  <div class="container footer-pro-inner">
+    <div class="footer-col">
+      <div class="footer-brand">
+        <img src="{% static 'img/jadwa-logo.png' %}" alt="Jadwa AI">
+      </div>
+      <p class="footer-desc">Jadwa AI helps entrepreneurs evaluate business ideas using AI-powered feasibility insights.</p>
+    </div>
+
+    <div class="footer-col">
+      <div class="footer-title">Explore</div>
+      <a href="#product">Product</a>
+      <a href="#how">How it Works</a>
+      <a href="#stories">Success Stories</a>
+      <a href="#contact">Contact</a>
+    </div>
+
+    <div class="footer-col">
+      <div class="footer-title">Account</div>
+      <a href="/login/">Login</a>
+      <a href="/signup/">Sign Up</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </div>
+
+    <div class="footer-col">
+      <div class="footer-title">Contact</div>
+      <div class="footer-meta">info@jadwa.ai</div>
+      <div class="footer-meta">Saudi Arabia</div>
+      <a class="footer-btn" href="#contact">Send a message →</a>
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    <span>© 2026 Jadwa AI. All rights reserved.</span>
+    <span class="footer-mini-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </span>
   </div>
 </footer>
 
@@ -311,5 +342,8 @@
     cards.forEach((card) => io.observe(card));
   });
 </script>
+
+</div>
+{% endwith %}
 
 {% endblock %}
