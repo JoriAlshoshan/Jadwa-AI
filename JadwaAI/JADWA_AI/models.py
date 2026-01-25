@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Project(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     project_name = models.CharField(max_length=200)
@@ -22,3 +23,21 @@ class AnalysisResult(models.Model):
 
     def __str__(self):
         return f"Result for {self.project.project_name}"
+
+
+class ContactMessage(models.Model):
+    TOPIC_CHOICES = [
+        ("demo", "Request a demo"),
+        ("support", "Support"),
+        ("partnership", "Partnership"),
+        ("other", "Other"),
+    ]
+
+    full_name = models.CharField(max_length=120)
+    email = models.EmailField()
+    topic = models.CharField(max_length=30, choices=TOPIC_CHOICES)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.full_name} - {self.topic}"
