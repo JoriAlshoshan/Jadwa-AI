@@ -61,7 +61,6 @@
 
 
 <section class="hero" id="home">
-  <!-- ✅ مهم: نخلي طبقة الشعار ما تغطي الـ navbar -->
   <div class="hero-center-logo hero-overlay">
     <img src="{% static 'img/hero-title.png' %}" class="hero-title-img" alt="Jadwa AI">
   </div>
@@ -306,13 +305,18 @@
 
 <footer class="footer-pro">
   <div class="container footer-pro-inner">
+
+    <!-- Column 1 -->
     <div class="footer-col">
       <div class="footer-brand">
         <img src="{% static 'img/jadwa-logo.png' %}" alt="Jadwa AI">
       </div>
-      <p class="footer-desc">Jadwa AI helps entrepreneurs evaluate business ideas using AI-powered feasibility insights.</p>
+      <p class="footer-desc">
+        Jadwa AI helps entrepreneurs evaluate business ideas using AI-powered feasibility insights.
+      </p>
     </div>
 
+    <!-- Column 2 -->
     <div class="footer-col">
       <div class="footer-title">Explore</div>
       <a href="#product">Product</a>
@@ -321,6 +325,7 @@
       <a href="#contact">Contact</a>
     </div>
 
+    <!-- Column 3 -->
     <div class="footer-col">
       <div class="footer-title">Account</div>
 
@@ -331,25 +336,26 @@
         <a href="{% url 'register' %}">Create Account</a>
       {% endif %}
 
-      <a href="#">Privacy</a>
-      <a href="#">Terms</a>
+      <!-- ✅ هنا الروابط الصح -->
+      <a href="{% url 'privacy' %}">Privacy</a>
+      <a href="{% url 'terms' %}">Terms</a>
     </div>
 
+    <!-- Column 4 -->
     <div class="footer-col">
       <div class="footer-title">Contact</div>
       <a href="mailto:info@jadwa.ai" class="footer-meta footer-link">info@jadwa.ai</a>
       <div class="footer-meta">Saudi Arabia</div>
     </div>
+
   </div>
 
+  <!-- Bottom -->
   <div class="container footer-bottom">
     <span>© 2026 Jadwa AI. All rights reserved.</span>
-    <span class="footer-mini-links">
-      <a href="#">Privacy</a>
-      <a href="#">Terms</a>
-    </span>
   </div>
 </footer>
+
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {

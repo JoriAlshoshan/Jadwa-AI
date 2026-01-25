@@ -9,7 +9,7 @@ from .models import ContactMessage
 
 
 # =======================
-# Public pages
+# Public pages (No Login)
 # =======================
 
 def landing(request):
@@ -18,6 +18,14 @@ def landing(request):
 
 def success_stories(request):
     return render(request, "pages/success_stories.html")
+
+
+def privacy(request):
+    return render(request, "pages/privacy.html")
+
+
+def terms(request):
+    return render(request, "pages/terms.html")
 
 
 # =======================
@@ -34,13 +42,13 @@ def project_new(request):
     """
     /projects/new/
     (مؤقت الآن) صفحة إضافة مشروع
-    لاحقاً نحولها فورم + حفظ DB
+    لاحقاً: فورم + حفظ DB + تشغيل تحليل
     """
     return render(request, "pages/project_new.html")
 
 
 # =======================
-# Register (اختياري إذا بتستخدمين signup مخصص)
+# Register
 # =======================
 
 def register(request):
@@ -77,6 +85,7 @@ def contact_submit(request):
         messages.error(request, "Please fill in all required fields correctly.")
         return redirect("/#contact")
 
+    # Save message
     ContactMessage.objects.create(
         full_name=name,
         email=email,
@@ -84,13 +93,22 @@ def contact_submit(request):
         message=message,
     )
 
+    # Email notification
     send_mail(
         subject=f"[Jadwa AI] New Contact: {topic}",
-        message=f"Name: {name}\nEmail: {email}\nTopic: {topic}\n\nMessage:\n{message}",
+        message=(
+            f"Name: {name}\n"
+            f"Email: {email}\n"
+            f"Topic: {topic}\n\n"
+            f"Message:\n{message}"
+        ),
         from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=[settings.CONTACT_NOTIFY_EMAIL],
         fail_silently=False,
     )
 
-    messages.success(request, "Message sent successfully. We will get back to you shortly.")
+    messages.success(
+        request,
+        "Message sent successfully. We will get back to you shortly."
+    )
     return redirect("/#contact")

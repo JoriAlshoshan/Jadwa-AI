@@ -723,3 +723,62 @@ select.form-input{
   color:#0a2fbf;
   text-decoration:underline;
 }
+/* ===============================
+   Legal Pages (Privacy & Terms)
+================================ */
+
+.legal-page{
+  padding: 90px 0;
+  background: #fafafa;
+}
+
+.legal-container{
+  max-width: 900px;
+}
+
+.legal-title{
+  font-size: 38px;
+  font-weight: 700;
+  margin: 14px 0 10px;
+  letter-spacing: -0.3px;
+}
+
+.legal-subtitle{
+  font-size: 16px;
+  color: #555;
+  max-width: 600px;
+  margin-bottom: 40px;
+}
+
+.legal-card{
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 40px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+}
+
+.legal-card h3{
+  font-size: 20px;
+  margin-top: 28px;
+  margin-bottom: 8px;
+}
+
+.legal-card h3:first-child{
+  margin-top: 0;
+}
+
+.legal-card p{
+  font-size: 15px;
+  line-height: 1.8;
+  color: #444;
+}
+
+.legal-card a{
+  color: #1e40ff;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.legal-card a:hover{
+  text-decoration: underline;
+}
