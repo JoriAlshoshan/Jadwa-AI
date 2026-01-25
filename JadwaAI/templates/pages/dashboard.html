@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="padding:60px 0;">
+
+  <h1>Dashboard</h1>
+  <p>Welcome, {{ user.username }} </p>
+
+  <!-- Logout button (POST) -->
+  <form action="{% url 'logout' %}" method="post" style="margin-top:30px;">
+    {% csrf_token %}
+    <button type="submit" class="btn">Logout</button>
+  </form>
+
+</div>
+{% endblock %}

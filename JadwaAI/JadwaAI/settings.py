@@ -71,7 +71,26 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
+#  Static
+STATIC_URL = "/static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+#  Auth redirects 
+LOGIN_URL = "/accounts/login/"
+LOGIN_REDIRECT_URL = "/dashboard/"
+LOGOUT_REDIRECT_URL = "/"
+
+# Email seettings
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = "jori.alshoshan@gmail.com"
+EMAIL_HOST_PASSWORD = "glpmnziikosocrwd"
+
+DEFAULT_FROM_EMAIL = "Jadwa AI <info@jadwa.ai>"
+CONTACT_NOTIFY_EMAIL = "jori.alshoshan@gmail.com"
