@@ -1,46 +1,34 @@
 {% extends "base.html" %}
-{% load static %}
+{% load i18n %}
 
 {% block content %}
 <section class="legal-page">
   <div class="container legal-container">
 
-    <span class="badge">Legal</span>
-    <h1 class="legal-title">Terms & Conditions</h1>
+    <span class="badge">{% trans "Legal" %}</span>
+    <h1 class="legal-title">{% trans "Terms & Conditions" %}</h1>
+
     <p class="legal-subtitle">
-      By using Jadwa AI, you agree to the following terms and conditions.
+      {% trans "By using Jadwa AI, you agree to the following terms and conditions." %}
     </p>
 
     <div class="legal-card">
-      <h3>1. Use of the Platform</h3>
-      <p>
-        Jadwa AI provides feasibility insights for informational purposes only.
-        Final business decisions remain the responsibility of the user.
-      </p>
 
-      <h3>2. User Responsibilities</h3>
-      <p>
-        You agree to provide accurate information and use the platform in a lawful
-        and ethical manner.
-      </p>
+      <h3>{% trans "1. Use of the Platform" %}</h3>
+      <p>{% trans "Jadwa AI provides feasibility insights for informational purposes only. Final business decisions remain the responsibility of the user." %}</p>
 
-      <h3>3. Intellectual Property</h3>
-      <p>
-        All content, branding, and system logic belong to Jadwa AI and may not be
-        reused without permission.
-      </p>
+      <h3>{% trans "2. User Responsibilities" %}</h3>
+      <p>{% trans "You agree to provide accurate information and use the platform in a lawful and ethical manner." %}</p>
 
-      <h3>4. Limitation of Liability</h3>
-      <p>
-        Jadwa AI is not liable for losses resulting from decisions made based on
-        the feasibility analysis.
-      </p>
+      <h3>{% trans "3. Intellectual Property" %}</h3>
+      <p>{% trans "All content, branding, and system logic belong to Jadwa AI and may not be reused without permission." %}</p>
 
-      <h3>5. Updates</h3>
-      <p>
-        These terms may be updated periodically. Continued use of the platform
-        implies acceptance of the latest version.
-      </p>
+      <h3>{% trans "4. Limitation of Liability" %}</h3>
+      <p>{% trans "Jadwa AI is not liable for losses resulting from decisions made based on the feasibility analysis." %}</p>
+
+      <h3>{% trans "5. Updates" %}</h3>
+      <p>{% trans "These terms may be updated periodically. Continued use of the platform implies acceptance of the latest version." %}</p>
+
     </div>
 
   </div>

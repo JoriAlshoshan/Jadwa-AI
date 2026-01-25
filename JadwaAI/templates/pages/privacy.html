@@ -1,45 +1,33 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
 <section class="legal-page">
   <div class="container legal-container">
 
-    <span class="badge">Legal</span>
-    <h1 class="legal-title">Privacy Policy</h1>
+    <span class="badge">{% trans "Legal" %}</span>
+    <h1 class="legal-title">{% trans "Privacy Policy" %}</h1>
     <p class="legal-subtitle">
-      Your privacy matters to us. This page explains how Jadwa AI collects, uses,
-      and protects your information.
+      {% trans "Your privacy matters to us. This page explains how Jadwa AI collects, uses, and protects your information." %}
     </p>
 
     <div class="legal-card">
-      <h3>1. Information We Collect</h3>
-      <p>
-        We may collect personal information such as your name, email address,
-        and project-related data when you use Jadwa AI.
-      </p>
+      <h3>{% trans "1. Information We Collect" %}</h3>
+      <p>{% trans "We may collect personal information such as your name, email address, and project-related data when you use Jadwa AI." %}</p>
 
-      <h3>2. How We Use Your Information</h3>
-      <p>
-        Your data is used solely to provide feasibility analysis, improve system
-        accuracy, and communicate important updates.
-      </p>
+      <h3>{% trans "2. How We Use Your Information" %}</h3>
+      <p>{% trans "Your data is used solely to provide feasibility analysis, improve system accuracy, and communicate important updates." %}</p>
 
-      <h3>3. Data Protection</h3>
-      <p>
-        We apply technical and organizational measures to keep your data secure
-        and prevent unauthorized access.
-      </p>
+      <h3>{% trans "3. Data Protection" %}</h3>
+      <p>{% trans "We apply technical and organizational measures to keep your data secure and prevent unauthorized access." %}</p>
 
-      <h3>4. Third-Party Services</h3>
-      <p>
-        Jadwa AI may rely on trusted third-party services (e.g., email providers)
-        strictly to operate the platform.
-      </p>
+      <h3>{% trans "4. Third-Party Services" %}</h3>
+      <p>{% trans "Jadwa AI may rely on trusted third-party services (e.g., email providers) strictly to operate the platform." %}</p>
 
-      <h3>5. Contact</h3>
+      <h3>{% trans "5. Contact" %}</h3>
       <p>
-        If you have any questions regarding privacy, please contact us at
+        {% trans "If you have any questions regarding privacy, please contact us at" %}
         <a href="mailto:info@jadwa.ai">info@jadwa.ai</a>.
       </p>
     </div>

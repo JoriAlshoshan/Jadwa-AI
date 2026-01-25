@@ -1,0 +1,480 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-25 19:50+0300\n"
+"PO-Revision-Date: 2026-01-25 19:40+0300\n"
+"Last-Translator: Jadwa AI Team\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+
+#: .\JadwaAI\settings.py:74
+msgid "English"
+msgstr "English"
+
+#: .\JadwaAI\settings.py:75
+msgid "Arabic"
+msgstr "العربية"
+
+
+#: .\templates\pages\dashboard.html:7 .\templates\pages\landing.html:343
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+#: .\templates\pages\dashboard.html:8
+msgid "Welcome,"
+msgstr "مرحبًا،"
+
+#: .\templates\pages\dashboard.html:12
+msgid "Logout"
+msgstr "تسجيل الخروج"
+
+
+#: .\templates\pages\landing.html:20 .\templates\pages\landing.html:98
+#: .\templates\pages\landing.html:332
+msgid "Product"
+msgstr "المنتج"
+
+#: .\templates\pages\landing.html:21 .\templates\pages\landing.html:333
+msgid "How it Works"
+msgstr "كيف يعمل"
+
+#: .\templates\pages\landing.html:22 .\templates\pages\landing.html:334
+msgid "Success Stories"
+msgstr "قصص النجاح"
+
+#: .\templates\pages\landing.html:23 .\templates\pages\landing.html:252
+#: .\templates\pages\landing.html:335 .\templates\pages\landing.html:356
+msgid "Contact"
+msgstr "تواصل معنا"
+
+
+#: .\templates\pages\landing.html:79
+msgid "Business Feasibility Powered by AI"
+msgstr "دراسة جدوى مدعومة بالذكاء الاصطناعي"
+
+#: .\templates\pages\landing.html:80 .\templates\pages\landing.html:325
+msgid "Jadwa AI helps entrepreneurs evaluate business ideas using AI-powered feasibility insights."
+msgstr "يساعدك Jadwa AI على تقييم أفكارك التجارية باستخدام تحليلات جدوى مدعومة بالذكاء الاصطناعي."
+
+#: .\templates\pages\landing.html:85 .\templates\pages\landing.html:88
+msgid "Start Feasibility Analysis"
+msgstr "ابدأ تحليل الجدوى"
+
+
+#: .\templates\pages\landing.html:99
+msgid "What You Get with Jadwa AI"
+msgstr "ماذا ستحصل مع Jadwa AI"
+
+#: .\templates\pages\landing.html:100
+msgid "A professional feasibility experience designed for Saudi entrepreneurs."
+msgstr "تجربة دراسة جدوى احترافية مصممة لرواد الأعمال في السعودية."
+
+
+#: .\templates\pages\landing.html:106
+msgid "Feasibility Decision"
+msgstr "قرار الجدوى"
+
+#: .\templates\pages\landing.html:107
+msgid "Get a clear feasibility status with a confidence score based on your inputs."
+msgstr "احصل على حالة جدوى واضحة مع نسبة ثقة مبنية على بياناتك."
+
+#: .\templates\pages\landing.html:112
+msgid "ML Scoring Engine"
+msgstr "محرك التقييم الذكي"
+
+#: .\templates\pages\landing.html:113
+msgid "Random Forest evaluates key signals like budget, region, duration, and indicators."
+msgstr "يقيم نموذج Random Forest مؤشرات رئيسية مثل الميزانية والمنطقة والمدة والمؤشرات الاقتصادية."
+
+
+#: .\templates\pages\landing.html:118
+msgid "Actionable Recommendations"
+msgstr "توصيات قابلة للتنفيذ"
+
+#: .\templates\pages\landing.html:119
+msgid "Practical steps to reduce risk, refine the plan, and improve success chances."
+msgstr "خطوات عملية لتقليل المخاطر وتحسين الخطة وزيادة فرص النجاح."
+
+
+#: .\templates\pages\landing.html:124
+msgid "Exportable Report"
+msgstr "تقرير قابل للتصدير"
+
+#: .\templates\pages\landing.html:125
+msgid "Download a clean report ready to share with partners and stakeholders."
+msgstr "حمّل تقريرًا احترافيًا جاهزًا للمشاركة مع الشركاء وأصحاب المصلحة."
+
+
+#: .\templates\pages\landing.html:130
+msgid "Saved Analyses"
+msgstr "تحليلات محفوظة"
+
+#: .\templates\pages\landing.html:131
+msgid "Track projects, revisit results, and compare feasibility outcomes over time."
+msgstr "تابع مشاريعك وراجع النتائج وقارن مخرجات الجدوى عبر الوقت."
+
+
+#: .\templates\pages\landing.html:136
+msgid "Saudi Context"
+msgstr "سياق السوق السعودي"
+
+#: .\templates\pages\landing.html:137
+msgid "Built with Saudi market needs and decision-making flow in mind."
+msgstr "مصمم مع مراعاة احتياجات السوق السعودي وآلية اتخاذ القرار."
+
+
+#: .\templates\pages\landing.html:147
+msgid "How it works"
+msgstr "كيف يعمل"
+
+#: .\templates\pages\landing.html:148
+msgid "How Jadwa AI Works"
+msgstr "كيف يعمل Jadwa AI"
+
+#: .\templates\pages\landing.html:149
+msgid "A clear, guided flow that turns your idea into a feasibility decision."
+msgstr "رحلة واضحة وموجّهة تحول فكرتك إلى قرار جدوى."
+
+
+#: .\templates\pages\landing.html:160
+msgid "Step 01"
+msgstr "الخطوة 01"
+
+#: .\templates\pages\landing.html:161
+msgid "Enter Project Details"
+msgstr "إدخال تفاصيل المشروع"
+
+#: .\templates\pages\landing.html:162
+msgid "Provide budget, region, duration, and project type in a structured form."
+msgstr "أدخل الميزانية والمنطقة والمدة ونوع المشروع في نموذج منظم."
+
+
+#: .\templates\pages\landing.html:174
+msgid "Step 02"
+msgstr "الخطوة 02"
+
+#: .\templates\pages\landing.html:175
+msgid "Run AI Feasibility"
+msgstr "تشغيل تحليل الجدوى"
+
+#: .\templates\pages\landing.html:176
+msgid "We compute a feasibility score using ML + Saudi market indicators."
+msgstr "نحسب درجة الجدوى باستخدام التعلم الآلي ومؤشرات السوق السعودي."
+
+
+#: .\templates\pages\landing.html:188
+msgid "Step 03"
+msgstr "الخطوة 03"
+
+#: .\templates\pages\landing.html:189
+msgid "Get Insights & Report"
+msgstr "استلام التحليلات والتقرير"
+
+#: .\templates\pages\landing.html:190
+msgid "Receive recommendations and export a clean PDF report for sharing."
+msgstr "احصل على التوصيات وصدّر تقرير PDF احترافي للمشاركة."
+
+
+#: .\templates\pages\landing.html:201
+msgid "Success stories"
+msgstr "قصص النجاح"
+
+#: .\templates\pages\landing.html:202
+msgid "Saudi Success Stories"
+msgstr "قصص نجاح سعودية"
+
+#: .\templates\pages\landing.html:203
+msgid "Examples of strong execution backed by smart feasibility decisions."
+msgstr "نماذج لتنفيذ قوي مدعوم بقرارات جدوى ذكية."
+
+
+#: .\templates\pages\landing.html:213
+msgid "A Saudi fintech startup that validated demand early and scaled responsibly."
+msgstr "شركة تقنية مالية سعودية تحققت من الطلب مبكرًا وتوسعت بشكل مدروس."
+
+#: .\templates\pages\landing.html:214
+msgid "FinTech · Scalable"
+msgstr "تقنية مالية · قابل للتوسع"
+
+#: .\templates\pages\landing.html:224
+msgid "A local delivery platform that focused on operational feasibility and expanded step by step."
+msgstr "منصة توصيل محلية ركزت على الجدوى التشغيلية وتوسعت خطوة بخطوة."
+
+#: .\templates\pages\landing.html:225
+msgid "Logistics · High Demand"
+msgstr "لوجستيات · طلب مرتفع"
+
+#: .\templates\pages\landing.html:235
+msgid "A digital payments solution that grew by addressing user needs with strong readiness."
+msgstr "حل مدفوعات رقمية نما عبر تلبية احتياجات المستخدمين بجاهزية عالية."
+
+#: .\templates\pages\landing.html:236
+msgid "Digital Payments · Trusted"
+msgstr "مدفوعات رقمية · موثوق"
+
+
+#: .\templates\pages\landing.html:242
+msgid "View more success stories →"
+msgstr "عرض المزيد من قصص النجاح →"
+
+
+#: .\templates\pages\landing.html:253
+msgid "Talk to the Team"
+msgstr "تواصل مع الفريق"
+
+#: .\templates\pages\landing.html:254
+msgid "Have a question, partnership idea, or want a demo? Send us a message."
+msgstr "هل لديك سؤال أو فكرة شراكة أو ترغب بعرض توضيحي؟ أرسل لنا رسالة."
+
+
+#: .\templates\pages\landing.html:259 .\templates\pages\landing.html:358
+msgid "Saudi Arabia"
+msgstr "المملكة العربية السعودية"
+
+#: .\templates\pages\landing.html:261
+msgid "Reply within 24–48h"
+msgstr "الرد خلال 24–48 ساعة"
+
+
+#: .\templates\pages\landing.html:278
+msgid "Full name"
+msgstr "الاسم الكامل"
+
+#: .\templates\pages\landing.html:279
+msgid "Your name"
+msgstr "اسمك"
+
+#: .\templates\pages\landing.html:280
+msgid "Full name is required."
+msgstr "الاسم الكامل مطلوب."
+
+
+#: .\templates\pages\landing.html:284
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+#: .\templates\pages\landing.html:285
+msgid "you@email.com"
+msgstr "you@email.com"
+
+#: .\templates\pages\landing.html:286
+msgid "Please enter a valid email address."
+msgstr "يرجى إدخال بريد إلكتروني صحيح."
+
+
+#: .\templates\pages\landing.html:290
+msgid "Topic"
+msgstr "الموضوع"
+
+#: .\templates\pages\landing.html:292
+msgid "Select a topic"
+msgstr "اختر موضوعًا"
+
+#: .\templates\pages\landing.html:293
+msgid "Request a demo"
+msgstr "طلب عرض توضيحي"
+
+#: .\templates\pages\landing.html:294
+msgid "Support"
+msgstr "الدعم"
+
+#: .\templates\pages\landing.html:295
+msgid "Partnership"
+msgstr "شراكة"
+
+#: .\templates\pages\landing.html:296
+msgid "Other"
+msgstr "أخرى"
+
+#: .\templates\pages\landing.html:298
+msgid "Please select a topic."
+msgstr "يرجى اختيار موضوع."
+
+
+#: .\templates\pages\landing.html:302
+msgid "Message"
+msgstr "الرسالة"
+
+#: .\templates\pages\landing.html:303
+msgid "Write your message..."
+msgstr "اكتب رسالتك..."
+
+#: .\templates\pages\landing.html:304
+msgid "Message is required."
+msgstr "الرسالة مطلوبة."
+
+#: .\templates\pages\landing.html:307
+msgid "Send Message"
+msgstr "إرسال الرسالة"
+
+#: .\templates\pages\landing.html:308
+msgid "By sending, you agree to be contacted back regarding your request."
+msgstr "بالإرسال، أنت توافق على التواصل معك بخصوص طلبك."
+
+
+#: .\templates\pages\landing.html:331
+msgid "Explore"
+msgstr "استكشف"
+
+#: .\templates\pages\landing.html:340
+msgid "Account"
+msgstr "الحساب"
+
+#: .\templates\pages\landing.html:345
+msgid "Login"
+msgstr "تسجيل الدخول"
+
+#: .\templates\pages\landing.html:346
+msgid "Create Account"
+msgstr "إنشاء حساب"
+
+#: .\templates\pages\landing.html:350
+msgid "Privacy"
+msgstr "الخصوصية"
+
+#: .\templates\pages\landing.html:351
+msgid "Terms"
+msgstr "الشروط"
+
+#: .\templates\pages\landing.html:365
+msgid "All rights reserved."
+msgstr "جميع الحقوق محفوظة."
+
+
+# ===== Privacy =====
+#: .\templates\pages\privacy.html:9
+msgid "Legal"
+msgstr "قانوني"
+
+#: .\templates\pages\privacy.html:10
+msgid "Privacy Policy"
+msgstr "سياسة الخصوصية"
+
+#: .\templates\pages\privacy.html:12
+msgid "Your privacy matters to us. This page explains how Jadwa AI collects, uses, and protects your information."
+msgstr "خصوصيتك تهمنا. توضح هذه الصفحة كيفية قيام Jadwa AI بجمع معلوماتك واستخدامها وحمايتها."
+
+#: .\templates\pages\privacy.html:16
+msgid "1. Information We Collect"
+msgstr "1. المعلومات التي نجمعها"
+
+#: .\templates\pages\privacy.html:17
+msgid "We may collect personal information such as your name, email address, and project-related data when you use Jadwa AI."
+msgstr "قد نقوم بجمع معلومات شخصية مثل الاسم والبريد الإلكتروني وبيانات متعلقة بالمشروع عند استخدامك لمنصة Jadwa AI."
+
+#: .\templates\pages\privacy.html:19
+msgid "2. How We Use Your Information"
+msgstr "2. كيفية استخدام معلوماتك"
+
+#: .\templates\pages\privacy.html:20
+msgid "Your data is used solely to provide feasibility analysis, improve system accuracy, and communicate important updates."
+msgstr "تُستخدم بياناتك فقط لتقديم تحليل الجدوى، وتحسين دقة النظام، والتواصل معك بشأن التحديثات المهمة."
+
+#: .\templates\pages\privacy.html:22
+msgid "3. Data Protection"
+msgstr "3. حماية البيانات"
+
+#: .\templates\pages\privacy.html:23
+msgid "We apply technical and organizational measures to keep your data secure and prevent unauthorized access."
+msgstr "نطبق إجراءات تقنية وتنظيمية للحفاظ على أمان بياناتك ومنع أي وصول غير مصرح به."
+
+#: .\templates\pages\privacy.html:25
+msgid "4. Third-Party Services"
+msgstr "4. خدمات الطرف الثالث"
+
+#: .\templates\pages\privacy.html:26
+msgid "Jadwa AI may rely on trusted third-party services (e.g., email providers) strictly to operate the platform."
+msgstr "قد تعتمد Jadwa AI على خدمات موثوقة من أطراف ثالثة (مثل مزودي البريد الإلكتروني) فقط لتشغيل المنصة."
+
+#: .\templates\pages\privacy.html:28
+msgid "5. Contact"
+msgstr "5. التواصل"
+
+#: .\templates\pages\privacy.html:30
+msgid "If you have any questions regarding privacy, please contact us at"
+msgstr "إذا كان لديك أي استفسارات تتعلق بالخصوصية، يرجى التواصل معنا عبر"
+
+
+# ===== Terms & Conditions =====
+msgid "Terms & Conditions"
+msgstr "الشروط والأحكام"
+
+msgid "By using Jadwa AI, you agree to the following terms and conditions."
+msgstr "باستخدام Jadwa AI، فإنك توافق على الشروط والأحكام التالية."
+
+msgid "1. Use of the Platform"
+msgstr "1. استخدام المنصة"
+
+msgid "Jadwa AI provides feasibility insights for informational purposes only. Final business decisions remain the responsibility of the user."
+msgstr "توفر Jadwa AI تحليلات جدوى لأغراض معلوماتية فقط، وتبقى قرارات الأعمال النهائية مسؤولية المستخدم."
+
+msgid "2. User Responsibilities"
+msgstr "2. مسؤوليات المستخدم"
+
+msgid "You agree to provide accurate information and use the platform in a lawful and ethical manner."
+msgstr "توافق على تقديم معلومات دقيقة واستخدام المنصة بطريقة قانونية وأخلاقية."
+
+msgid "3. Intellectual Property"
+msgstr "3. الملكية الفكرية"
+
+msgid "All content, branding, and system logic belong to Jadwa AI and may not be reused without permission."
+msgstr "جميع المحتويات والعلامة التجارية ومنطق النظام مملوكة لـ Jadwa AI، ولا يجوز إعادة استخدامها دون إذن مسبق."
+
+msgid "4. Limitation of Liability"
+msgstr "4. تحديد المسؤولية"
+
+msgid "Jadwa AI is not liable for losses resulting from decisions made based on the feasibility analysis."
+msgstr "لا تتحمل Jadwa AI أي مسؤولية عن الخسائر الناتجة عن قرارات تم اتخاذها بناءً على تحليل الجدوى."
+
+msgid "5. Updates"
+msgstr "5. التحديثات"
+
+msgid "These terms may be updated periodically. Continued use of the platform implies acceptance of the latest version."
+msgstr "قد يتم تحديث هذه الشروط بشكل دوري، ويعني الاستمرار في استخدام المنصة موافقتك على أحدث نسخة منها."
+
+
+# ===== Register =====
+msgid "Register"
+msgstr "إنشاء حساب"
+
+msgid "Registration page will be available soon."
+msgstr "صفحة إنشاء الحساب ستكون متاحة قريبًا."
+
+
+# ===== More Success Stories =====
+msgid "More Saudi Success Stories"
+msgstr "المزيد من قصص النجاح السعودية"
+
+msgid "More examples of strong execution backed by smart feasibility decisions."
+msgstr "المزيد من الأمثلة على تنفيذ قوي مدعوم بقرارات جدوى ذكية."
+
+msgid "Scaled e-commerce operations with strong logistics and market alignment."
+msgstr "وسّعت عمليات التجارة الإلكترونية بدعم لوجستي قوي وتوافق مع السوق."
+
+msgid "E-commerce · Growth"
+msgstr "تجارة إلكترونية · نمو"
+
+msgid "Focused on service readiness and expanded with clear operational KPIs."
+msgstr "ركزت على جاهزية الخدمة وتوسعت بمؤشرات تشغيلية واضحة."
+
+msgid "Delivery · Operations"
+msgstr "توصيل · تشغيل"
+
+msgid "Empowered SMEs with scalable tooling and clear product-market fit."
+msgstr "مكّنت المنشآت الصغيرة والمتوسطة بأدوات قابلة للتوسع وملاءمة واضحة للسوق."
+
+msgid "SaaS · SMEs"
+msgstr "SaaS · منشآت صغيرة ومتوسطة"
+
+msgid "← Back to homepage"
+msgstr "← العودة للصفحة الرئيسية"

@@ -14,4 +14,5 @@ urlpatterns = [
 
     #  Authentication (Login / Logout / Password reset)
     path('accounts/', include('django.contrib.auth.urls')),
+    path("i18n/", include("django.conf.urls.i18n")),
 ]

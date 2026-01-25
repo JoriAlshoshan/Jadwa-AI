@@ -1,11 +1,12 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
-<div class="page lang-en">
+<div class="page {% if request.LANGUAGE_CODE == 'ar' %}lang-ar{% else %}lang-en{% endif %}">
   <section style="min-height:calc(100vh - 90px);display:flex;align-items:center;justify-content:center;text-align:center;">
     <div>
-      <h1>Register</h1>
-      <p>Registration page will be available soon.</p>
+      <h1>{% trans "Register" %}</h1>
+      <!-- <p>{% trans "Registration page will be available soon." %}</p> -->
     </div>
   </section>
 </div>
