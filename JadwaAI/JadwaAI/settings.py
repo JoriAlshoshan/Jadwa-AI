@@ -95,14 +95,12 @@ LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
 
 # Email seettings
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtppro.zoho.sa"
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+EMAIL_HOST_USER = "contact@jadwa-ai.com"
+EMAIL_HOST_PASSWORD = "JadwaAI@2026!"
+CONTACT_NOTIFY_EMAIL = "contact@jadwa-ai.com"
+DEFAULT_FROM_EMAIL = "Jadwa AI <contact@jadwa-ai.com>"
 
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-
-EMAIL_HOST_USER = "jori.alshoshan@gmail.com"
-EMAIL_HOST_PASSWORD = "glpmnziikosocrwd"
-
-DEFAULT_FROM_EMAIL = "Jadwa AI <info@jadwa.ai>"
-CONTACT_NOTIFY_EMAIL = "jori.alshoshan@gmail.com"
