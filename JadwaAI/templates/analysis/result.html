@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+
+  <h2>Analysis Result</h2>
+
+  <!-- Summary Card -->
+  <div class="card">
+    <p><strong>Project:</strong> {{ result.project_name }}</p>
+    <p>
+      <strong>Feasibility Probability:</strong>
+      {{ result.probability|floatformat:2 }}
+    </p>
+    <p>
+      <strong>Status:</strong>
+      <span class="{% if result.label == 'Feasible' %}text-success{% else %}text-danger{% endif %}">
+        {{ result.label }}
+      </span>
+    </p>
+  </div>
+
+  <!-- Recommendations Section -->
+  <div class="card" style="margin-top:20px;">
+
+    <h3>AI Recommendations</h3>
+
+    {% if result.recommendations_status == "pending" %}
+      <p>Recommendations have not been generated yet.</p>
+      <a href="{% url 'generate_recs' result.id %}" class="btn">
+        Generate Recommendations
+      </a>
+
+    {% elif result.recommendations_status == "failed" %}
+      <p class="text-danger">
+        Failed to generate recommendations.
+      </p>
+      <a href="{% url 'generate_recs' result.id %}" class="btn">
+        Try Again
+      </a>
+
+    {% else %}
+      <pre style="white-space: pre-wrap;">
+{{ result.recommendations }}
+      </pre>
+    {% endif %}
+
+  </div>
+
+  <!-- Actions -->
+  <div style="margin-top:20px;">
+    <a href="/" class="btn btn-secondary">Back to Dashboard</a>
+  </div>
+
+</div>
+{% endblock %}
