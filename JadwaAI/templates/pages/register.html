@@ -4,15 +4,17 @@
         <div class="legal-container" style="max-width:420px; margin:0 auto;">
             <div style="text-align:center; margin-bottom:34px;">
                 <img src="{% static 'img/jadwa-logo.png' %}" alt="Logo" style="height:80px; margin-bottom:16px;">
-                <h2 style="margin-bottom:12px; color:#0b0f1a;">{% trans "Create your Jadwa AI account" %}</h2>
-                <p style="margin-bottom:30px; color:#64748b;">{% trans "Sign up to start analyzing feasibility projects instantly." %}</p>
+                <h2 style="margin-bottom:12px; color:#0b0f1a;">Create your Jadwa AI account</h2>
+                <p style="margin-bottom:30px; color:#64748b;">Sign up to start analyzing feasibility projects instantly.</p>
             </div>
 
             {% if messages %} {% for message in messages %}
-            <div class="inline-msg inline-msg--error">{{ message }}</div>
+            <div class="inline-msg inline-msg--{% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
             {% endfor %} {% endif %}
 
-            <form method="post" class="contact-form">
+            <form method="post">
                 {% csrf_token %} {% for field in form %}
                 <div class="form-row {% if field.errors %}is-error{% endif %}">
                     <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label> {{ field }} {% if field.errors %}
@@ -20,13 +22,15 @@
                     {% endif %}
                 </div>
                 {% endfor %}
-                <button type="submit" class="btn btn-full" style="margin-top:12px;">{% trans "Sign Up" %}</button>
+
+                <button type="submit" class="btn btn-full" style="margin-top:12px;">Sign Up</button>
             </form>
 
-            <p style="margin-top:18px; color:#64748b;">
-                {% trans "Already have an account?" %} <a href="{% url 'login' %}" class="contact-link">{% trans "Login here" %}</a>
+            <p style="margin-top:18px; color:#64748b; text-align:center;">
+                Already have an account? <a href="{% url 'login' %}">Login here</a>
             </p>
         </div>
     </section>
 </div>
+
 {% endblock %}

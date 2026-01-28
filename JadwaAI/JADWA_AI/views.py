@@ -4,10 +4,8 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login
+from django.contrib.auth import login as auth_login
 from .models import ContactMessage
-from django.shortcuts import render, redirect
-from django.contrib import messages
 from .forms import JadwaUserCreationForm, JadwaAuthenticationForm
 
 # =======================
@@ -30,7 +28,7 @@ def terms(request):
     return render(request, "pages/terms.html")
 
 # =======================
-# Login
+# Login 
 # =======================
 
 def jadwa_login(request):
@@ -41,7 +39,8 @@ def jadwa_login(request):
         form = JadwaAuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            login(request, user)
+            auth_login(request, user)
+            messages.success(request, "You have successfully logged in.")
             return redirect("dashboard")
         else:
             messages.error(request, "Invalid username or password.")
@@ -51,7 +50,7 @@ def jadwa_login(request):
     return render(request, "pages/login.html", {"form": form})
 
 # =======================
-# Sign Up
+# Sign Up 
 # =======================
 
 def jadwa_signup(request):
@@ -62,7 +61,8 @@ def jadwa_signup(request):
         form = JadwaUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
+            auth_login(request, user)
+            messages.success(request, "Your account has been created successfully.")
             return redirect("dashboard")
         else:
             messages.error(request, "Please fix the errors below.")
