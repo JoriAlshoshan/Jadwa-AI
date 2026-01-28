@@ -1,37 +1,30 @@
 {% extends "base.html" %} {% load static %} {% load i18n %} {% block content %}
-<div class="page">
-    <section class="auth-page">
-        <div class="auth-container" style="max-width:420px; margin:0 auto;">
-            <div style="text-align:center; margin-bottom:34px;">
-                <img src="{% static 'img/jadwa-logo.png' %}" alt="Logo" style="height:80px; margin-bottom:16px;">
-                <h2 style="margin-bottom:12px; color:#0b0f1a;">Login to Jadwa AI</h2>
-                <p style="margin-bottom:30px; color:#64748b;">Access your dashboard and start your feasibility analysis.</p>
-            </div>
+<div class="auth-container" style="max-width:400px; margin:50px auto; padding:30px; border-radius:8px; box-shadow:0 4px 10px rgba(0,0,0,0.1); background:#fff;">
+    <h1 style="text-align:center; margin-bottom:20px;">Login to your Jadwa AI account</h1>
 
-            {% for message in messages %}
-            <div class="inline-msg {% if message.tags %}inline-msg--{{ message.tags }}{% endif %}">
-                {{ message }}
-            </div>
-            {% endfor %}
+    <!-- Messages -->
+    {% if messages %} {% for message in messages %}
+    <div style="padding:10px; border-radius:4px; margin-bottom:16px; {% if message.tags == 'error' %}background:#fee2e2; color:#b91c1c;{% elif message.tags == 'success' %}background:#d1fae5; color:#065f46;{% else %}background:#bfdbfe; color:#1e3a8a;{% endif %}">
+        {{ message }}
+    </div>
+    {% endfor %} {% endif %}
 
-            <form method="post" class="contact-form">
-                {% csrf_token %} {% for field in form %}
-                <div class="form-row {% if field.errors %}is-error{% endif %}">
-                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label> {{ field }} {% if field.errors %}
-                    <div class="form-error">
-                        {% for error in field.errors %} {{ error }} {% endfor %}
-                    </div>
-                    {% endif %}
-                </div>
+    <!-- Login Form -->
+    <form method="post" style="display:flex; flex-direction:column;">
+        {% csrf_token %} {% for field in form %}
+        <div style="margin-bottom:18px;">
+            <label for="{{ field.id_for_label }}" style="font-weight:600; display:block; margin-bottom:6px;">{{ field.label }}</label> {{ field }} {% if field.errors %}
+            <div style="color:#dc2626; font-size:0.875rem; margin-top:4px;">
+                {% for error in field.errors %}
+                <p>{{ error }}</p>
                 {% endfor %}
-
-                <button type="submit" class="btn btn-full" style="margin-top:12px;">Login</button>
-            </form>
-
-            <p style="margin-top:18px; color:#64748b;">
-                Don't have an account? <a href="{% url 'signup' %}">Sign Up here</a>
-            </p>
+            </div>
+            {% endif %}
         </div>
-    </section>
+        {% endfor %}
+        <button type="submit" style="padding:12px; border-radius:6px; background:#2563eb; color:white; font-weight:600; border:none; cursor:pointer;">Login</button>
+    </form>
+
+    <p style="text-align:center; margin-top:15px;">Don't have an account? <a href="{% url 'signup' %}">Sign up here</a></p>
 </div>
 {% endblock %}

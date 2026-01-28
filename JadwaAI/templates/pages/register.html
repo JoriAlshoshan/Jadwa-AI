@@ -1,45 +1,31 @@
-{% extends "base.html" %} {% load static %} {% load i18n %} {% block content %}
-<div class="page">
-    <section class="auth-page">
-        <div class="auth-container" style="max-width:420px; margin:0 auto; padding:40px;">
+{% extends "base.html" %} {% load static %} {% block content %}
+<div class="auth-container" style="max-width:400px; margin:50px auto; padding:30px; border-radius:8px; box-shadow:0 4px 10px rgba(0,0,0,0.1); background:#fff;">
+    <h1 style="text-align:center; margin-bottom:20px;">Create your Jadwa AI account</h1>
+    <p style="text-align:center; margin-bottom:25px; color:#6b7280;">Sign up to start analyzing feasibility projects instantly.</p>
 
-            <!-- Logo -->
-            <div style="text-align:center; margin-bottom:34px;">
-                <img src="{% static 'img/jadwa-logo.png' %}" alt="Jadwa AI Logo" style="height:80px; margin-bottom:16px;">
-                <h2 style="margin-bottom:12px; color:#0b0f1a;">Create your Jadwa AI account</h2>
-                <p style="margin-bottom:30px; color:#64748b;">Sign up to start analyzing feasibility projects instantly.</p>
-            </div>
+    <!-- Messages -->
+    {% if messages %} {% for message in messages %}
+    <div style="padding:10px; border-radius:4px; margin-bottom:16px; {% if message.tags == 'error' %}background:#fee2e2; color:#b91c1c;{% elif message.tags == 'success' %}background:#d1fae5; color:#065f46;{% else %}background:#bfdbfe; color:#1e3a8a;{% endif %}">
+        {{ message }}
+    </div>
+    {% endfor %} {% endif %}
 
-            <!-- General messages -->
-            {% if messages %} {% for message in messages %}
-            <div class="inline-msg {% if message.tags %}{{ message.tags }}{% endif %}" style="margin-bottom:16px; padding:10px; border-radius:4px; background:#f0f4f8; color:#0b0f1a;">
-                {{ message }}
-            </div>
-            {% endfor %} {% endif %}
-
-            <!-- Registration form -->
-            <form method="post" class="contact-form">
-                {% csrf_token %} {% for field in form %}
-                <div class="form-row" style="margin-bottom:18px;">
-                    <label class="form-label" for="{{ field.id_for_label }}" style="display:block; margin-bottom:6px; font-weight:600;">{{ field.label }}</label> {{ field|attr:"class:form-input" }} {% if field.errors %}
-                    <div class="form-error" style="color:#dc2626; font-size:0.875rem; margin-top:4px;">
-                        {% for error in field.errors %}
-                        <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-                </div>
+    <!-- Registration Form -->
+    <form method="post" style="display:flex; flex-direction:column;">
+        {% csrf_token %} {% for field in form %}
+        <div style="margin-bottom:18px;">
+            <label for="{{ field.id_for_label }}" style="font-weight:600; display:block; margin-bottom:6px;">{{ field.label }}</label> {{ field }} {% if field.errors %}
+            <div style="color:#dc2626; font-size:0.875rem; margin-top:4px;">
+                {% for error in field.errors %}
+                <p>{{ error }}</p>
                 {% endfor %}
-
-                <button type="submit" class="btn btn-full" style="width:100%; padding:12px; background:#2563eb; color:white; border:none; border-radius:6px; font-weight:600; cursor:pointer;">
-                    Sign Up
-                </button>
-            </form>
-
-            <p style="margin-top:18px; color:#64748b; text-align:center;">
-                Already have an account? <a href="{% url 'login' %}" style="color:#2563eb; text-decoration:none;">Login here</a>
-            </p>
+            </div>
+            {% endif %}
         </div>
-    </section>
+        {% endfor %}
+        <button type="submit" style="padding:12px; border-radius:6px; background:#2563eb; color:white; font-weight:600; border:none; cursor:pointer;">Sign Up</button>
+    </form>
+
+    <p style="text-align:center; margin-top:15px;">Already have an account? <a href="{% url 'login' %}">Login here</a></p>
 </div>
 {% endblock %}
