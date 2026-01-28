@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login as auth_login
+from django.contrib.auth import login, authenticate
 from .models import ContactMessage
 from .forms import JadwaUserCreationForm, JadwaAuthenticationForm
 
@@ -28,19 +28,45 @@ def terms(request):
     return render(request, "pages/terms.html")
 
 # =======================
-# Login 
+# SignUp
+# =======================
+
+def jadwa_signup(request):
+    if request.user.is_authenticated:
+        messages.info(request, "You are already logged in.")
+        return redirect("dashboard")
+
+    if request.method == "POST":
+        form = JadwaUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Your account has been created successfully! You are now logged in.")
+            return redirect("dashboard")
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+    else:
+        form = JadwaUserCreationForm()
+
+    return render(request, "pages/register.html", {"form": form})
+
+# =======================
+# Login
 # =======================
 
 def jadwa_login(request):
     if request.user.is_authenticated:
+        messages.info(request, "You are already logged in.")
         return redirect("dashboard")
 
     if request.method == "POST":
         form = JadwaAuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            auth_login(request, user)
-            messages.success(request, "You have successfully logged in.")
+            login(request, user)
+            messages.success(request, "You have logged in successfully!")
             return redirect("dashboard")
         else:
             messages.error(request, "Invalid username or password.")
@@ -48,28 +74,6 @@ def jadwa_login(request):
         form = JadwaAuthenticationForm()
 
     return render(request, "pages/login.html", {"form": form})
-
-# =======================
-# Sign Up 
-# =======================
-
-def jadwa_signup(request):
-    if request.user.is_authenticated:
-        return redirect("dashboard")
-
-    if request.method == "POST":
-        form = JadwaUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            auth_login(request, user)
-            messages.success(request, "Your account has been created successfully.")
-            return redirect("dashboard")
-        else:
-            messages.error(request, "Please fix the errors below.")
-    else:
-        form = JadwaUserCreationForm()
-
-    return render(request, "pages/register.html", {"form": form})
 
 # =======================
 # User (After Login)
