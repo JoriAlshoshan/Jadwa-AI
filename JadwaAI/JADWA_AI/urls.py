@@ -15,7 +15,7 @@ urlpatterns = [
     path("privacy/", views.privacy, name="privacy"),
     path("terms/", views.terms, name="terms"),
 
-    path("login/", views.login, name="login"),
-    path("signup/", views.signup, name="signup"),
+    path("login/", views.jadwa_login, name="login"),
+    path("signup/", views.jadwa_signup, name="signup"),
     path("logout/", auth_views.LogoutView.as_view(next_page="landing"), name="logout"),
 ]

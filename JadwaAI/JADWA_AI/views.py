@@ -8,7 +8,6 @@ from django.contrib.auth import login
 from .models import ContactMessage
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import login
 from .forms import JadwaUserCreationForm, JadwaAuthenticationForm
 
 # =======================
@@ -34,7 +33,7 @@ def terms(request):
 # Login
 # =======================
 
-def login(request):
+def jadwa_login(request):
     if request.user.is_authenticated:
         return redirect("dashboard")
 
@@ -55,7 +54,7 @@ def login(request):
 # Sign Up
 # =======================
 
-def signup(request):
+def jadwa_signup(request):
     if request.user.is_authenticated:
         return redirect("dashboard")
 
