@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path("", views.landing, name="landing"),
@@ -13,4 +14,8 @@ urlpatterns = [
     path("contact/", views.contact_submit, name="contact_submit"),
     path("privacy/", views.privacy, name="privacy"),
     path("terms/", views.terms, name="terms"),
+
+    path("login/", views.login, name="login"),
+    path("signup/", views.signup, name="signup"),
+    path("logout/", auth_views.LogoutView.as_view(next_page="landing"), name="logout"),
 ]

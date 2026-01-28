@@ -1,13 +1,32 @@
-{% extends "base.html" %}
-{% load i18n %}
-
-{% block content %}
+{% extends "base.html" %} {% load static %}{% load i18n %} {% block content %}
 <div class="page {% if request.LANGUAGE_CODE == 'ar' %}lang-ar{% else %}lang-en{% endif %}">
-  <section style="min-height:calc(100vh - 90px);display:flex;align-items:center;justify-content:center;text-align:center;">
-    <div>
-      <h1>{% trans "Login" %}</h1>
-      <!-- <p>{% trans "Login page will be available soon." %}</p> -->
-    </div>
-  </section>
+    <section class="legal-page">
+        <div class="legal-container" style="max-width:420px; margin:0 auto;">
+            <div style="text-align:center; margin-bottom:34px;">
+                <img src="{% static 'img/jadwa-logo.png' %}" alt="Logo" style="height:80px; margin-bottom:16px;">
+                <h2 style="margin-bottom:12px; color:#0b0f1a;">{% trans "Login to Jadwa AI" %}</h2>
+                <p style="margin-bottom:30px; color:#64748b;">{% trans "Access your dashboard and start your feasibility analysis." %}</p>
+            </div>
+
+            {% if messages %} {% for message in messages %}
+            <div class="inline-msg inline-msg--error">{{ message }}</div>
+            {% endfor %} {% endif %}
+
+            <form method="post" class="contact-form">
+                {% csrf_token %} {% for field in form %}
+                <div class="form-row {% if field.errors %}is-error{% endif %}">
+                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label> {{ field }} {% if field.errors %}
+                    <div class="form-error">{{ field.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-full" style="margin-top:12px;">{% trans "Login" %}</button>
+            </form>
+
+            <p style="margin-top:18px; color:#64748b;">
+                {% trans "Don't have an account?" %} <a href="{% url 'signup' %}" class="contact-link">{% trans "Create one" %}</a>
+            </p>
+        </div>
+    </section>
 </div>
 {% endblock %}
