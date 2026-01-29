@@ -1,6 +1,7 @@
 from django.db import models
+import pandas as pd
 from django.contrib.auth.models import User
-
+from .fill_economic_indicator import calculate_update_economic_indicator
 
 class Project(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -41,3 +42,47 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f"{self.full_name} - {self.topic}"
+
+class Projects(models.Model):
+    project_name = models.CharField(max_length=20)
+    PROJECT_TYPE_CHOICES = [
+        ("Service","Service"),
+        ("Product","Product"),
+        ("Hybrid","Hybrid"),
+    ]
+    Project_type = models.CharField(max_length=50,choices=PROJECT_TYPE_CHOICES,db_column="Project_type")
+    project_location = models.CharField(max_length=50)
+    LOCATION_TYPE_CHOICES = [
+        ("On-site","On-site"),
+        ("Online","Online"),
+        ("Hybrid","Hybrid"),
+    ]
+    project_location_type = models.CharField(max_length=50,choices=LOCATION_TYPE_CHOICES)
+    project_budget = models.IntegerField(null = False , blank = False)
+    project_duration = models.IntegerField(null = False , blank = False)
+    number_of_employees = models.IntegerField(null = False , blank = False)
+    economic_indicator = models.CharField(null=True, blank=True,editable =False)
+    Number_of_Similar_Enterprises = models.IntegerField(null=True, blank=True)
+
+   
+    def save(self, *args, **kwargs):
+        region_df = calculate_update_economic_indicator()
+        region_data = region_df[region_df['region_project'] == self.project_location]
+        if not region_data.empty:
+            self.economic_indicator = float(region_data['economic_indicator'].values[0])
+            value = self.economic_indicator
+
+            if value<=0.33:
+                self.economic_indicator ="Low"
+            elif value<=0.66:
+                self.economic_indicator ="Medium"
+            else:
+                self.economic_indicator ="High"
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.project_name} - {self.project_location}"
+    
+    class Meta:
+        db_table = 'projects_table'
