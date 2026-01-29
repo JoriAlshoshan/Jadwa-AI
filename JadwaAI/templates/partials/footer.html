@@ -1,0 +1,55 @@
+{% load static %}
+{% load i18n %}
+
+<footer class="footer-pro">
+  <div class="container footer-pro-inner">
+
+    <!-- Column 1 -->
+    <div class="footer-col">
+      <div class="footer-brand">
+        <img src="{% static 'img/jadwa-logo.png' %}" alt="Jadwa AI">
+      </div>
+      <p class="footer-desc">
+        {% trans "Jadwa AI helps entrepreneurs evaluate business ideas using AI-powered feasibility insights." %}
+      </p>
+    </div>
+
+    <!-- Column 2 -->
+    <div class="footer-col">
+      <div class="footer-title">{% trans "Explore" %}</div>
+      <a href="#product">{% trans "Product" %}</a>
+      <a href="#how">{% trans "How it Works" %}</a>
+      <a href="#stories">{% trans "Success Stories" %}</a>
+      <a href="#contact">{% trans "Contact" %}</a>
+    </div>
+
+    <!-- Column 3 -->
+    <div class="footer-col">
+      <div class="footer-title">{% trans "Account" %}</div>
+
+      {% if user.is_authenticated %}
+        <a href="{% url 'dashboard' %}">{% trans "Dashboard" %}</a>
+      {% else %}
+        <a href="/accounts/login/?next=/dashboard/">{% trans "Login" %}</a>
+        <a href="{% url 'register' %}">{% trans "Create Account" %}</a>
+      {% endif %}
+
+      <!-- ✅ هنا الروابط الصح -->
+      <a href="{% url 'privacy' %}">{% trans "Privacy" %}</a>
+      <a href="{% url 'terms' %}">{% trans "Terms" %}</a>
+    </div>
+
+    <!-- Column 4 -->
+    <div class="footer-col">
+      <div class="footer-title">{% trans "Contact" %}</div>
+      <a href="mailto:contact@jadwa-ai.com" class="footer-meta footer-link">contact@jadwa-ai.com</a>
+      <div class="footer-meta">{% trans "Saudi Arabia" %}</div>
+    </div>
+
+  </div>
+
+  <!-- Bottom -->
+  <div class="container footer-bottom">
+    <span>© 2026 Jadwa AI. {% trans "All rights reserved." %}</span>
+  </div>
+</footer>

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/analysis.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container analysis-page">
+
+  <section class="analysis-hero">
+    <h1 class="analysis-title">Analysis Result</h1>
+    <p class="analysis-subtitle">AI-powered feasibility insights for your project</p>
+  </section>
+
+  <section class="analysis-grid">
+
+    <div class="analysis-card">
+      <h3 class="card-title">Project Overview</h3>
+
+      <p><strong>Project:</strong> {{ result.project_name }}</p>
+
+      <p>
+        <strong>Feasibility Probability:</strong>
+        <span class="probability">{{ feasibility_percent|floatformat:2 }}%</span>
+      </p>
+
+      <p class="status-row">
+        <strong>Status:</strong>
+        <span class="status-badge {% if result.label == 'Feasible' %}success{% else %}danger{% endif %}">
+          {{ result.label }}
+        </span>
+      </p>
+    </div>
+
+    <div class="analysis-card">
+      <h3 class="card-title">AI Recommendations</h3>
+
+      <div class="skeleton-box">
+        <div class="skeleton-line w-80"></div>
+        <div class="skeleton-line w-100"></div>
+        <div class="skeleton-line w-90"></div>
+        <div class="skeleton-line w-95"></div>
+        <div class="skeleton-line w-70"></div>
+        <div class="skeleton-line w-100"></div>
+        <div class="skeleton-line w-85"></div>
+      </div>
+
+      <p class="muted" style="margin-top:14px;">Generating recommendations, please wait...</p>
+
+      <form id="csrfForm">{% csrf_token %}</form>
+    </div>
+
+  </section>
+
+  <div class="analysis-actions">
+    <a href="{% url 'analysis_result' result.id %}" class="secondary-btn">Back</a>
+  </div>
+
+</div>
+
+<script>
+  (async () => {
+    const token = document.querySelector('#csrfForm input[name="csrfmiddlewaretoken"]').value;
+
+    await fetch("{% url 'generate_recs' result.id %}", {
+      method: "POST",
+      headers: { "X-CSRFToken": token }
+    }).catch(() => {});
+
+    const statusUrl = "{% url 'recs_status' result.id %}";
+    const doneUrl = "{% url 'analysis_result' result.id %}";
+
+    const timer = setInterval(async () => {
+      try {
+        const res = await fetch(statusUrl, { headers: { "Accept": "application/json" } });
+        const data = await res.json();
+        if (data.status === "ready" || data.status === "failed") {
+          clearInterval(timer);
+          window.location.href = doneUrl;
+        }
+      } catch (e) {}
+    }, 1200);
+  })();
+</script>
+{% endblock %}

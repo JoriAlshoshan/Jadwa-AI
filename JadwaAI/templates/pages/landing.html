@@ -6,68 +6,7 @@
 
 <div class="page {% if request.LANGUAGE_CODE == 'ar' %}lang-ar{% else %}lang-en{% endif %}">
 
-<nav class="nav">
-  <div class="container nav-inner">
 
-    <div class="nav-left">
-      <a href="#home" class="brand" aria-label="Jadwa AI Home">
-        <img src="{% static 'img/jadwa-logo.png' %}" class="brand-logo" alt="Jadwa AI">
-      </a>
-    </div>
-
-    <div class="nav-right">
-      <div class="links">
-        <a href="#product">{% trans "Product" %}</a>
-        <a href="#how">{% trans "How it Works" %}</a>
-        <a href="#stories">{% trans "Success Stories" %}</a>
-        <a href="#contact">{% trans "Contact" %}</a>
-      </div>
-
-      <div class="nav-actions" role="navigation" aria-label="Language and account">
-
-        <!-- Language (Django set_language) -->
-        <form action="{% url 'set_language' %}" method="post" style="display:inline;">
-          {% csrf_token %}
-          <input type="hidden" name="next" value="#home">
-          <input
-            type="hidden"
-            name="language"
-            value="{% if request.LANGUAGE_CODE == 'ar' %}en{% else %}ar{% endif %}"
-          >
-          <button
-            type="submit"
-            class="nav-lang"
-            aria-label="Change language"
-            style="background:none;border:0;cursor:pointer;"
-          >
-            {% if request.LANGUAGE_CODE == 'ar' %}English{% else %}عربي{% endif %}
-          </button>
-        </form>
-
-        <span class="nav-divider" aria-hidden="true"></span>
-
-        <!-- Account icon 👤 (Account only) -->
-        {% if user.is_authenticated %}
-          <a href="{% url 'dashboard' %}" class="nav-icon" aria-label="Account">
-        {% else %}
-          <a href="/accounts/login/?next=/dashboard/" class="nav-icon" aria-label="Login">
-        {% endif %}
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M20 21a8 8 0 1 0-16 0"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    stroke-linecap="round"/>
-              <path d="M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"
-                    stroke="currentColor"
-                    stroke-width="1.8"/>
-            </svg>
-          </a>
-
-      </div>
-    </div>
-
-  </div>
-</nav>
 
 
 <section class="hero" id="home">
@@ -254,7 +193,7 @@
         <p class="contact-sub">{% trans "Have a question, partnership idea, or want a demo? Send us a message." %}</p>
 
         <div class="contact-meta">
-<a href="mailto:contact@jadwa-ai.com" class="contact-link">contact@jadwa-ai.com</a>
+          <a href="mailto:contact@jadwa-ai.com" class="contact-link">contact@jadwa-ai.com</a>
           <span class="dot">•</span>
           <span>{% trans "Saudi Arabia" %}</span>
           <span class="dot">•</span>
@@ -313,58 +252,10 @@
 </section>
 
 
-<footer class="footer-pro">
-  <div class="container footer-pro-inner">
 
-    <!-- Column 1 -->
-    <div class="footer-col">
-      <div class="footer-brand">
-        <img src="{% static 'img/jadwa-logo.png' %}" alt="Jadwa AI">
-      </div>
-      <p class="footer-desc">
-        {% trans "Jadwa AI helps entrepreneurs evaluate business ideas using AI-powered feasibility insights." %}
-      </p>
-    </div>
 
-    <!-- Column 2 -->
-    <div class="footer-col">
-      <div class="footer-title">{% trans "Explore" %}</div>
-      <a href="#product">{% trans "Product" %}</a>
-      <a href="#how">{% trans "How it Works" %}</a>
-      <a href="#stories">{% trans "Success Stories" %}</a>
-      <a href="#contact">{% trans "Contact" %}</a>
-    </div>
 
-    <!-- Column 3 -->
-    <div class="footer-col">
-      <div class="footer-title">{% trans "Account" %}</div>
 
-      {% if user.is_authenticated %}
-        <a href="{% url 'dashboard' %}">{% trans "Dashboard" %}</a>
-      {% else %}
-        <a href="/accounts/login/?next=/dashboard/">{% trans "Login" %}</a>
-        <a href="{% url 'register' %}">{% trans "Create Account" %}</a>
-      {% endif %}
-
-      <!-- ✅ هنا الروابط الصح -->
-      <a href="{% url 'privacy' %}">{% trans "Privacy" %}</a>
-      <a href="{% url 'terms' %}">{% trans "Terms" %}</a>
-    </div>
-
-    <!-- Column 4 -->
-    <div class="footer-col">
-      <div class="footer-title">{% trans "Contact" %}</div>
-<a href="mailto:contact@jadwa-ai.com" class="footer-meta footer-link">contact@jadwa-ai.com</a>
-      <div class="footer-meta">{% trans "Saudi Arabia" %}</div>
-    </div>
-
-  </div>
-
-  <!-- Bottom -->
-  <div class="container footer-bottom">
-    <span>© 2026 Jadwa AI. {% trans "All rights reserved." %}</span>
-  </div>
-</footer>
 
 
 <script>

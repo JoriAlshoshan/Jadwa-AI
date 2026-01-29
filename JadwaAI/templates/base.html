@@ -1,13 +1,28 @@
 {% load static %}
 {% load i18n %}
 <!DOCTYPE html>
-<html lang="{{ request.LANGUAGE_CODE }}">
+<html lang="{{ request.LANGUAGE_CODE }}"
+      dir="{% if request.LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jadwa AI</title>
+
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% block extra_css %}{% endblock %}
 </head>
+
 <body>
-  {% block content %}{% endblock %}
+
+  {% include "partials/navbar.html" %}
+
+  <main class="app-bg">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include "partials/footer.html" %}
+
+  {% block extra_js %}{% endblock %}
+
 </body>
 </html>
