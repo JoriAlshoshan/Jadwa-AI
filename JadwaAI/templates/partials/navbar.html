@@ -1,0 +1,65 @@
+{% load static %}
+{% load i18n %}
+
+<nav class="nav">
+  <div class="container nav-inner">
+
+    <div class="nav-left">
+      <a href="#home" class="brand" aria-label="Jadwa AI Home">
+        <img src="{% static 'img/jadwa-logo.png' %}" class="brand-logo" alt="Jadwa AI">
+      </a>
+    </div>
+
+    <div class="nav-right">
+      <div class="links">
+        <a href="#product">{% trans "Product" %}</a>
+        <a href="#how">{% trans "How it Works" %}</a>
+        <a href="#stories">{% trans "Success Stories" %}</a>
+        <a href="#contact">{% trans "Contact" %}</a>
+      </div>
+
+      <div class="nav-actions" role="navigation" aria-label="Language and account">
+
+        <!-- Language (Django set_language) -->
+        <form action="{% url 'set_language' %}" method="post" style="display:inline;">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="#home">
+          <input
+            type="hidden"
+            name="language"
+            value="{% if request.LANGUAGE_CODE == 'ar' %}en{% else %}ar{% endif %}"
+          >
+          <button
+            type="submit"
+            class="nav-lang"
+            aria-label="Change language"
+            style="background:none;border:0;cursor:pointer;"
+          >
+            {% if request.LANGUAGE_CODE == 'ar' %}English{% else %}عربي{% endif %}
+          </button>
+        </form>
+
+        <span class="nav-divider" aria-hidden="true"></span>
+
+        <!-- Account icon 👤 (Account only) -->
+        {% if user.is_authenticated %}
+          <a href="{% url 'dashboard' %}" class="nav-icon" aria-label="Account">
+        {% else %}
+          <a href="/accounts/login/?next=/dashboard/" class="nav-icon" aria-label="Login">
+        {% endif %}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M20 21a8 8 0 1 0-16 0"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"/>
+              <path d="M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"
+                    stroke="currentColor"
+                    stroke-width="1.8"/>
+            </svg>
+          </a>
+
+      </div>
+    </div>
+
+  </div>
+</nav>

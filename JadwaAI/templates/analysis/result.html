@@ -1,55 +1,101 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/analysis.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container analysis-page">
 
-  <h2>Analysis Result</h2>
+  <section class="analysis-hero">
+    <h1 class="analysis-title">Analysis Result</h1>
+    <p class="analysis-subtitle">AI-powered feasibility insights for your project</p>
+  </section>
 
-  <!-- Summary Card -->
-  <div class="card">
-    <p><strong>Project:</strong> {{ result.project_name }}</p>
-    <p>
-      <strong>Feasibility Probability:</strong>
-      {{ result.probability|floatformat:2 }}
-    </p>
-    <p>
-      <strong>Status:</strong>
-      <span class="{% if result.label == 'Feasible' %}text-success{% else %}text-danger{% endif %}">
-        {{ result.label }}
-      </span>
-    </p>
-  </div>
+  <section class="analysis-grid">
 
-  <!-- Recommendations Section -->
-  <div class="card" style="margin-top:20px;">
+    <div class="analysis-card">
+      <h3 class="card-title">Project Overview</h3>
 
-    <h3>AI Recommendations</h3>
+      <p><strong>Project:</strong> {{ result.project_name }}</p>
 
-    {% if result.recommendations_status == "pending" %}
-      <p>Recommendations have not been generated yet.</p>
-      <a href="{% url 'generate_recs' result.id %}" class="btn">
-        Generate Recommendations
-      </a>
-
-    {% elif result.recommendations_status == "failed" %}
-      <p class="text-danger">
-        Failed to generate recommendations.
+      <p>
+        <strong>Feasibility Probability:</strong>
+        <span class="probability">{{ feasibility_percent|floatformat:2 }}%</span>
       </p>
-      <a href="{% url 'generate_recs' result.id %}" class="btn">
-        Try Again
-      </a>
 
-    {% else %}
-      <pre style="white-space: pre-wrap;">
-{{ result.recommendations }}
-      </pre>
-    {% endif %}
+      <p class="status-row">
+        <strong>Status:</strong>
+        <span class="status-badge {% if result.label == 'Feasible' %}success{% else %}danger{% endif %}">
+          {{ result.label }}
+        </span>
+      </p>
+    </div>
 
-  </div>
+    <div class="analysis-card">
+      <h3 class="card-title">AI Recommendations</h3>
 
-  <!-- Actions -->
-  <div style="margin-top:20px;">
-    <a href="/" class="btn btn-secondary">Back to Dashboard</a>
+      {% if result.recommendations_status == "ready" and result.recommendations %}
+        <div class="recommendations-box">
+          {{ result.recommendations|linebreaks }}
+        </div>
+
+      {% elif result.recommendations_status == "failed" %}
+        <p class="muted">Failed to generate recommendations.</p>
+        <a href="{% url 'analysis_result' result.id %}?loading=1" class="btn primary-btn">
+          Try Again
+        </a>
+
+      {% else %}
+        {% if request.GET.loading %}
+          <p class="muted">Generating AI recommendations…</p>
+
+          <div class="skeleton-box">
+            <div class="skeleton-line w-80"></div>
+            <div class="skeleton-line w-100"></div>
+            <div class="skeleton-line w-90"></div>
+            <div class="skeleton-line w-95"></div>
+            <div class="skeleton-line w-70"></div>
+            <div class="skeleton-line w-100"></div>
+            <div class="skeleton-line w-85"></div>
+          </div>
+
+          <form id="csrfForm">{% csrf_token %}</form>
+
+          <script>
+            (async () => {
+              const token = document.querySelector("#csrfForm input[name=csrfmiddlewaretoken]")?.value || "";
+              const genUrl = "{% url 'generate_recs' result.id %}";
+              fetch(genUrl, { method: "POST", headers: { "X-CSRFToken": token } }).catch(() => {});
+
+              const statusUrl = "{% url 'recs_status' result.id %}";
+              const timer = setInterval(async () => {
+                try {
+                  const res = await fetch(statusUrl, { headers: { "Accept": "application/json" } });
+                  const data = await res.json();
+                  if (data.status === "ready" || data.status === "failed") {
+                    clearInterval(timer);
+                    window.location.href = "{% url 'analysis_result' result.id %}";
+                  }
+                } catch (e) {}
+              }, 1200);
+            })();
+          </script>
+
+        {% else %}
+          <p class="muted">Recommendations have not been generated yet.</p>
+          <a href="{% url 'analysis_result' result.id %}?loading=1" class="btn primary-btn">
+            Generate Recommendations
+          </a>
+        {% endif %}
+      {% endif %}
+    </div>
+
+  </section>
+
+  <div class="analysis-actions">
+    <a href="/" class="btn secondary-btn">Back to Dashboard</a>
   </div>
 
 </div>

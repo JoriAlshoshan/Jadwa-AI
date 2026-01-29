@@ -1,18 +1,13 @@
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from .models import AnalysisResult
 
 
 @login_required
 def run_analysis(request, project_id):
-    """
-    Run feasibility analysis (FAST – without recommendations),
-    save the result, then redirect to result page.
-    """
-    # Import here to avoid startup/import issues
     from ai.services.analyzer import analyze_project
 
-    # Temporary project data (will be replaced in Part 2)
     project_data = {
         "type_project": "Service",
         "region_project": "Riyadh",
@@ -23,39 +18,42 @@ def run_analysis(request, project_id):
         "economic_indicator": 2,
     }
 
-    #  Fast analysis (NO recommendations)
-    result = analyze_project(project_data, include_recommendations=False)
+    out = analyze_project(project_data, include_recommendations=False)
 
-    # Save result to database
     saved_result = AnalysisResult.objects.create(
         user=request.user,
         project_id=project_id,
         project_name="Sample Project",
-        probability=result["probability"],
-        threshold=result["threshold"],
-        label=result["label"],
-        recommendations="",                 # empty for now
-        recommendations_status="pending",   # pending
+        probability=out["probability"],
+        threshold=out["threshold"],
+        label=out["label"],
+        recommendations="",
+        recommendations_status="pending",
     )
 
-    # Redirect to analysis result page
     return redirect("analysis_result", result_id=saved_result.id)
 
 
 @login_required
+def recs_loading(request, result_id):
+    result = get_object_or_404(AnalysisResult, id=result_id, user=request.user)
+    feasibility_percent = round(result.probability * 100, 2)
+
+    return render(request, "analysis/recs_loading.html", {
+        "result": result,
+        "feasibility_percent": feasibility_percent,
+    })
+
+
+@login_required
 def generate_recs(request, result_id):
-    """
-    Generate AI recommendations ON DEMAND (can be slow).
-    """
     from ai.services.analyzer import analyze_project
 
-    result_obj = get_object_or_404(
-        AnalysisResult,
-        id=result_id,
-        user=request.user
-    )
+    result_obj = get_object_or_404(AnalysisResult, id=result_id, user=request.user)
 
-    # Temporary project data (will be replaced in Part 2)
+    if request.method != "POST":
+        return JsonResponse({"ok": False, "status": result_obj.recommendations_status}, status=405)
+
     project_data = {
         "type_project": "Service",
         "region_project": "Riyadh",
@@ -67,29 +65,29 @@ def generate_recs(request, result_id):
     }
 
     try:
-        #  Generate recommendations only here
         out = analyze_project(project_data, include_recommendations=True)
-        result_obj.recommendations = out["recommendations"]
+        result_obj.recommendations = out.get("recommendations", "")
         result_obj.recommendations_status = "ready"
     except Exception as e:
         result_obj.recommendations = f"Failed to generate recommendations: {e}"
         result_obj.recommendations_status = "failed"
 
     result_obj.save(update_fields=["recommendations", "recommendations_status"])
-    return redirect("analysis_result", result_id=result_obj.id)
+    return JsonResponse({"ok": True, "status": result_obj.recommendations_status})
+
+
+@login_required
+def recs_status(request, result_id):
+    result_obj = get_object_or_404(AnalysisResult, id=result_id, user=request.user)
+    return JsonResponse({"status": result_obj.recommendations_status})
 
 
 @login_required
 def analysis_result(request, result_id):
-    """
-    Display a single analysis result.
-    """
-    result = get_object_or_404(
-        AnalysisResult,
-        id=result_id,
-        user=request.user
-    )
+    result = get_object_or_404(AnalysisResult, id=result_id, user=request.user)
+    feasibility_percent = round(result.probability * 100, 2)
 
     return render(request, "analysis/result.html", {
-        "result": result
+        "result": result,
+        "feasibility_percent": feasibility_percent,
     })
