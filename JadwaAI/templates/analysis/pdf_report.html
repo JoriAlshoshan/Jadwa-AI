@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <style>
+    body{ font-family: "Cairo", sans-serif; direction: rtl; }
+    h1{ margin:0 0 10px; }
+    .box{ border:1px solid #ddd; padding:14px; border-radius:12px; }
+    .muted{ color:#555; }
+    .recs{ white-space: pre-wrap; line-height:1.9; }
+  </style>
+</head>
+<body>
+  <h1>Jadwa AI - Analysis Report</h1>
+  <div class="box">
+    <div><b>Project:</b> {{ result.project_name }}</div>
+    <div><b>Feasibility Probability:</b> {{ feasibility_percent }}%</div>
+    <div><b>Status:</b> {{ result.label }}</div>
+  </div>
+
+  <h2>AI Recommendations</h2>
+  <div class="box recs">{{ result.recommendations }}</div>
+</body>
+</html>

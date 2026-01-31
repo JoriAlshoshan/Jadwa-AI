@@ -7,4 +7,6 @@ urlpatterns = [
     path("recs-loading/<int:result_id>/", views.recs_loading, name="recs_loading"),
     path("recs-status/<int:result_id>/", views.recs_status, name="recs_status"),
     path("recommend/<int:result_id>/", views.generate_recs, name="generate_recs"),
+
+    path("result/<int:result_id>/pdf/", views.analysis_pdf, name="analysis_pdf"),
 ]

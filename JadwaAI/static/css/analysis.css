@@ -188,3 +188,72 @@
   0%{ background-position:100% 0; }
   100%{ background-position:0 0; }
 }
+.analysis-actions{
+  display:flex;
+  gap:14px;
+  justify-content:center;
+  align-items:center;
+  margin-top:24px;
+  flex-wrap:wrap;
+}
+
+.analysis-actions{
+  display:flex;
+  gap:14px;
+  justify-content:center;
+  align-items:center;
+  margin-top:24px;
+  flex-wrap:wrap;
+}
+
+.analysis-actions .btn{
+  min-width: 260px;
+}
+
+/* PDF button نفس ستايل Back to Dashboard (يعتمد على secondary-btn) */
+.pdf-btn{
+  gap:10px;
+  padding-left:16px;
+  padding-right:18px;
+  text-decoration:none !important;
+}
+
+/* أيقونة داخل دائرة */
+.pdf-icon{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:999px;
+  background: rgba(10,47,191,.08);
+  border: 1px solid rgba(10,47,191,.15);
+  color:#0a2fbf;
+  font-size:16px;
+  line-height:1;
+}
+
+.pdf-text{
+  font-weight:900;
+}
+
+.pdf-btn.is-loading{
+  pointer-events:none;
+  opacity:.85;
+}
+.pdf-btn.is-loading .pdf-icon{
+  position:relative;
+}
+.pdf-btn.is-loading .pdf-icon::after{
+  content:"";
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  border:2px solid rgba(10,47,191,.25);
+  border-top-color:#0a2fbf;
+  position:absolute;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin{ to{ transform: rotate(360deg); } }
+.analysis-actions .btn{
+  min-width: 260px;
+}

@@ -94,9 +94,24 @@
 
   </section>
 
-  <div class="analysis-actions">
-    <a href="/" class="btn secondary-btn">Back to Dashboard</a>
-  </div>
+<div class="analysis-actions">
+ <a href="{% url 'analysis_pdf' result.id %}" class="btn secondary-btn pdf-btn" id="pdfBtn">
+  <span class="pdf-text">Download PDF</span>
+</a>
+
+  <a href="/" class="btn secondary-btn">Back to Dashboard</a>
+</div>
+
+<script>
+  const btn = document.getElementById("pdfBtn");
+  if (btn) {
+    btn.addEventListener("click", () => {
+      btn.classList.add("is-loading");
+      btn.setAttribute("aria-busy", "true");
+    });
+  }
+</script>
+
 
 </div>
 {% endblock %}
