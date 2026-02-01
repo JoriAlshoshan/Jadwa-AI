@@ -1,10 +1,17 @@
 from django.db import models
-import pandas as pd
-from django.contrib.auth.models import User
+from django.conf import settings
+from django.utils import timezone
 from .fill_economic_indicator import calculate_update_economic_indicator
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+    email = models.EmailField(unique=True)
+
+    USERNAME_FIELD = 'username'  
+    REQUIRED_FIELDS = [] 
 
 class Project(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     project_name = models.CharField(max_length=200)
     budget = models.FloatField()
     duration = models.IntegerField()
@@ -15,7 +22,6 @@ class Project(models.Model):
     def __str__(self):
         return self.project_name
 
-
 class AnalysisResult(models.Model):
     project = models.OneToOneField(Project, on_delete=models.CASCADE)
     feasibility_score = models.FloatField()
@@ -24,7 +30,6 @@ class AnalysisResult(models.Model):
 
     def __str__(self):
         return f"Result for {self.project.project_name}"
-
 
 class ContactMessage(models.Model):
     TOPIC_CHOICES = [
@@ -63,7 +68,6 @@ class Projects(models.Model):
     number_of_employees = models.IntegerField(null = False , blank = False)
     economic_indicator = models.CharField(null=True, blank=True,editable =False)
     Number_of_Similar_Enterprises = models.IntegerField(null=True, blank=True)
-
    
     def save(self, *args, **kwargs):
         region_df = calculate_update_economic_indicator()
@@ -86,3 +90,14 @@ class Projects(models.Model):
     
     class Meta:
         db_table = 'projects_table'
+    
+class PasswordResetOTP(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    code = models.CharField(max_length=6)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def is_valid(self):
+        now = timezone.now()
+        expiry_time = self.created_at + timezone.timedelta(minutes=10)
+        print(f"DEBUG: Now: {now} | Created: {self.created_at} | Expires: {expiry_time}")
+        return now <= expiry_time

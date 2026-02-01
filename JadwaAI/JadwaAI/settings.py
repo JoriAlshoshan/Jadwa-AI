@@ -105,3 +105,13 @@ EMAIL_HOST_PASSWORD = "JadwaAI@2026!"
 CONTACT_NOTIFY_EMAIL = "contact@jadwa-ai.com"
 DEFAULT_FROM_EMAIL = "Jadwa AI <contact@jadwa-ai.com>"
 
+
+AUTH_USER_MODEL = "JADWA_AI.User"
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+]
+
+LOGIN_URL = "/login/"
+LOGIN_REDIRECT_URL = "/dashboard/"
+LOGOUT_REDIRECT_URL = "/"

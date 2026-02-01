@@ -1,0 +1,53 @@
+{% extends "base.html" %} {% load static i18n %} {% block content %}
+<div class="page">
+    <section class="legal-page">
+        <div class="legal-container" style="max-width:420px; margin:0 auto;">
+
+            <!-- Heading -->
+            <div style="text-align:center; margin-bottom:34px;">
+                <h2 style="margin-bottom:12px; color:#0b0f1a;">
+                    Verify OTP
+                </h2>
+                <p style="margin-bottom:30px; color:#64748b;">
+                    Enter the 6-digit code sent to your email.
+                </p>
+            </div>
+
+            <!-- Messages -->
+            {% if messages %} {% for message in messages %}
+            <div class="inline-msg inline-msg--error">{{ message }}</div>
+            {% endfor %} {% endif %}
+
+            <!-- OTP Form -->
+            <form method="post" class="contact-form">
+                {% csrf_token %}
+
+                <div style="display:flex; gap:10px; justify-content:center; margin-bottom:20px;">
+                    {% for i in "123456" %}
+                    <input type="text" name="otp{{ forloop.counter }}" maxlength="1" required style="
+                                width:48px;
+                                height:52px;
+                                text-align:center;
+                                font-size:20px;
+                                border:1px solid #cbd5e1;
+                                border-radius:8px;
+                            "> {% endfor %}
+                </div>
+
+                <button type="submit" class="btn btn-full">
+                    Verify
+                </button>
+            </form>
+
+            <!-- Resend -->
+            <p style="margin-top:18px; text-align:center; color:#64748b;">
+                Didn’t receive the code?
+                <a href="{% url 'forgot_password' %}" class="contact-link">
+                    Resend OTP
+                </a>
+            </p>
+
+        </div>
+    </section>
+</div>
+{% endblock %}

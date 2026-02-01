@@ -27,6 +27,15 @@
                 <button type="submit" class="btn btn-full" style="margin-top:12px;">Login</button>
             </form>
 
+            <!-- Forgot Password -->
+            <p style="margin-top:14px; text-align:center; color:#64748b;">
+                Forgot your password?
+                <a href="{% url 'forgot_password' %}" class="contact-link">
+                    Reset it
+                </a>
+            </p>
+
+            <!-- Signup -->
             <p style="margin-top:18px; color:#64748b;">
                 Don't have an account? <a href="{% url 'signup' %}" class="contact-link">Create one</a>
             </p>

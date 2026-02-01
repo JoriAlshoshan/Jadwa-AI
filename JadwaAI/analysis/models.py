@@ -1,9 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import User
-
+from django.conf import settings
 
 class AnalysisResult(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     project_id = models.IntegerField()
 
@@ -13,8 +12,6 @@ class AnalysisResult(models.Model):
     threshold = models.FloatField(default=0.5)
 
     label = models.CharField(max_length=50)
-
-   
 
     recommendations_ar = models.TextField(blank=True, default="")
 
