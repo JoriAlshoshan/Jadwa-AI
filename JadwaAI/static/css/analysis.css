@@ -257,3 +257,7 @@
 .analysis-actions .btn{
   min-width: 260px;
 }
+.status-badge.warning{
+  background: rgba(245,158,11,.12);
+  color:#92400e;
+}
