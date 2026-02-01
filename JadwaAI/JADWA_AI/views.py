@@ -79,7 +79,7 @@ def jadwa_login(request):
     else:
         form = JadwaAuthenticationForm()
 
-    return render(request, "pages/login.html", {"form": form})
+    return render(request, "registration/login.html", {"form": form})
 
 # =======================
 # Forgot Password
