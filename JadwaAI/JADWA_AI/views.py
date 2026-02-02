@@ -6,9 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import get_user_model, login
 from .models import ContactMessage
-<<<<<<< HEAD
-from .forms import JadwaUserCreationForm, JadwaAuthenticationForm, ProjectInformationForm
-=======
+from .forms import ProjectInformationForm
 from .forms import JadwaUserCreationForm, JadwaAuthenticationForm
 from .models import PasswordResetOTP
 from .forms import ForgotPasswordForm, OTPForm, ResetPasswordForm
@@ -16,7 +14,6 @@ import random
 from django.utils import timezone
 
 User = get_user_model()  
->>>>>>> a77b9670be2e15a304d8d6d3f8d9918d04030945
 
 # =======================
 # Public pages (No Login)
