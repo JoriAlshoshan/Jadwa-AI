@@ -25,27 +25,3 @@ class JadwaAuthenticationForm(AuthenticationForm):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'form-input'})
     )
-
-class ProjectInformationForm(forms.ModelForm):
-    class Meta:
-        model = Projects
-        fields = ['project_name','Project_type','project_location','project_location_type','project_budget','project_duration','number_of_employees']
-        widgets ={
-            'project_name' : forms.TextInput(attrs={'class':'form-input'}),
-            'Project_type' : forms.Select(attrs={'class':'form-select'}),
-            'project_location' : forms.TextInput(attrs={'class':'form-input'}),
-            'project_location_type' : forms.Select(attrs={'class':'form-select'}),
-            'project_budget' : forms.NumberInput(attrs={'class':'form-input'}),
-            'project_duration' : forms.NumberInput(attrs={'class':'form-input'}),
-            'number_of_employees' : forms.NumberInput(attrs={'class':'form-input'})
-        }
-        labels ={
-            'project_name' : 'project name:' ,
-            'Project_type' : 'Project type:',
-            'project_location' : 'project location:',
-            'project_location_type' : 'project location type:',
-            'project_budget' : 'project budget:',
-            'project_duration' : 'project duration:',
-            'number_of_employees' : 'number of employees:'
-        }
-        
