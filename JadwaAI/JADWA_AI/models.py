@@ -72,12 +72,12 @@ class Projects(models.Model):
             self.economic_indicator = float(region_data['economic_indicator'].values[0])
             value = self.economic_indicator
 
-            if value<=0.33:
-                self.economic_indicator ="Low"
-            elif value<=0.66:
-                self.economic_indicator ="Medium"
-            else:
-                self.economic_indicator ="High"
+        if value<=0.33:
+            self.economic_indicator ="Low"
+        elif value<=0.66:
+            self.economic_indicator ="Medium"
+        else:
+            self.economic_indicator ="High"
 
         super().save(*args, **kwargs)
 

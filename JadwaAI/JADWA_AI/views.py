@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate
 from .models import ContactMessage
-from .forms import JadwaUserCreationForm, JadwaAuthenticationForm
+from .forms import JadwaUserCreationForm, JadwaAuthenticationForm, ProjectInformationForm
 
 # =======================
 # Public pages (No Login)
@@ -86,12 +86,8 @@ def dashboard(request):
 
 @login_required
 def project_new(request):
-    """
-    /projects/new/
-    (مؤقت الآن) صفحة إضافة مشروع
-    لاحقاً: فورم + حفظ DB + تشغيل تحليل
-    """
-    return render(request, "pages/project_new.html")
+    form = ProjectInformationForm()
+    return render(request, "pages/project_new.html",{"form":form})
 
 # =======================
 # Register
