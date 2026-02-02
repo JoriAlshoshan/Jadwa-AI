@@ -46,13 +46,25 @@
     <div class="analysis-card">
       <h3 class="card-title">{% trans "AI Recommendations" %}</h3>
 
-      <!-- صندوق التوصيات (يتحدّث تلقائي) -->
-<div id="recsBox"
-     class="{% if recs_status == 'ready' and recs_text %}recommendations-box{% else %}recs-loading-wrap{% endif %}">
+      <!-- ✅ زر التشغيل (يظهر فقط إذا التوصيات غير جاهزة) -->
+      {% if not recs_text %}
+       <button id="startRecsBtn" type="button" class="primary-btn">
+  Generate Recommendations
+</button>
+
+      {% endif %}
+
+      <!-- صندوق التوصيات (نفس اللي عندك، لكن مخفي بالبداية إذا مو جاهز) -->
+      <div id="recsBox"
+           style="{% if recs_status == 'ready' and recs_text %}display:block;{% else %}display:none;{% endif %}"
+           class="{% if recs_status == 'ready' and recs_text %}recommendations-box{% else %}recs-loading-wrap{% endif %}">
+
         {% if recs_status == "ready" and recs_text %}
           {{ recs_text|linebreaks }}
+
         {% elif recs_status == "failed" %}
           <p class="muted">{% trans "Failed to generate recommendations." %}</p>
+
         {% else %}
           <p class="muted">{% trans "Generating AI recommendations…" %}</p>
 
@@ -83,7 +95,7 @@
         };
       </script>
 
-      <!-- Auto Logic -->
+      <!-- Auto Logic (نفس منطقك، بس ما نربطه بـ DOMContentLoaded) -->
       <script>
         function getCSRF() {
           return document.querySelector(
@@ -138,10 +150,32 @@
           }
         }
 
-        document.addEventListener(
-          "DOMContentLoaded",
-          ensureRecommendationsAuto
-        );
+        // ✅ تشغيل المنطق عند الضغط على الزر فقط
+        document.addEventListener("DOMContentLoaded", () => {
+          const cfg = window.JADWA;
+          const btn = document.getElementById("startRecsBtn");
+          const box = document.getElementById("recsBox");
+
+          // لو التوصيات جاهزة من قبل، نخفي الزر ونظهر الصندوق
+          if (cfg.recsStatus === "ready") {
+            if (btn) btn.style.display = "none";
+            if (box) box.style.display = "block";
+            return;
+          }
+
+          // إذا مو جاهزة: لا نسوي شيء إلا عند الضغط
+          if (btn) {
+            btn.addEventListener("click", async () => {
+              btn.disabled = true;
+              btn.style.display = "none";
+              if (box) box.style.display = "block";
+
+              await ensureRecommendationsAuto();
+            });
+          } else {
+            // لو ما فيه زر (مثلاً تبين تشغيل تلقائي مستقبلاً) ما نسوي شيء
+          }
+        });
       </script>
     </div>
 

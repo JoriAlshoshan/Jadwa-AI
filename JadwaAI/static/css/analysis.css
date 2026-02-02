@@ -261,3 +261,32 @@
   background: rgba(245,158,11,.12);
   color:#92400e;
 }
+.primary-btn{
+  background: #0A2FBF;   /* أزرق صافي */
+  color: #fff;
+
+  border: none;          /* ❌ لا إطار */
+  outline: none;         /* ❌ لا تحديد */
+  box-shadow: none;      /* ❌ لا ظل */
+
+  border-radius: 999px;
+  padding: 14px 36px;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: .2px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  transition: background .2s ease;
+}
+
+.primary-btn:hover{
+  background: #0830A8;   /* أغمق شوي عند hover */
+}
+
+.primary-btn:active{
+  background: #06298F;
+}
