@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/analysis.css' %}">
@@ -8,48 +9,64 @@
 {% block content %}
 <div class="container analysis-page">
 
+  <!-- ===================== HERO ===================== -->
   <section class="analysis-hero">
-    <h1 class="analysis-title">Analysis Result</h1>
-    <p class="analysis-subtitle">AI-powered feasibility insights for your project</p>
+    <h1 class="analysis-title">{% trans "Analysis Result" %}</h1>
+    <p class="analysis-subtitle">
+      {% trans "AI-powered feasibility insights for your project" %}
+    </p>
   </section>
 
   <section class="analysis-grid">
 
+    <!-- ===================== Project Overview ===================== -->
     <div class="analysis-card">
-      <h3 class="card-title">Project Overview</h3>
+      <h3 class="card-title">{% trans "Project Overview" %}</h3>
 
-      <p><strong>Project:</strong> {{ result.project_name }}</p>
+      <p><strong>{% trans "Project" %}:</strong> {{ result.project_name }}</p>
 
       <p>
-        <strong>Feasibility Probability:</strong>
+        <strong>{% trans "Feasibility Probability" %}:</strong>
         <span class="probability">{{ feasibility_percent|floatformat:2 }}%</span>
       </p>
 
       <p class="status-row">
-        <strong>Status:</strong>
-        <span class="status-badge {% if result.label == 'Feasible' %}success{% else %}danger{% endif %}">
-          {{ result.label }}
-        </span>
+        <strong>{% trans "Status" %}:</strong>
+        {% if feasibility_percent >= 80 %}
+          <span class="status-badge success">{% trans "Feasible" %}</span>
+        {% elif feasibility_percent >= 50 %}
+          <span class="status-badge warning">{% trans "Needs Improvement" %}</span>
+        {% else %}
+          <span class="status-badge danger">{% trans "Not Feasible" %}</span>
+        {% endif %}
       </p>
     </div>
 
+    <!-- ===================== AI Recommendations ===================== -->
     <div class="analysis-card">
-      <h3 class="card-title">AI Recommendations</h3>
+      <h3 class="card-title">{% trans "AI Recommendations" %}</h3>
 
-      {% if result.recommendations_status == "ready" and result.recommendations %}
-        <div class="recommendations-box">
-          {{ result.recommendations|linebreaks }}
-        </div>
+      <!-- ✅ زر التشغيل (يظهر فقط إذا التوصيات غير جاهزة) -->
+      {% if not recs_text %}
+       <button id="startRecsBtn" type="button" class="primary-btn">
+  Generate Recommendations
+</button>
 
-      {% elif result.recommendations_status == "failed" %}
-        <p class="muted">Failed to generate recommendations.</p>
-        <a href="{% url 'analysis_result' result.id %}?loading=1" class="btn primary-btn">
-          Try Again
-        </a>
+      {% endif %}
 
-      {% else %}
-        {% if request.GET.loading %}
-          <p class="muted">Generating AI recommendations…</p>
+      <!-- صندوق التوصيات (نفس اللي عندك، لكن مخفي بالبداية إذا مو جاهز) -->
+      <div id="recsBox"
+           style="{% if recs_status == 'ready' and recs_text %}display:block;{% else %}display:none;{% endif %}"
+           class="{% if recs_status == 'ready' and recs_text %}recommendations-box{% else %}recs-loading-wrap{% endif %}">
+
+        {% if recs_status == "ready" and recs_text %}
+          {{ recs_text|linebreaks }}
+
+        {% elif recs_status == "failed" %}
+          <p class="muted">{% trans "Failed to generate recommendations." %}</p>
+
+        {% else %}
+          <p class="muted">{% trans "Generating AI recommendations…" %}</p>
 
           <div class="skeleton-box">
             <div class="skeleton-line w-80"></div>
@@ -60,43 +77,132 @@
             <div class="skeleton-line w-100"></div>
             <div class="skeleton-line w-85"></div>
           </div>
-
-          <form id="csrfForm">{% csrf_token %}</form>
-
-          <script>
-            (async () => {
-              const token = document.querySelector("#csrfForm input[name=csrfmiddlewaretoken]")?.value || "";
-              const genUrl = "{% url 'generate_recs' result.id %}";
-              fetch(genUrl, { method: "POST", headers: { "X-CSRFToken": token } }).catch(() => {});
-
-              const statusUrl = "{% url 'recs_status' result.id %}";
-              const timer = setInterval(async () => {
-                try {
-                  const res = await fetch(statusUrl, { headers: { "Accept": "application/json" } });
-                  const data = await res.json();
-                  if (data.status === "ready" || data.status === "failed") {
-                    clearInterval(timer);
-                    window.location.href = "{% url 'analysis_result' result.id %}";
-                  }
-                } catch (e) {}
-              }, 1200);
-            })();
-          </script>
-
-        {% else %}
-          <p class="muted">Recommendations have not been generated yet.</p>
-          <a href="{% url 'analysis_result' result.id %}?loading=1" class="btn primary-btn">
-            Generate Recommendations
-          </a>
         {% endif %}
-      {% endif %}
+      </div>
+
+      <!-- CSRF -->
+      <form id="csrfForm">{% csrf_token %}</form>
+
+      <!-- Config from Django -->
+      <script>
+        window.JADWA = {
+          recsStatus: "{{ recs_status }}",
+          hasOtherReady: "{{ has_other_ready|yesno:'true,false' }}",
+          urlGenerate: "{% url 'generate_recs' result.id %}",
+          urlTranslate: "{% url 'translate_recs' result.id %}",
+          urlStatus: "{% url 'recs_status' result.id %}",
+          reloadUrl: "{% url 'analysis_result' result.id %}"
+        };
+      </script>
+
+      <!-- Auto Logic (نفس منطقك، بس ما نربطه بـ DOMContentLoaded) -->
+      <script>
+        function getCSRF() {
+          return document.querySelector(
+            "#csrfForm input[name=csrfmiddlewaretoken]"
+          )?.value || "";
+        }
+
+        async function post(url) {
+          const res = await fetch(url, {
+            method: "POST",
+            headers: { "X-CSRFToken": getCSRF() }
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw data;
+          return data;
+        }
+
+        async function pollStatus() {
+          const cfg = window.JADWA;
+          const timer = setInterval(async () => {
+            try {
+              const res = await fetch(cfg.urlStatus);
+              const data = await res.json();
+              if (data.status === "ready" || data.status === "failed") {
+                clearInterval(timer);
+                window.location.href = cfg.reloadUrl;
+              }
+            } catch (e) {}
+          }, 1200);
+        }
+
+        async function ensureRecommendationsAuto() {
+          const cfg = window.JADWA;
+
+          // إذا جاهزة → لا تسوي شيء
+          if (cfg.recsStatus === "ready") return;
+
+          try {
+            // 🔁 ترجمة تلقائية إذا اللغة الثانية جاهزة
+            if (cfg.hasOtherReady === "true") {
+              await post(cfg.urlTranslate);
+              window.location.href = cfg.reloadUrl;
+              return;
+            }
+
+            // ⚙️ توليد تلقائي إذا ما فيه شيء
+            await post(cfg.urlGenerate);
+            await pollStatus();
+
+          } catch (e) {
+            window.location.href = cfg.reloadUrl;
+          }
+        }
+
+        // ✅ تشغيل المنطق عند الضغط على الزر فقط
+        document.addEventListener("DOMContentLoaded", () => {
+          const cfg = window.JADWA;
+          const btn = document.getElementById("startRecsBtn");
+          const box = document.getElementById("recsBox");
+
+          // لو التوصيات جاهزة من قبل، نخفي الزر ونظهر الصندوق
+          if (cfg.recsStatus === "ready") {
+            if (btn) btn.style.display = "none";
+            if (box) box.style.display = "block";
+            return;
+          }
+
+          // إذا مو جاهزة: لا نسوي شيء إلا عند الضغط
+          if (btn) {
+            btn.addEventListener("click", async () => {
+              btn.disabled = true;
+              btn.style.display = "none";
+              if (box) box.style.display = "block";
+
+              await ensureRecommendationsAuto();
+            });
+          } else {
+            // لو ما فيه زر (مثلاً تبين تشغيل تلقائي مستقبلاً) ما نسوي شيء
+          }
+        });
+      </script>
     </div>
 
   </section>
 
+  <!-- ===================== Actions ===================== -->
   <div class="analysis-actions">
-    <a href="/" class="btn secondary-btn">Back to Dashboard</a>
+    <a href="{% url 'analysis_pdf' result.id %}"
+       class="btn secondary-btn pdf-btn"
+       id="pdfBtn">
+      <span class="pdf-text">{% trans "Download PDF" %}</span>
+    </a>
+
+    <a href="{% url 'dashboard' %}" class="btn secondary-btn">
+      {% trans "Back to Dashboard" %}
+    </a>
   </div>
+
+  <script>
+    const btn = document.getElementById("pdfBtn");
+    if (btn) {
+      btn.addEventListener("click", () => {
+        btn.classList.add("is-loading");
+        btn.setAttribute("aria-busy", "true");
+      });
+    }
+  </script>
 
 </div>
 {% endblock %}

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/analysis.css' %}">
@@ -9,32 +10,39 @@
 <div class="container analysis-page">
 
   <section class="analysis-hero">
-    <h1 class="analysis-title">Analysis Result</h1>
-    <p class="analysis-subtitle">AI-powered feasibility insights for your project</p>
+    <h1 class="analysis-title">{% trans "Analysis Result" %}</h1>
+    <p class="analysis-subtitle">{% trans "AI-powered feasibility insights for your project" %}</p>
   </section>
 
   <section class="analysis-grid">
 
     <div class="analysis-card">
-      <h3 class="card-title">Project Overview</h3>
+      <h3 class="card-title">{% trans "Project Overview" %}</h3>
 
-      <p><strong>Project:</strong> {{ result.project_name }}</p>
+      <p><strong>{% trans "Project" %}:</strong> {{ result.project_name }}</p>
 
       <p>
-        <strong>Feasibility Probability:</strong>
+        <strong>{% trans "Feasibility Probability" %}:</strong>
         <span class="probability">{{ feasibility_percent|floatformat:2 }}%</span>
       </p>
 
       <p class="status-row">
-        <strong>Status:</strong>
+        <strong>{% trans "Status" %}:</strong>
+
         <span class="status-badge {% if result.label == 'Feasible' %}success{% else %}danger{% endif %}">
-          {{ result.label }}
+          {% if result.label == "Feasible" %}
+            {% trans "Feasible" %}
+          {% elif result.label == "Not Feasible" %}
+            {% trans "Not Feasible" %}
+          {% else %}
+            {{ result.label }}
+          {% endif %}
         </span>
       </p>
     </div>
 
     <div class="analysis-card">
-      <h3 class="card-title">AI Recommendations</h3>
+      <h3 class="card-title">{% trans "AI Recommendations" %}</h3>
 
       <div class="skeleton-box">
         <div class="skeleton-line w-80"></div>
@@ -46,7 +54,10 @@
         <div class="skeleton-line w-85"></div>
       </div>
 
-      <p class="muted" style="margin-top:14px;">Generating recommendations, please wait...</p>
+      <p class="muted" style="margin-top:14px;">
+{% load i18n %}
+<p class="muted" style="margin-top:14px;">{% trans "Generating AI recommendations..." %}</p>
+      </p>
 
       <form id="csrfForm">{% csrf_token %}</form>
     </div>
@@ -54,7 +65,9 @@
   </section>
 
   <div class="analysis-actions">
-    <a href="{% url 'analysis_result' result.id %}" class="secondary-btn">Back</a>
+    <a href="{% url 'analysis_result' result.id %}" class="secondary-btn">
+      {% trans "Back" %}
+    </a>
   </div>
 
 </div>

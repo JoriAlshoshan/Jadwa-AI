@@ -1,0 +1,106 @@
+{% load i18n %}
+<!doctype html>
+<html lang="{{ request.LANGUAGE_CODE }}"
+      dir="{% if request.LANGUAGE_CODE|slice:":2" == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+  <meta charset="utf-8">
+  <style>
+    body{
+      font-family: {% if request.LANGUAGE_CODE|slice:":2" == 'ar' %}"Cairo", sans-serif{% else %}Arial, sans-serif{% endif %};
+      direction: {% if request.LANGUAGE_CODE|slice:":2" == 'ar' %}rtl{% else %}ltr{% endif %};
+      margin: 24px;
+      color: #111;
+    }
+
+    h1{ margin:0 0 10px; }
+    h2{ margin:18px 0 10px; }
+
+    .box{
+      border:1px solid #ddd;
+      padding:14px;
+      border-radius:12px;
+    }
+
+    .muted{ color:#555; }
+
+    .badge{
+      padding:8px 18px;
+      border-radius:999px;
+      font-weight:800;
+      display:inline-block;
+      font-size:16px;
+      margin-inline-start:10px; /* RTL/LTR friendly */
+    }
+    .badge.ok{ background:#e9f7ef; color:#1e7e34; }
+    .badge.no{ background:#fdecea; color:#b02a37; }
+
+    .recs{
+      white-space: pre-wrap;
+      line-height:1.9;
+      unicode-bidi: plaintext;
+    }
+    .recs.ltr{ direction:ltr; text-align:left; }
+    .recs.rtl{ direction:rtl; text-align:right; }
+  </style>
+</head>
+
+<body>
+
+  <h1>{% trans "Jadwa AI - Analysis Report" %}</h1>
+
+  <div class="box">
+
+    <h2>{% trans "Project Overview" %}</h2>
+
+    <div class="muted" style="margin-top:8px;">
+      <b>{% trans "Project" %}:</b>
+      {{ result.project_name }}
+    </div>
+
+    <div style="margin-top:10px;">
+      <b>{% trans "Feasibility Score" %}:</b>
+      <span style="color:#0b5cff; font-weight:800;">
+        {{ feasibility_percent|floatformat:2 }}%
+      </span>
+    </div>
+
+    <div style="margin-top:12px;">
+      <b>{% trans "Status" %}:</b>
+
+      {% with lbl=result.label|lower|cut:" " %}
+        {% if lbl == "feasible" %}
+          <span class="badge ok">
+            {% if request.LANGUAGE_CODE|slice:":2" == "ar" %}
+              قابل للتنفيذ
+            {% else %}
+              Feasible
+            {% endif %}
+          </span>
+
+        {% elif lbl == "notfeasible" or lbl == "not_feasible" or lbl == "infeasible" %}
+          <span class="badge no">
+            {% if request.LANGUAGE_CODE|slice:":2" == "ar" %}
+              غير قابل للتنفيذ
+            {% else %}
+              Not Feasible
+            {% endif %}
+          </span>
+
+        {% else %}
+          <span class="badge">
+            {{ result.label }}
+          </span>
+        {% endif %}
+      {% endwith %}
+    </div>
+
+  </div>
+
+  <h2>{% trans "AI Recommendations" %}</h2>
+
+  <div class="box recs {% if recs_is_ar %}rtl{% else %}ltr{% endif %}">
+    {{ recs_text|default:_("No recommendations generated yet.") }}
+  </div>
+
+</body>
+</html>

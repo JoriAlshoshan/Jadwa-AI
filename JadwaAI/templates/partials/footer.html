@@ -14,14 +14,15 @@
       </p>
     </div>
 
-    <!-- Column 2 -->
-    <div class="footer-col">
-      <div class="footer-title">{% trans "Explore" %}</div>
-      <a href="#product">{% trans "Product" %}</a>
-      <a href="#how">{% trans "How it Works" %}</a>
-      <a href="#stories">{% trans "Success Stories" %}</a>
-      <a href="#contact">{% trans "Contact" %}</a>
-    </div>
+<!-- Column 2 -->
+<div class="footer-col">
+  <div class="footer-title">{% trans "Explore" %}</div>
+
+  <a href="{% url 'landing' %}#product">{% trans "Product" %}</a>
+  <a href="{% url 'landing' %}#how">{% trans "How it Works" %}</a>
+  <a href="{% url 'landing' %}#stories">{% trans "Success Stories" %}</a>
+  <a href="{% url 'landing' %}#contact">{% trans "Contact" %}</a>
+</div>
 
     <!-- Column 3 -->
     <div class="footer-col">

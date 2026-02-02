@@ -1,12 +1,22 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import get_user_model, login
 from .models import ContactMessage
+<<<<<<< HEAD
 from .forms import JadwaUserCreationForm, JadwaAuthenticationForm, ProjectInformationForm
+=======
+from .forms import JadwaUserCreationForm, JadwaAuthenticationForm
+from .models import PasswordResetOTP
+from .forms import ForgotPasswordForm, OTPForm, ResetPasswordForm
+import random
+from django.utils import timezone
+
+User = get_user_model()  
+>>>>>>> a77b9670be2e15a304d8d6d3f8d9918d04030945
 
 # =======================
 # Public pages (No Login)
@@ -73,7 +83,100 @@ def jadwa_login(request):
     else:
         form = JadwaAuthenticationForm()
 
-    return render(request, "pages/login.html", {"form": form})
+    return render(request, "registration/login.html", {"form": form})
+
+# =======================
+# Forgot Password
+# =======================
+
+def forgot_password(request):
+    if request.method == "POST":
+        form = ForgotPasswordForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                messages.error(request, "No user found with this email.")
+                return redirect("forgot_password")
+
+            otp = f"{random.randint(100000, 999999)}"
+
+            PasswordResetOTP.objects.create(user=user, code=otp)
+
+            send_mail(
+                subject="Your Jadwa AI OTP Code",
+                message=f"Your OTP code is: {otp}",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.email],
+            )
+
+            request.session["reset_user_id"] = user.id
+            messages.success(request, "OTP sent to your email.")
+            return redirect("verify_otp")
+    else:
+        form = ForgotPasswordForm()
+
+    return render(request, "pages/forgot_password.html", {"form": form})
+
+# =======================
+# Verify OTP
+# =======================
+
+def verify_otp(request):
+    user_id = request.session.get("reset_user_id")
+    if not user_id:
+        return redirect("forgot_password")
+
+    user = get_object_or_404(User, id=user_id)
+
+    if request.method == "POST":
+        otp_digits = [
+            request.POST.get(f'otp{i}', '') for i in range(1, 7)
+        ]
+        full_otp = "".join(otp_digits) 
+
+        form = OTPForm({'otp': full_otp})
+        
+        if form.is_valid():
+            otp_obj = PasswordResetOTP.objects.filter(
+                user=user, 
+                code=full_otp
+            ).last()
+
+            if otp_obj and otp_obj.is_valid():
+                request.session["otp_verified"] = True
+                return redirect("reset_password")
+            else:
+                messages.error(request, "Invalid or expired OTP.")
+        else:
+            messages.error(request, "Please enter all 6 digits correctly.")
+    else:
+        form = OTPForm()
+
+    return render(request, "pages/verify_otp.html", {"form": form})
+
+# =======================
+# Reset Password
+# =======================
+
+def reset_password(request):
+    if not request.session.get("otp_verified"):
+        return redirect("forgot_password")
+
+    user = get_object_or_404(User, id=request.session["reset_user_id"])
+
+    if request.method == "POST":
+        form = ResetPasswordForm(user, request.POST)
+        if form.is_valid():
+            form.save()  
+            messages.success(request, "Password reset successfully. You can login now.")
+            request.session.flush() 
+            return redirect("login")
+    else:
+        form = ResetPasswordForm(user)
+
+    return render(request, "pages/reset_password.html", {"form": form})
 
 # =======================
 # User (After Login)
@@ -98,14 +201,18 @@ def register(request):
         return redirect("dashboard")
 
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = JadwaUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
+            messages.success(request, "Welcome! Your account has been created.")
             return redirect("dashboard")
-        messages.error(request, "Please fix the errors below.")
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
     else:
-        form = UserCreationForm()
+        form = JadwaUserCreationForm()
 
     return render(request, "pages/register.html", {"form": form})
 
