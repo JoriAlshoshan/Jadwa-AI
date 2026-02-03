@@ -5,40 +5,49 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/AddProjectPage.css' %}">
 
-<div class="page-container" style="min-height:70vh; display:flex; align-items:center; justify-content:center; padding:40px;">
-  <div style="max-width:650px; text-align:center; width: 100%;">
-    
-    <h1 style="margin-bottom:10px;">{% trans "Add Project" %}</h1>
-    <p style="opacity:.8; margin-bottom:24px;">{% trans "Fill in the details below to analyze your project" %}</p>
+<div class="page-container" style="min-height:90vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px;">
+  
+  <div style="max-width:850px; width:100%;">
+    <h1 class="form-title">{% trans "Add Project" %}</h1>
 
-    <div class="form-box" style="text-align: right; direction: rtl;">
-        <form action="{% url 'project_new' %}" method="post">
-            {% csrf_token %}
-            <h2 class="form-title">{% trans "Analyze Your Project" %}</h2>
-            
-            {% for field in form %}
-            <div class="form-row" style="margin-bottom: 15px;">
-                <label for="{{ field.id_for_label }}" style="display: block; margin-bottom: 5px; font-weight: bold;">
-                    {{ field.label }}
+    <div class="form-box" style="direction: ltr;">
+      <form action="{% url 'project_new' %}" method="post">
+        {% csrf_token %}
+        
+        <table>
+          {% for field in form %}
+            <tr>
+              <td style="width: 260px; vertical-align: middle; text-align: left;">
+                <label for="{{ field.id_for_label }}">
+                  {{ field.label }}
                 </label>
-                {{ field }}
-                {% if field.errors %}
-                    <div class="error" style="color: red; font-size: 12px;">
-                        {{ field.errors }}
+              </td>
+              <td style="vertical-align: middle;">
+                <div style="width: 100%;">
+                  {{ field }}
+                  {% if field.errors %}
+                    <div class="error-text">
+                        {{ field.errors.0 }}
                     </div>
-                {% endif %}
-            </div>
-            {% endfor %}
-            
-            <button type="submit" class="btn btn-full">{% trans "Show Result" %}</button>
-        </form>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+
+        <div style="margin-top: 40px; text-align: center;">
+          <button type="submit" class="btn-full" style="width: 100%; max-width: 300px;">
+            {% trans "Show result" %}
+          </button>
+        </div>
+      </form>
     </div>
 
-    <div style="margin-top: 30px;">
-        <a href="{% url 'dashboard' %}" class="btn">{% trans "Back to Dashboard" %}</a>
-        <a href="/" class="btn btn-outline" style="margin-right:10px;">{% trans "Back to Home" %}</a>
+    <div style="margin-top: 30px; display: flex; gap: 20px; justify-content: center;">
+      <a href="{% url 'dashboard' %}" class="btn-outline" style="flex: 1; max-width: 200px;">{% trans "Back to Dashboard" %}</a>
+      <a href="/" class="btn-outline" style="flex: 1; max-width: 200px;">{% trans "Back to Home" %}</a>
     </div>
-    
   </div>
 </div>
 {% endblock %}
