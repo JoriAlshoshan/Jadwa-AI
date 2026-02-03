@@ -782,15 +782,6 @@ select.form-input{
 .legal-card a:hover{
   text-decoration: underline;
 }
-<<<<<<< HEAD
-.form-control{
-    border:1px solid rgba(17,17,17,.08);
-    border-radius:22px;
-    padding:18px ;
-    background:#26f30b;
-    box-shadow:0 12px 32px rgba(0,0,0,.05);
-    position:relative;
-=======
 .nav-account {
   position: relative;
 }
@@ -830,5 +821,4 @@ select.form-input{
 .nav-dropdown .dropdown-link:hover {
   background: #f3f5f9;
   border-radius: 6px;
->>>>>>> a77b9670be2e15a304d8d6d3f8d9918d04030945
 }
