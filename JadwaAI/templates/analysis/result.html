@@ -30,14 +30,31 @@
         <span class="probability">{{ feasibility_percent|floatformat:2 }}%</span>
       </p>
 
+      {# ✅ (اختياري) عرض الثريشولد عشان يكون واضح للمستخدم #}
+      <p class="muted" style="margin-top:-6px;">
+        <small>
+          {% trans "Decision Threshold" %}: {{ result.threshold|floatformat:2 }}
+        </small>
+      </p>
+
       <p class="status-row">
         <strong>{% trans "Status" %}:</strong>
-        {% if feasibility_percent >= 80 %}
-          <span class="status-badge success">{% trans "Feasible" %}</span>
-        {% elif feasibility_percent >= 50 %}
-          <span class="status-badge warning">{% trans "Needs Improvement" %}</span>
+
+        {# ✅ الحالة الآن من الـ views: status_text + is_feasible #}
+        {% if status_text %}
+          {# نلوّن البادج حسب النتيجة الفعلية #}
+          {% if result.probability >= result.threshold %}
+            <span class="status-badge success">{{ status_text }}</span>
+          {% else %}
+            <span class="status-badge danger">{{ status_text }}</span>
+          {% endif %}
         {% else %}
-          <span class="status-badge danger">{% trans "Not Feasible" %}</span>
+          {# fallback لو نسيتِ تمرير status_text من views #}
+          {% if result.probability >= result.threshold %}
+            <span class="status-badge success">{% trans "Feasible" %}</span>
+          {% else %}
+            <span class="status-badge danger">{% trans "Not Feasible" %}</span>
+          {% endif %}
         {% endif %}
       </p>
     </div>
@@ -48,13 +65,12 @@
 
       <!-- ✅ زر التشغيل (يظهر فقط إذا التوصيات غير جاهزة) -->
       {% if not recs_text %}
-       <button id="startRecsBtn" type="button" class="primary-btn">
-  Generate Recommendations
-</button>
-
+        <button id="startRecsBtn" type="button" class="primary-btn">
+          {% trans "Generate Recommendations" %}
+        </button>
       {% endif %}
 
-      <!-- صندوق التوصيات (نفس اللي عندك، لكن مخفي بالبداية إذا مو جاهز) -->
+      <!-- صندوق التوصيات -->
       <div id="recsBox"
            style="{% if recs_status == 'ready' and recs_text %}display:block;{% else %}display:none;{% endif %}"
            class="{% if recs_status == 'ready' and recs_text %}recommendations-box{% else %}recs-loading-wrap{% endif %}">
@@ -95,7 +111,6 @@
         };
       </script>
 
-      <!-- Auto Logic (نفس منطقك، بس ما نربطه بـ DOMContentLoaded) -->
       <script>
         function getCSRF() {
           return document.querySelector(
@@ -130,18 +145,15 @@
         async function ensureRecommendationsAuto() {
           const cfg = window.JADWA;
 
-          // إذا جاهزة → لا تسوي شيء
           if (cfg.recsStatus === "ready") return;
 
           try {
-            // 🔁 ترجمة تلقائية إذا اللغة الثانية جاهزة
             if (cfg.hasOtherReady === "true") {
               await post(cfg.urlTranslate);
               window.location.href = cfg.reloadUrl;
               return;
             }
 
-            // ⚙️ توليد تلقائي إذا ما فيه شيء
             await post(cfg.urlGenerate);
             await pollStatus();
 
@@ -150,30 +162,24 @@
           }
         }
 
-        // ✅ تشغيل المنطق عند الضغط على الزر فقط
         document.addEventListener("DOMContentLoaded", () => {
           const cfg = window.JADWA;
           const btn = document.getElementById("startRecsBtn");
           const box = document.getElementById("recsBox");
 
-          // لو التوصيات جاهزة من قبل، نخفي الزر ونظهر الصندوق
           if (cfg.recsStatus === "ready") {
             if (btn) btn.style.display = "none";
             if (box) box.style.display = "block";
             return;
           }
 
-          // إذا مو جاهزة: لا نسوي شيء إلا عند الضغط
           if (btn) {
             btn.addEventListener("click", async () => {
               btn.disabled = true;
               btn.style.display = "none";
               if (box) box.style.display = "block";
-
               await ensureRecommendationsAuto();
             });
-          } else {
-            // لو ما فيه زر (مثلاً تبين تشغيل تلقائي مستقبلاً) ما نسوي شيء
           }
         });
       </script>

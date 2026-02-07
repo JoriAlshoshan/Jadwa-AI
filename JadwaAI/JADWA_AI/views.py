@@ -3,17 +3,24 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import get_user_model, login
-from .models import ContactMessage
-from .forms import ProjectInformationForm
-from .forms import JadwaUserCreationForm, JadwaAuthenticationForm
-from .models import PasswordResetOTP
-from .forms import ForgotPasswordForm, OTPForm, ResetPasswordForm
 import random
-from django.utils import timezone
+from analysis.models import AnalysisResult
+from django.utils import translation
 
-User = get_user_model()  
+
+from .models import ContactMessage, PasswordResetOTP, Projects
+from .forms import (
+    ProjectInformationForm,
+    JadwaUserCreationForm,
+    JadwaAuthenticationForm,
+    ForgotPasswordForm,
+    OTPForm,
+    ResetPasswordForm
+)
+
+User = get_user_model()
+
 
 # =======================
 # Public pages (No Login)
@@ -33,6 +40,7 @@ def privacy(request):
 
 def terms(request):
     return render(request, "pages/terms.html")
+
 
 # =======================
 # SignUp
@@ -59,6 +67,7 @@ def jadwa_signup(request):
 
     return render(request, "pages/register.html", {"form": form})
 
+
 # =======================
 # Login
 # =======================
@@ -82,6 +91,7 @@ def jadwa_login(request):
 
     return render(request, "registration/login.html", {"form": form})
 
+
 # =======================
 # Forgot Password
 # =======================
@@ -98,7 +108,6 @@ def forgot_password(request):
                 return redirect("forgot_password")
 
             otp = f"{random.randint(100000, 999999)}"
-
             PasswordResetOTP.objects.create(user=user, code=otp)
 
             send_mail(
@@ -116,6 +125,7 @@ def forgot_password(request):
 
     return render(request, "pages/forgot_password.html", {"form": form})
 
+
 # =======================
 # Verify OTP
 # =======================
@@ -128,18 +138,13 @@ def verify_otp(request):
     user = get_object_or_404(User, id=user_id)
 
     if request.method == "POST":
-        otp_digits = [
-            request.POST.get(f'otp{i}', '') for i in range(1, 7)
-        ]
-        full_otp = "".join(otp_digits) 
+        otp_digits = [request.POST.get(f"otp{i}", "") for i in range(1, 7)]
+        full_otp = "".join(otp_digits)
 
-        form = OTPForm({'otp': full_otp})
-        
+        form = OTPForm({"otp": full_otp})
+
         if form.is_valid():
-            otp_obj = PasswordResetOTP.objects.filter(
-                user=user, 
-                code=full_otp
-            ).last()
+            otp_obj = PasswordResetOTP.objects.filter(user=user, code=full_otp).last()
 
             if otp_obj and otp_obj.is_valid():
                 request.session["otp_verified"] = True
@@ -153,6 +158,7 @@ def verify_otp(request):
 
     return render(request, "pages/verify_otp.html", {"form": form})
 
+
 # =======================
 # Reset Password
 # =======================
@@ -161,19 +167,21 @@ def reset_password(request):
     if not request.session.get("otp_verified"):
         return redirect("forgot_password")
 
-    user = get_object_or_404(User, id=request.session["reset_user_id"])
+    user = get_object_or_404(User, id=request.session.get("reset_user_id"))
 
     if request.method == "POST":
         form = ResetPasswordForm(user, request.POST)
         if form.is_valid():
-            form.save()  
+            form.save()
             messages.success(request, "Password reset successfully. You can login now.")
-            request.session.flush() 
+            request.session.flush()
+            # ✅ اسم المسار في urls عندك هو name="login"
             return redirect("login")
     else:
         form = ResetPasswordForm(user)
 
     return render(request, "pages/reset_password.html", {"form": form})
+
 
 # =======================
 # User (After Login)
@@ -184,13 +192,70 @@ def dashboard(request):
     return render(request, "pages/dashboard.html")
 
 
+# =======================
+# Project Create (After Login)
+# =======================
+
 @login_required
 def project_new(request):
-    form = ProjectInformationForm()
-    return render(request, "pages/project_new.html",{"form":form})
+    if request.method == "POST":
+        form = ProjectInformationForm(request.POST)
+        if form.is_valid():
+            project = form.save(commit=False)
+
+            if hasattr(project, "user_id"):
+                project.user = request.user
+
+            project.save()
+
+            # ✅ بعد الحفظ شغّلي التحليل وودّي لصفحة النتيجة
+            return redirect("run_analysis", project_id=project.pk)
+
+        else:
+            messages.error(request, "Please fix the errors below.")
+    else:
+        form = ProjectInformationForm()
+
+    return render(request, "pages/project_new.html", {"form": form})
+
+
 
 # =======================
-# Register
+# Project Result Page
+# =======================
+
+
+
+@login_required
+def project_result(request, pk):
+    project = get_object_or_404(Projects, pk=pk)
+
+    # ✅ جيب آخر نتيجة تحليل مرتبطة بالمشروع (يدعم project FK أو project_id)
+    try:
+        AnalysisResult._meta.get_field("project")
+        result = AnalysisResult.objects.filter(project=project).order_by("-id").first()
+    except Exception:
+        result = AnalysisResult.objects.filter(project_id=project.id).order_by("-id").first()
+
+    if not result:
+        messages.error(request, "ما فيه نتيجة تحليل لهذا المشروع للحين. شغّلي التحليل أول.")
+        return redirect("dashboard")
+
+    lang = translation.get_language() or "en"
+    recs_status = result.recommendations_status_ar if lang.startswith("ar") else result.recommendations_status_en
+
+    return render(request, "analysis/result.html", {
+        "project": project,
+        "result": result,          # ✅ ضروري
+        "recs_status": recs_status, # ✅ صحيح
+        "has_other_ready": False,
+    })
+
+
+
+
+# =======================
+# Register (optional duplicate)
 # =======================
 
 def register(request):
@@ -213,6 +278,7 @@ def register(request):
 
     return render(request, "pages/register.html", {"form": form})
 
+
 # =======================
 # Contact
 # =======================
@@ -230,7 +296,6 @@ def contact_submit(request):
         messages.error(request, "Please fill in all required fields correctly.")
         return redirect("/#contact")
 
-    # Save message
     ContactMessage.objects.create(
         full_name=name,
         email=email,
@@ -238,7 +303,6 @@ def contact_submit(request):
         message=message,
     )
 
-    # Email notification
     send_mail(
         subject=f"[Jadwa AI] New Contact: {topic}",
         message=(
@@ -252,8 +316,5 @@ def contact_submit(request):
         fail_silently=False,
     )
 
-    messages.success(
-        request,
-        "Message sent successfully. We will get back to you shortly."
-    )
+    messages.success(request, "Message sent successfully. We will get back to you shortly.")
     return redirect("/#contact")

@@ -16,15 +16,19 @@
         
         <table>
           {% for field in form %}
-            <tr>
+
+            {# ✅ نخفي صف Other افتراضيًا ونظهره بالـ JS #}
+            <tr {% if field.name == "project_location_other" %} id="row_location_other" style="display:none;" {% endif %}>
               <td style="width: 260px; vertical-align: middle; text-align: left;">
                 <label for="{{ field.id_for_label }}">
                   {{ field.label }}
                 </label>
               </td>
+
               <td style="vertical-align: middle;">
                 <div style="width: 100%;">
                   {{ field }}
+
                   {% if field.errors %}
                     <div class="error-text">
                         {{ field.errors.0 }}
@@ -33,6 +37,7 @@
                 </div>
               </td>
             </tr>
+
           {% endfor %}
         </table>
 
@@ -50,4 +55,29 @@
     </div>
   </div>
 </div>
+
+<script>
+  (function () {
+    // لازم يكون اسم الحقل في الفورم: project_location
+    const locationSelect = document.getElementById("id_project_location");
+    const otherRow = document.getElementById("row_location_other");
+    const otherInput = document.getElementById("id_project_location_other");
+
+    function toggleOtherRow() {
+      if (!locationSelect || !otherRow) return;
+
+      const isOther = locationSelect.value === "Other";
+      otherRow.style.display = isOther ? "" : "none";
+
+      // إذا مو Other، نمسح قيمة الحقل عشان ما تنحفظ بالغلط
+      if (!isOther && otherInput) otherInput.value = "";
+    }
+
+    if (locationSelect) {
+      toggleOtherRow();
+      locationSelect.addEventListener("change", toggleOtherRow);
+    }
+  })();
+</script>
+
 {% endblock %}

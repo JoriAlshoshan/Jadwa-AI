@@ -10,6 +10,7 @@ urlpatterns = [
     path("register/", views.register, name="register"),
 
     path("projects/new/", views.project_new, name="project_new"),
+    path("projects/<int:pk>/result/", views.project_result, name="project_result"),
 
     path("contact/", views.contact_submit, name="contact_submit"),
     path("privacy/", views.privacy, name="privacy"),
@@ -22,5 +23,4 @@ urlpatterns = [
     path("forgot-password/", views.forgot_password, name="forgot_password"),
     path("verify-otp/", views.verify_otp, name="verify_otp"),
     path("reset-password/", views.reset_password, name="reset_password"),
-
 ]
