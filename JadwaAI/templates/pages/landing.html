@@ -205,7 +205,7 @@
         <form class="contact-form" method="post" action="{% url 'contact_submit' %}" novalidate>
           {% csrf_token %}
 
-          {% if messages %}
+{% if messages and request.resolver_match.url_name == 'contact_submit' %}
             {% for m in messages %}
               <div class="inline-msg {% if 'success' in m.tags %}inline-msg--success{% else %}inline-msg--error{% endif %}">
                 {{ m }}

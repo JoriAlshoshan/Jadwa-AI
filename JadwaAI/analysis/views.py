@@ -140,11 +140,6 @@ def feasibility_label_by_lang(result: AnalysisResult, lang: str) -> str:
 
 
 def normalize_recommendations_text(result: AnalysisResult, lang: str, recs_text: str) -> str:
-    """
-    ✅ يمنع أي تعارض بين التوصيات ونتيجة (probability vs threshold)
-    - يضيف سطر “قرار نهائي” بالأعلى
-    - ويصحح كلمات feasible / not feasible داخل النص (قد يكون قوي، لكنه يمنع التعارض)
-    """
     text = (recs_text or "").strip()
     prob = float(getattr(result, "probability", 0) or 0)
     thr = float(getattr(result, "threshold", 0.5) or 0.5)
@@ -153,18 +148,13 @@ def normalize_recommendations_text(result: AnalysisResult, lang: str, recs_text:
     if str(lang).startswith("ar"):
         final_word = "قابل للتنفيذ" if ok else "غير قابل للتنفيذ"
         rule = f"تنبيه: القرار النهائي حسب النموذج = ({prob:.4f}) مقارنة بحد القرار ({thr:.2f})، لذلك المشروع {final_word}."
-
-        # تصحيح كلمات داخل النص (اختياري لكنه يمنع التعارض)
         if ok:
             text = re.sub(r"غير قابل للتنفيذ", "قابل للتنفيذ", text)
         else:
-            # انتبهي: يستبدل كل ظهور لعبارة "قابل للتنفيذ"
             text = re.sub(r"قابل للتنفيذ", "غير قابل للتنفيذ", text)
-
     else:
         final_word = "feasible" if ok else "not feasible"
         rule = f"Note: Final decision uses probability ({prob:.4f}) vs threshold ({thr:.2f}); therefore the project is {final_word}."
-
         if ok:
             text = re.sub(r"\bnot feasible\b", "feasible", text, flags=re.IGNORECASE)
         else:
@@ -172,23 +162,18 @@ def normalize_recommendations_text(result: AnalysisResult, lang: str, recs_text:
 
     if not text:
         return rule
-
     if rule.lower() not in text.lower():
         text = f"{rule}\n\n{text}"
-
     return text
 
 
-# ✅ حل "Low" / "Medium" / "High"
 def map_economic_indicator(value):
     v = (value or "").strip()
-
     mapping = {
         "Low": 1, "Medium": 2, "High": 3,
         "low": 1, "medium": 2, "high": 3,
         "1": 1, "2": 2, "3": 3,
     }
-
     try:
         return float(v)
     except Exception:
@@ -196,18 +181,25 @@ def map_economic_indicator(value):
 
 
 def build_project_data(project: Projects) -> dict:
-    """
-    ✅ نقرأ قيم المشروع الحقيقي (عدّلي أسماء الحقول إذا تختلف عندك)
-    """
+    # 1️⃣ نقرأ المنطقة والمدينة من المشروع
+    region = (getattr(project, "project_region", "") or "").strip()
+    city = (getattr(project, "project_city", "") or "").strip()
+
+    # 2️⃣ نكوّن الموقع النهائي اللي يروح للـ ML
+    if region and city:
+        location_for_ml = f"{region}, {city}"
+    else:
+        location_for_ml = region or city
+
+    # 3️⃣ نرجّع البيانات للذكاء الاصطناعي
     return {
-        "type_project": getattr(project, "Project_type", None) or getattr(project, "type_project", "Service"),
-        "region_project": getattr(project, "project_location", None) or getattr(project, "region_project", "Riyadh"),
+        "type_project": getattr(project, "Project_type", "Service"),
+        "region_project": location_for_ml,   # ⭐ هذا أهم سطر
         "budget_project": float(getattr(project, "project_budget", 0) or 0),
         "project_duration_days": int(getattr(project, "project_duration", 0) or 0),
         "num_saudi_employees": int(getattr(project, "number_of_employees", 0) or 0),
-        "num_enterprises": int(getattr(project, "num_enterprises", 0) or 0),
-        "economic_indicator": map_economic_indicator(getattr(project, "economic_indicator", None)),
     }
+
 
 
 # =======================
@@ -219,8 +211,15 @@ def run_analysis(request, project_id):
     from ai.services.analyzer import analyze_project
 
     project = get_object_or_404(Projects, id=project_id)
+    project.refresh_from_db()
 
     project_data = build_project_data(project)
+
+    # messages.info(
+    #     request,
+    #     f"DEBUG → region={getattr(project,'project_region',None)} | city={getattr(project,'project_city',None)} | location sent to ML={project_data.get('region_project')}"
+    # )
+
     out = analyze_project(project_data, include_recommendations=False, lang=current_lang(request))
 
     saved_result = AnalysisResult.objects.create(
@@ -232,7 +231,7 @@ def run_analysis(request, project_id):
                      or "Project",
         probability=float(out.get("probability", 0) or 0),
         threshold=float(out.get("threshold", 0.5) or 0.5),
-        label=str(out.get("label", "") or ""),  # نخليه مخزن بس ما نعتمد عليه للعرض
+        label=str(out.get("label", "") or ""),
         recommendations_ar="",
         recommendations_en="",
         recommendations_status_ar="pending",
@@ -292,7 +291,6 @@ def generate_recs(request, result_id):
         out = analyze_project(project_data, include_recommendations=True, lang=lang)
         raw_text = (out.get("recommendations") or "").strip()
 
-        # ✅ منع التعارض قبل التخزين
         recs_text = normalize_recommendations_text(result_obj, lang, raw_text)
         set_recs_by_lang(result_obj, lang, recs_text, "ready")
 
@@ -340,7 +338,6 @@ def translate_recs(request, result_id):
         from ai.services.translator import translate_text
         translated = translate_text(other_text, target_lang=("ar" if is_ar else "en"))
 
-        # ✅ منع التعارض حتى بعد الترجمة
         translated = normalize_recommendations_text(result_obj, lang, translated)
 
         set_recs_by_lang(result_obj, lang, translated, "ready")
@@ -565,10 +562,22 @@ def analysis_pdf(request, result_id):
         size=10.5,
         color=PRIMARY,
     )
+
+    # ✅ الإضافة الوحيدة: سطر الثريشولد في الـ PDF
     draw_line(
         proj_x + 0.6 * cm,
         proj_x + col_w - 0.6 * cm,
-        cards_top_y - 3.4 * cm,
+        cards_top_y - 3.2 * cm,
+        f"{_('Decision Threshold')}: {result.threshold:.2f}",
+        size=10.5,
+        color=MUTED,
+    )
+
+    # (نزلنا سطر الحالة شوي عشان يركب كل شيء)
+    draw_line(
+        proj_x + 0.6 * cm,
+        proj_x + col_w - 0.6 * cm,
+        cards_top_y - 3.8 * cm,
         f"{_('Status')}: {status_text}",
         size=10.5,
         color=STATUS_COLOR,
@@ -659,3 +668,4 @@ def analysis_pdf(request, result_id):
 
     p.save()
     return response
+

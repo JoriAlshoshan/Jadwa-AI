@@ -53,6 +53,9 @@ class ContactMessage(models.Model):
         return f"{self.full_name} - {self.topic}"
 
 
+# =========================================
+# ✅ Projects (الجدول اللي تستخدمينه للتحليل)
+# =========================================
 class Projects(models.Model):
     project_name = models.CharField(max_length=20)
 
@@ -63,7 +66,64 @@ class Projects(models.Model):
     ]
     Project_type = models.CharField(max_length=50, choices=PROJECT_TYPE_CHOICES, db_column="Project_type")
 
+    # ==========================================================
+    # ✅ (جديد) اختيارات مرتبة للـ UX: Region + City
+    # ==========================================================
+    REGION_CHOICES = [
+        ("riyadh", "منطقة الرياض"),
+        ("qassim", "منطقة القصيم"),
+        ("eastern", "المنطقة الشرقية"),
+        ("makkah", "منطقة مكة المكرمة"),
+        ("madinah", "منطقة المدينة المنورة"),
+        ("asir", "منطقة عسير"),
+        ("tabuk", "منطقة تبوك"),
+        ("jazan", "منطقة جازان"),
+        ("hail", "منطقة حائل"),
+        ("jouf", "منطقة الجوف"),
+        ("najran", "منطقة نجران"),
+        ("bahah", "منطقة الباحة"),
+        ("northern", "منطقة الحدود الشمالية"),
+        ("other", "أخرى"),
+    ]
+
+    CITY_CHOICES = [
+        ("riyadh_city", "الرياض"),
+        ("diriyah", "الدرعية"),
+        ("kharj", "الخرج"),
+        ("buraidah", "بريدة"),
+        ("unaizah", "عنيزة"),
+        ("ras", "الرس"),
+        ("dammam", "الدمام"),
+        ("khobar", "الخبر"),
+        ("dhahran", "الظهران"),
+        ("jubail", "الجبيل"),
+        ("jeddah", "جدة"),
+        ("taif", "الطائف"),
+        ("madinah_city", "المدينة المنورة"),
+        ("abha", "أبها"),
+        ("khamees", "خميس مشيط"),
+        ("tabuk_city", "تبوك"),
+        ("jazan_city", "جازان"),
+        ("hail_city", "حائل"),
+        ("sakaka", "سكاكا"),
+        ("arar", "عرعر"),
+        ("najran_city", "نجران"),
+        ("bahah_city", "الباحة"),
+        ("other", "أخرى"),
+    ]
+
+    # ✅ هذي الحقول هي اللي تحطينها في الفورم بدل القائمة الضخمة
+    project_region = models.CharField(max_length=30, choices=REGION_CHOICES, default="riyadh")
+    project_city = models.CharField(max_length=30, choices=CITY_CHOICES, default="riyadh_city")
+
+    # النص إذا اختارت "أخرى"
+    project_location_other = models.CharField(max_length=100, blank=True, null=True)
+
+    # ==========================================================
+    # ✅ (قديم) القائمة الضخمة تبقى "خلف الكواليس" للداتا ست
+    # ==========================================================
     LOCATION_CHOICES = [
+        # (كما هي عندك بالكامل)
         ("الأحساء", "الأحساء"),
         ("الجبيل, الجبيل الصناعية", "الجبيل, الجبيل الصناعية"),
         ("الرياض", "الرياض"),
@@ -164,9 +224,8 @@ class Projects(models.Model):
         ("Other", "Other"),
     ]
 
-    # ✅ max_length كبير بسبب القيم الطويلة
-    project_location = models.CharField(max_length=255, choices=LOCATION_CHOICES)
-    project_location_other = models.CharField(max_length=100, blank=True, null=True)
+    # ✅ نخلي هذا للحفظ الداخلي (الداتا ست)
+    project_location = models.CharField(max_length=255, choices=LOCATION_CHOICES, default="Other")
 
     LOCATION_TYPE_CHOICES = [
         ("On-site", "On-site"),
@@ -182,18 +241,68 @@ class Projects(models.Model):
     economic_indicator = models.CharField(null=True, blank=True, editable=False)
     Number_of_Similar_Enterprises = models.IntegerField(null=True, blank=True)
 
+    # ==========================================================
+    # ✅ mapping: (Region, City) -> قيمة من LOCATION_CHOICES
+    # لازم توسعينه حسب احتياجك
+    # ==========================================================
+    REGION_CITY_TO_DATASET_LOC = {
+        ("riyadh", "riyadh_city"): "منطقة الرياض, الرياض",
+        ("riyadh", "diriyah"): "منطقة الرياض, الدرعية",
+        ("riyadh", "kharj"): "منطقة الرياض, الخرج",
+
+        ("qassim", "buraidah"): "منطقة القصيم, بريدة",
+        ("qassim", "unaizah"): "منطقة القصيم, عنيزة",
+        ("qassim", "ras"): "منطقة القصيم, الرس",
+
+        ("eastern", "dammam"): "المنطقة الشرقية, الدمام",
+        ("eastern", "khobar"): "المنطقة الشرقية, الخبر",
+        ("eastern", "dhahran"): "المنطقة الشرقية, الظهران",
+        ("eastern", "jubail"): "المنطقة الشرقية, الجبيل",
+
+        ("makkah", "jeddah"): "منطقة مكة المكرمة, جدة",
+        ("makkah", "taif"): "منطقة مكة المكرمة, الطائف",
+
+        ("madinah", "madinah_city"): "منطقة المدينة المنورة, المدينة المنورة",
+        ("asir", "abha"): "منطقة عسير, أبها",
+        ("asir", "khamees"): "منطقة عسير, خميس مشيط",
+
+        ("tabuk", "tabuk_city"): "منطقة تبوك, تبوك",
+        ("jazan", "jazan_city"): "منطقة جازان, جازان",
+        ("hail", "hail_city"): "منطقة حائل, حائل",
+        ("jouf", "sakaka"): "منطقة الجوف, سكاكا",
+        ("northern", "arar"): "منطقة الحدود الشمالية, عرعر",
+        ("najran", "najran_city"): "نجران, منطقة نجران",
+        ("bahah", "bahah_city"): "منطقة الباحة, الباحة",
+    }
+
     def save(self, *args, **kwargs):
         region_df = calculate_update_economic_indicator()
 
-        # ✅ لو Other استخدمي النص المكتوب، غير كذا استخدمي الاختيار
-        if self.project_location == "Other" and self.project_location_other:
-            effective_loc = self.project_location_other.strip()
+        # ✅ 1) أول شيء: نحدد "الموقع الفعّال" اللي بنستخدمه للداتا ست
+        # لو user اختار Other في المنطقة أو المدينة، نستخدم النص المكتوب
+        if (self.project_region == "other" or self.project_city == "other"):
+            if self.project_location_other:
+                effective_loc = self.project_location_other.strip()
+                # نخزن داخليًا Other عشان choices ما تتكسر
+                self.project_location = "Other"
+            else:
+                effective_loc = "Other"
+                self.project_location = "Other"
         else:
-            effective_loc = (self.project_location or "").strip()
+            mapped = self.REGION_CITY_TO_DATASET_LOC.get((self.project_region, self.project_city))
+            if mapped:
+                # نخزن القيمة المطابقة للداتا ست داخل project_location
+                self.project_location = mapped
+                effective_loc = mapped
+            else:
+                # إذا ما لقينا mapping (لازم تضيفينه)، نعتبره Other
+                self.project_location = "Other"
+                effective_loc = "Other"
 
-        # تنظيف بسيط للمسافات حول الفواصل
-        effective_loc = ", ".join([p.strip() for p in effective_loc.split(",") if p.strip()])
+        # ✅ 2) تنظيف بسيط للمسافات حول الفواصل (لو كان نص)
+        effective_loc = ", ".join([p.strip() for p in str(effective_loc).split(",") if p.strip()])
 
+        # ✅ 3) نحسب economic_indicator من الـ dataframe
         region_data = region_df[region_df['region_project'].astype(str).str.strip() == effective_loc]
 
         value = None

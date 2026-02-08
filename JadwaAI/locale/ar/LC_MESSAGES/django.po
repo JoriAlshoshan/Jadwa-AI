@@ -662,3 +662,5 @@ msgstr "جميع الحقوق محفوظة."
 msgid "Generating AI recommendations..."
 msgstr "جارٍ توليد توصيات الذكاء الاصطناعي..."
 
+msgid "Decision Threshold"
+msgstr "حد القرار"

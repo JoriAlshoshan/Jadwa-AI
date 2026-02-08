@@ -1,45 +1,85 @@
 {% extends "base.html" %}
 {% load static %}
-{% load i18n %} 
+{% load i18n %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/AddProjectPage.css' %}">
 
 <div class="page-container" style="min-height:90vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px;">
-  
+
   <div style="max-width:850px; width:100%;">
     <h1 class="form-title">{% trans "Add Project" %}</h1>
 
-    <div class="form-box" style="direction: ltr;">
-      <form action="{% url 'project_new' %}" method="post">
+    <div class="form-box" style="direction:{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %};">
+      {# ✅ novalidate: يمنع Bubble حق المتصفح ويخلّي رسائلنا تظهر #}
+      <form action="{% url 'project_new' %}" method="post" id="projectForm" novalidate>
         {% csrf_token %}
-        
+
         <table>
           {% for field in form %}
 
             {# ✅ نخفي صف Other افتراضيًا ونظهره بالـ JS #}
             <tr {% if field.name == "project_location_other" %} id="row_location_other" style="display:none;" {% endif %}>
-              <td style="width: 260px; vertical-align: middle; text-align: left;">
+              <td style="width: 260px; vertical-align: middle; text-align:{% if LANGUAGE_CODE == 'ar' %}right{% else %}left{% endif %};">
                 <label for="{{ field.id_for_label }}">
                   {{ field.label }}
                 </label>
               </td>
 
               <td style="vertical-align: middle;">
-                <div style="width: 100%;">
+                {# ✅ wrapper للحقل عشان نقدر نحط وردي حوله #}
+                <div class="field-wrap {% if field.errors %}field-error-wrap{% endif %}" id="wrap_{{ field.name }}" style="width: 100%;">
+
                   {{ field }}
 
-                  {% if field.errors %}
-                    <div class="error-text">
-                        {{ field.errors.0 }}
+                  {# ✅ Counters + UX for project name #}
+                  {% if field.name == "project_name" %}
+                    <div style="display:flex; justify-content:space-between; margin-top:6px;">
+                      <small style="color:#6b7280;">{% trans "Keep it short (max 80 characters)." %}</small>
+                      <small style="color:#6b7280;"><span id="nameCount">0</span>/80</small>
                     </div>
                   {% endif %}
+
+                  {# ✅ خطأ لطيف من JS (بدل bubble) #}
+                  <div class="error-text" id="err_{{ field.name }}" style="display:none;"></div>
+
+                  {# ✅ أخطاء Django من الباك-إند #}
+                  {% if field.errors %}
+                    <div class="error-text" id="djerr_{{ field.name }}">
+                      {{ field.errors.0 }}
+                    </div>
+                  {% endif %}
+
                 </div>
               </td>
             </tr>
 
           {% endfor %}
         </table>
+
+        {# ✅ Description اختياري (مو داخل الفورم الأصلي) #}
+        <div style="margin-top:18px;">
+          <label for="id_description" style="display:block; margin-bottom:8px;">
+            {% trans "Description" %} <span style="color:#6b7280;">({% trans "Optional" %})</span>
+          </label>
+
+          <div class="field-wrap" id="wrap_description">
+            <textarea
+              id="id_description"
+              name="description"
+              rows="4"
+              maxlength="400"
+              placeholder="{% trans 'Briefly describe the idea, target customers, and how it works.' %}"
+            >{% if request.POST.description %}{{ request.POST.description }}{% endif %}</textarea>
+
+            <div style="display:flex; justify-content:space-between; margin-top:6px;">
+              <small style="color:#6b7280;">{% trans "Helps AI recommendations." %}</small>
+              <small style="color:#6b7280;"><span id="descCount">0</span>/400</small>
+            </div>
+
+            <div class="error-text" id="err_description" style="display:none;"></div>
+          </div>
+        </div>
 
         <div style="margin-top: 40px; text-align: center;">
           <button type="submit" class="btn-full" style="width: 100%; max-width: 300px;">
@@ -50,34 +90,182 @@
     </div>
 
     <div style="margin-top: 30px; display: flex; gap: 20px; justify-content: center;">
-      <a href="{% url 'dashboard' %}" class="btn-outline" style="flex: 1; max-width: 200px;">{% trans "Back to Dashboard" %}</a>
-      <a href="/" class="btn-outline" style="flex: 1; max-width: 200px;">{% trans "Back to Home" %}</a>
+      <a href="{% url 'dashboard' %}" class="btn-outline" style="flex: 1; max-width: 200px;">
+        {% trans "Back to Dashboard" %}
+      </a>
+      <a href="/" class="btn-outline" style="flex: 1; max-width: 200px;">
+        {% trans "Back to Home" %}
+      </a>
     </div>
+
   </div>
 </div>
 
 <script>
+  window.REGION_TO_CITIES = {
+    "riyadh":   ["riyadh_city", "diriyah", "kharj", "other"],
+    "qassim":   ["buraidah", "unaizah", "ras", "other"],
+    "eastern":  ["dammam", "khobar", "dhahran", "jubail", "other"],
+    "makkah":   ["jeddah", "taif", "other"],
+    "madinah":  ["madinah_city", "other"],
+    "asir":     ["abha", "khamees", "other"],
+    "tabuk":    ["tabuk_city", "other"],
+    "jazan":    ["jazan_city", "other"],
+    "hail":     ["hail_city", "other"],
+    "jouf":     ["sakaka", "other"],
+    "northern": ["arar", "other"],
+    "najran":   ["najran_city", "other"],
+    "bahah":    ["bahah_city", "other"],
+    "other":    ["other"]
+  };
+</script>
+
+<script>
   (function () {
-    // لازم يكون اسم الحقل في الفورم: project_location
-    const locationSelect = document.getElementById("id_project_location");
-    const otherRow = document.getElementById("row_location_other");
-    const otherInput = document.getElementById("id_project_location_other");
+    const regionSelect = document.getElementById("id_project_region");
+    const citySelect   = document.getElementById("id_project_city");
+    const otherRow   = document.getElementById("row_location_other");
+    const regionToCities = window.REGION_TO_CITIES || {};
+
+    const allCityOptions = [];
+    if (citySelect) {
+      for (const opt of citySelect.options) {
+        allCityOptions.push({ value: opt.value, label: opt.text });
+      }
+    }
+
+    function setCityOptionsForRegion(regionValue) {
+      if (!citySelect) return;
+
+      const allowed = regionToCities[regionValue] || ["other"];
+      const current = citySelect.value;
+
+      citySelect.innerHTML = "";
+      allowed.forEach(val => {
+        const match = allCityOptions.find(o => o.value === val);
+        const opt = document.createElement("option");
+        opt.value = val;
+        opt.textContent = match ? match.label : val;
+        citySelect.appendChild(opt);
+      });
+
+      if (allowed.includes(current)) citySelect.value = current;
+      else citySelect.value = allowed[0] || "other";
+    }
 
     function toggleOtherRow() {
-      if (!locationSelect || !otherRow) return;
-
-      const isOther = locationSelect.value === "Other";
+      if (!otherRow) return;
+      const isOther =
+        (regionSelect && regionSelect.value === "other") ||
+        (citySelect && citySelect.value === "other");
       otherRow.style.display = isOther ? "" : "none";
-
-      // إذا مو Other، نمسح قيمة الحقل عشان ما تنحفظ بالغلط
-      if (!isOther && otherInput) otherInput.value = "";
     }
 
-    if (locationSelect) {
+    regionSelect?.addEventListener("change", function () {
+      setCityOptionsForRegion(regionSelect.value);
       toggleOtherRow();
-      locationSelect.addEventListener("change", toggleOtherRow);
-    }
+    });
+
+    citySelect?.addEventListener("change", toggleOtherRow);
+
+    if (regionSelect) setCityOptionsForRegion(regionSelect.value);
+    toggleOtherRow();
   })();
+</script>
+
+<script>
+(function () {
+  const form = document.getElementById("projectForm");
+  if (!form) return;
+
+  const nameInput = document.getElementById("id_project_name");
+  const nameCount = document.getElementById("nameCount");
+
+  const descInput = document.getElementById("id_description");
+  const descCount = document.getElementById("descCount");
+
+  if (nameInput) nameInput.setAttribute("maxlength", "80");
+
+  function setErr(fieldName, msg) {
+    const errEl = document.getElementById("err_" + fieldName);
+    const wrap = document.getElementById("wrap_" + fieldName);
+
+    if (msg) {
+      if (errEl) {
+        errEl.style.display = "block";
+        errEl.textContent = msg;
+      }
+      if (wrap) wrap.classList.add("field-error-wrap");
+
+      // اخفي خطأ Django لو موجود عشان ما يتكرر
+      const dj = document.getElementById("djerr_" + fieldName);
+      if (dj) dj.style.display = "none";
+
+    } else {
+      if (errEl) {
+        errEl.style.display = "none";
+        errEl.textContent = "";
+      }
+      if (wrap) wrap.classList.remove("field-error-wrap");
+    }
+  }
+
+  function updateCounter(input, out) {
+    if (!input || !out) return;
+    out.textContent = (input.value || "").length;
+  }
+
+  updateCounter(nameInput, nameCount);
+  updateCounter(descInput, descCount);
+
+  nameInput?.addEventListener("input", () => {
+    updateCounter(nameInput, nameCount);
+    setErr("project_name", "");
+  });
+
+  descInput?.addEventListener("input", () => {
+    updateCounter(descInput, descCount);
+    setErr("description", "");
+  });
+
+  // ✅ امسح أي ستايل خطأ لما المستخدم يكتب بأي حقل
+  form.addEventListener("input", function(e){
+    const el = e.target;
+    const name = el?.getAttribute("name");
+    if (!name) return;
+    setErr(name, "");
+  });
+
+  form.addEventListener("submit", function (e) {
+    let ok = true;
+
+    // مثال: تحقق من الاسم فقط (وخلّ بقية الحقول على Django)
+    const nameVal = (nameInput?.value || "").trim();
+    if (!nameVal) {
+      setErr("project_name", "{% trans 'Project name is required.' %}");
+      ok = false;
+    } else if (nameVal.length < 3) {
+      setErr("project_name", "{% trans 'Project name is too short.' %}");
+      ok = false;
+    }
+
+    if (!ok) e.preventDefault();
+  });
+})();
+</script>
+<script>
+document.getElementById("projectForm").addEventListener("change", function(e){
+  const name = e.target.name;
+  if (!name) return;
+
+  // اخفي رسالة Django
+  const dj = document.getElementById("djerr_" + name);
+  if (dj) dj.style.display = "none";
+
+  // شيلي الإطار الأحمر
+  const wrap = document.getElementById("wrap_" + name);
+  if (wrap) wrap.classList.remove("field-error-wrap");
+});
 </script>
 
 {% endblock %}

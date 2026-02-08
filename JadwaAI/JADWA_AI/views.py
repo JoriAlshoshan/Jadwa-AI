@@ -195,7 +195,6 @@ def dashboard(request):
 # =======================
 # Project Create (After Login)
 # =======================
-
 @login_required
 def project_new(request):
     if request.method == "POST":
@@ -207,16 +206,15 @@ def project_new(request):
                 project.user = request.user
 
             project.save()
-
-            # ✅ بعد الحفظ شغّلي التحليل وودّي لصفحة النتيجة
             return redirect("run_analysis", project_id=project.pk)
 
-        else:
-            messages.error(request, "Please fix the errors below.")
-    else:
-        form = ProjectInformationForm()
+        messages.error(request, "Please fix the errors below.")
+        return render(request, "pages/project_new.html", {"form": form})
 
+    # ✅ GET عادي: بدون initial_data
+    form = ProjectInformationForm()
     return render(request, "pages/project_new.html", {"form": form})
+
 
 
 

@@ -115,3 +115,42 @@ table label {
     background-size: 16px;
     padding-right: 40px;
 }
+/* ===== Soft Error Style (مثل المثال الخفيف) ===== */
+
+/* خلي wrapper بدون بلوكات */
+.field-error-wrap{
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+/* شكل الحقول الأساسي (ناعم) */
+.field-wrap input,
+.field-wrap select,
+.field-wrap textarea{
+  width: 100%;
+  height: 52px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+/* خطأ خفيف: إطار أحمر + ظل خفيف جدًا */
+.field-error-wrap input,
+.field-error-wrap select,
+.field-error-wrap textarea{
+  border-color: #f87171 !important;                 /* أحمر ناعم */
+  background: #fff !important;                      /* داخل أبيض */
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.12) !important;  /* حلقة خفيفة */
+}
+
+/* رسالة الخطأ مثل المثال */
+.error-text{
+  margin-top: 8px;
+  color: #dc2626;
+  font-size: 14px;
+  font-weight: 600;
+}
