@@ -7,6 +7,9 @@ from .models import Projects
 User = get_user_model()
 
 
+# =========================
+# User Forms
+# =========================
 class JadwaUserCreationForm(UserCreationForm):
     email = forms.EmailField(
         required=True,
@@ -30,10 +33,9 @@ class JadwaAuthenticationForm(AuthenticationForm):
     )
 
 
-# =========================================
-# ✅ فلترة المدن حسب المنطقة (قيم لازم تطابق CITY_CHOICES)
-# ملاحظة: ما يحتاج نحط "other" هنا لأننا بنضيفه تلقائيًا تحت
-# =========================================
+# =========================
+# Region → City Mapping
+# =========================
 REGION_TO_CITIES = {
     "riyadh":   ["riyadh_city", "diriyah", "kharj"],
     "qassim":   ["buraidah", "unaizah", "ras"],
@@ -52,6 +54,9 @@ REGION_TO_CITIES = {
 }
 
 
+# =========================
+# Project Form
+# =========================
 class ProjectInformationForm(forms.ModelForm):
     class Meta:
         model = Projects
@@ -67,6 +72,9 @@ class ProjectInformationForm(forms.ModelForm):
             'project_budget',
             'project_duration',
             'number_of_employees',
+
+            # ✅ الوصف (كان ناقص)
+            'description',
         ]
 
         widgets = {
@@ -85,6 +93,13 @@ class ProjectInformationForm(forms.ModelForm):
             'project_budget': forms.NumberInput(attrs={'class': 'form-input'}),
             'project_duration': forms.NumberInput(attrs={'class': 'form-input'}),
             'number_of_employees': forms.NumberInput(attrs={'class': 'form-input'}),
+
+            # ✅ textarea للوصف
+            'description': forms.Textarea(attrs={
+                'class': 'form-input',
+                'rows': 4,
+                'placeholder': 'Describe competitors and target audience (optional)'
+            }),
         }
 
         labels = {
@@ -99,9 +114,10 @@ class ProjectInformationForm(forms.ModelForm):
             'project_budget': 'project budget:',
             'project_duration': 'project duration:',
             'number_of_employees': 'number of employees:',
+
+            'description': 'Description (Optional):',
         }
 
-        # ✅ رسائل أخطاء نظيفة
         error_messages = {
             "project_name": {"required": "This field is required."},
             "Project_type": {"required": "This field is required."},
@@ -112,18 +128,16 @@ class ProjectInformationForm(forms.ModelForm):
             },
             "project_location_other": {"required": "Please specify the location."},
             "project_location_type": {"required": "This field is required."},
-            "project_budget": {"required": "This field is required.", "invalid": "Please enter a valid budget."},
-            "project_duration": {"required": "This field is required.", "invalid": "Please enter a valid duration."},
-            "number_of_employees": {"required": "This field is required.", "invalid": "Please enter a valid number."},
+            "project_budget": {"required": "This field is required."},
+            "project_duration": {"required": "This field is required."},
+            "number_of_employees": {"required": "This field is required."},
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # Map للقيم -> الليبل (أسماء المدن بالعربي)
         city_label_map = dict(self.fields['project_city'].choices)
 
-        # نحدد المنطقة من POST أو instance
         region_value = None
         if self.data.get("project_region"):
             region_value = self.data.get("project_region")
@@ -132,14 +146,13 @@ class ProjectInformationForm(forms.ModelForm):
 
         if region_value:
             allowed = REGION_TO_CITIES.get(region_value, [])
-
-            # ✅ أهم سطر: نضمن وجود other دايمًا
             if "other" not in allowed:
-                allowed = allowed + ["other"]
+                allowed.append("other")
 
-            self.fields['project_city'].choices = [(c, city_label_map.get(c, c)) for c in allowed]
+            self.fields['project_city'].choices = [
+                (c, city_label_map.get(c, c)) for c in allowed
+            ]
         else:
-            # قبل اختيار المنطقة: خليها other فقط
             self.fields['project_city'].choices = [("other", city_label_map.get("other", "أخرى"))]
 
     def clean(self):
@@ -149,17 +162,18 @@ class ProjectInformationForm(forms.ModelForm):
         city = cleaned.get('project_city')
         other = (cleaned.get('project_location_other') or '').strip()
 
-        # إذا اختار other لازم يكتب
         if (region == "other" or city == "other") and not other:
             self.add_error('project_location_other', 'Please specify the location.')
 
-        # إذا مو other امسح النص
         if not (region == "other" or city == "other"):
             cleaned['project_location_other'] = ""
 
         return cleaned
 
 
+# =========================
+# Password / OTP
+# =========================
 class ForgotPasswordForm(forms.Form):
     email = forms.EmailField(
         label="Email",

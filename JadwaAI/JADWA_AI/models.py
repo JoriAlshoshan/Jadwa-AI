@@ -237,6 +237,7 @@ class Projects(models.Model):
     project_budget = models.IntegerField(null=False, blank=False)
     project_duration = models.IntegerField(null=False, blank=False)
     number_of_employees = models.IntegerField(null=False, blank=False)
+    description = models.TextField(null=True, blank=True)
 
     economic_indicator = models.CharField(null=True, blank=True, editable=False)
     Number_of_Similar_Enterprises = models.IntegerField(null=True, blank=True)
