@@ -6,7 +6,7 @@ DATASET_PATH = os.path.join(
     settings.BASE_DIR, "dataset", "jadwa_ai_final_dataset.csv"
 )
 
-df = pd.read_csv(r"C:\Users\رهف\Desktop\JadwaAI project\Jadwa-AI\JadwaAI\dataset\jadwa_ai_final_dataset.csv")
+df = pd.read_csv("")
 
 def get_similar_enterprises(project_type, region):
     df["type_project"]=0
@@ -26,4 +26,4 @@ def get_similar_enterprises(project_type, region):
         return int(same_region["عدد المنشآت"].mean())
 
     return int(df["عدد المنشآت"].mean())
-    # df.to_csv("jadwa_ai_final_dataset.csv", index=False)
+
