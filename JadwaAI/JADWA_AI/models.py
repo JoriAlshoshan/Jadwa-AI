@@ -2,8 +2,8 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
-
 from .fill_economic_indicator import calculate_update_economic_indicator
+from .num_similar_enterprises import get_similar_enterprises
 
 
 class User(AbstractUser):
@@ -240,7 +240,7 @@ class Projects(models.Model):
     description = models.TextField(null=True, blank=True)
 
     economic_indicator = models.CharField(null=True, blank=True, editable=False)
-    Number_of_Similar_Enterprises = models.IntegerField(null=True, blank=True)
+    num_of_similar_enterprises = models.IntegerField(null=True, blank=True,editable=False)
 
     # ==========================================================
     # ✅ mapping: (Region, City) -> قيمة من LOCATION_CHOICES
@@ -319,6 +319,7 @@ class Projects(models.Model):
                 self.economic_indicator = "Medium"
             else:
                 self.economic_indicator = "High"
+        self.num_of_similar_enterprises = get_similar_enterprises(self.Project_type, self.project_location)
 
         super().save(*args, **kwargs)
 
