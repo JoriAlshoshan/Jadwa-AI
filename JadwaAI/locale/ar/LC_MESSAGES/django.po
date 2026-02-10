@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-01 10:49+0300\n"
+"POT-Creation-Date: 2026-02-10 17:54+0300\n"
 "PO-Revision-Date: 2026-01-25 19:40+0300\n"
 "Last-Translator: Jadwa AI Team\n"
 "Language-Team: Arabic\n"
@@ -17,120 +17,298 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: .\JadwaAI\settings.py:75
-msgid "English"
-msgstr "English"
+#: .\JADWA_AI\models.py:42 .\templates\pages\landing.html:232
+msgid "Request a demo"
+msgstr "طلب عرض توضيحي"
 
-#: .\JadwaAI\settings.py:76
-msgid "Arabic"
-msgstr "العربية"
+#: .\JADWA_AI\models.py:43 .\templates\pages\landing.html:233
+msgid "Support"
+msgstr "الدعم"
 
-#: .\analysis\views.py:324
-msgid "Jadwa AI © 2026 | contact@jadwa-ai.com | Saudi Arabia"
-msgstr "Jadwa AI © 2026 | contact@jadwa-ai.com | المملكة العربية السعودية"
+#: .\JADWA_AI\models.py:44 .\templates\pages\landing.html:234
+msgid "Partnership"
+msgstr "شراكة"
 
-#: .\analysis\views.py:351 .\templates\analysis\pdf_report.html:70
+#: .\JADWA_AI\models.py:45 .\JADWA_AI\models.py:83 .\JADWA_AI\models.py:110
+#: .\JADWA_AI\models.py:118 .\templates\pages\landing.html:235
+msgid "Other"
+msgstr "أخرى"
 
-#| msgid "Recommendations have not been generated yet."
+#: .\JADWA_AI\models.py:62
+msgid "Service"
+msgstr "خدمة"
+
+#: .\JADWA_AI\models.py:63 .\templates\pages\landing.html:37
+#: .\templates\pages\success_stories.html:17
+#: .\templates\partials\footer.html:21 .\templates\partials\navbar.html:17
+msgid "Product"
+msgstr "المنتج"
+
+#: .\JADWA_AI\models.py:64 .\JADWA_AI\models.py:125
+msgid "Hybrid"
+msgstr "هجينة"
+
+#: .\JADWA_AI\models.py:69 .\JADWA_AI\models.py:87
+#: .\templates\pages\project_new.html:108
+msgid "---------"
+msgstr "---------"
+
+#: .\JADWA_AI\models.py:70
+msgid "Riyadh Region"
+msgstr "منطقة الرياض"
+
+#: .\JADWA_AI\models.py:71
+msgid "Qassim Region"
+msgstr "منطقة القصيم"
+
+#: .\JADWA_AI\models.py:72
+msgid "Eastern Region"
+msgstr "المنطقة الشرقية"
+
+#: .\JADWA_AI\models.py:73
+msgid "Makkah Region"
+msgstr "منطقة مكة المكرمة"
+
+#: .\JADWA_AI\models.py:74
+msgid "Madinah Region"
+msgstr "منطقة المدينة المنورة"
+
+#: .\JADWA_AI\models.py:75
+msgid "Asir Region"
+msgstr "منطقة عسير"
+
+#: .\JADWA_AI\models.py:76
+msgid "Tabuk Region"
+msgstr "منطقة تبوك"
+
+#: .\JADWA_AI\models.py:77
+msgid "Jazan Region"
+msgstr "منطقة جازان"
+
+#: .\JADWA_AI\models.py:78
+msgid "Hail Region"
+msgstr "منطقة حائل"
+
+#: .\JADWA_AI\models.py:79
+msgid "Al Jouf Region"
+msgstr "منطقة الجوف"
+
+#: .\JADWA_AI\models.py:80
+msgid "Najran Region"
+msgstr "منطقة نجران"
+
+#: .\JADWA_AI\models.py:81
+msgid "Al Bahah Region"
+msgstr "منطقة الباحة"
+
+#: .\JADWA_AI\models.py:82
+msgid "Northern Borders"
+msgstr "منطقة الحدود الشمالية"
+
+#: .\JADWA_AI\models.py:88
+msgid "Riyadh"
+msgstr "الرياض"
+
+#: .\JADWA_AI\models.py:89
+msgid "Diriyah"
+msgstr "الدرعية"
+
+#: .\JADWA_AI\models.py:90
+msgid "Al Kharj"
+msgstr "الخرج"
+
+#: .\JADWA_AI\models.py:91
+msgid "Buraidah"
+msgstr "بريدة"
+
+#: .\JADWA_AI\models.py:92
+msgid "Unaizah"
+msgstr "عنيزة"
+
+#: .\JADWA_AI\models.py:93
+msgid "Ar Rass"
+msgstr "الرس"
+
+#: .\JADWA_AI\models.py:94
+msgid "Dammam"
+msgstr "الدمام"
+
+#: .\JADWA_AI\models.py:95
+msgid "Khobar"
+msgstr "الخبر"
+
+#: .\JADWA_AI\models.py:96
+msgid "Dhahran"
+msgstr "الظهران"
+
+#: .\JADWA_AI\models.py:97
+msgid "Jubail"
+msgstr "الجبيل"
+
+#: .\JADWA_AI\models.py:98
+msgid "Jeddah"
+msgstr "جدة"
+
+#: .\JADWA_AI\models.py:99
+msgid "Taif"
+msgstr "الطائف"
+
+#: .\JADWA_AI\models.py:100
+msgid "Madinah"
+msgstr "المدينة المنورة"
+
+#: .\JADWA_AI\models.py:101
+msgid "Abha"
+msgstr "أبها"
+
+#: .\JADWA_AI\models.py:102
+msgid "Khamis Mushait"
+msgstr "خميس مشيط"
+
+#: .\JADWA_AI\models.py:103
+msgid "Tabuk"
+msgstr "تبوك"
+
+#: .\JADWA_AI\models.py:104
+msgid "Jazan"
+msgstr "جازان"
+
+#: .\JADWA_AI\models.py:105
+msgid "Hail"
+msgstr "حائل"
+
+#: .\JADWA_AI\models.py:106
+msgid "Sakaka"
+msgstr "سكاكا"
+
+#: .\JADWA_AI\models.py:107
+msgid "Arar"
+msgstr "عرعر"
+
+#: .\JADWA_AI\models.py:108
+msgid "Najran"
+msgstr "نجران"
+
+#: .\JADWA_AI\models.py:109
+msgid "Al Bahah"
+msgstr "الباحة"
+
+#: .\JADWA_AI\models.py:123
+msgid "On-site"
+msgstr "حضوري"
+
+#: .\JADWA_AI\models.py:124
+msgid "Online"
+msgstr "عن بُعد"
+
+#: .\analysis\views.py:241
+msgid "Analysis completed successfully!"
+msgstr "تم إكمال التحليل بنجاح!"
+
+
+#: .\analysis\views.py:402 .\templates\analysis\pdf_report.html:102
 msgid "No recommendations generated yet."
 msgstr "لم يتم توليد التوصيات بعد."
 
-#: .\analysis\views.py:357 .\templates\analysis\pdf_report.html:58
-#: .\templates\analysis\recs_loading.html:34
-#: .\templates\analysis\result.html:34
-msgid "Feasible"
-msgstr "قابل للتنفيذ"
-
-#: .\analysis\views.py:359 .\templates\analysis\pdf_report.html:60
-#: .\templates\analysis\recs_loading.html:36
-msgid "Not Feasible"
-msgstr "غير قابل للتنفيذ"
+#: .\analysis\views.py:498
+msgid "Jadwa AI © 2026 | contact@jadwa-ai.com | Saudi Arabia"
+msgstr "Jadwa AI © 2026 | contact@jadwa-ai.com | المملكة العربية السعودية"
 
 # ===== Analysis Result Page =====
-#: .\analysis\views.py:365 .\templates\analysis\recs_loading.html:13
-#: .\templates\analysis\result.html:13
+#: .\analysis\views.py:521 .\templates\analysis\recs_loading.html:13
+#: .\templates\analysis\result.html:14
 msgid "Analysis Result"
 msgstr "نتيجة التحليل"
 
-#: .\analysis\views.py:371 .\templates\analysis\recs_loading.html:14
-#: .\templates\analysis\result.html:14
+#: .\analysis\views.py:527 .\templates\analysis\recs_loading.html:14
+#: .\templates\analysis\result.html:16
 msgid "AI-powered feasibility insights for your project"
 msgstr "رؤى جدوى مدعومة بالذكاء الاصطناعي لمشروعك"
 
-#: .\analysis\views.py:393 .\templates\analysis\recs_loading.html:20
-#: .\templates\analysis\result.html:20
+#: .\analysis\views.py:548 .\templates\analysis\pdf_report.html:53
+#: .\templates\analysis\recs_loading.html:20
+#: .\templates\analysis\result.html:24
 msgid "Project Overview"
 msgstr "نظرة عامة على المشروع"
 
-#: .\analysis\views.py:398 .\templates\analysis\pdf_report.html:48
+#: .\analysis\views.py:553 .\templates\analysis\pdf_report.html:56
 #: .\templates\analysis\recs_loading.html:22
-#: .\templates\analysis\result.html:22
+#: .\templates\analysis\result.html:26
 msgid "Project"
 msgstr "المشروع"
 
-#: .\analysis\views.py:405 .\templates\analysis\pdf_report.html:51
-#: .\templates\analysis\recs_loading.html:25
-#: .\templates\analysis\result.html:25
+#: .\analysis\views.py:561 .\templates\analysis\recs_loading.html:25
+#: .\templates\analysis\result.html:29
 msgid "Feasibility Probability"
 msgstr "نسبة الجدوى"
 
-#: .\analysis\views.py:412 .\templates\analysis\pdf_report.html:56
+#: .\analysis\views.py:571 .\templates\analysis\result.html:36
+msgid "Decision Threshold"
+msgstr "حد القرار"
+
+#: .\analysis\views.py:581 .\templates\analysis\pdf_report.html:68
 #: .\templates\analysis\recs_loading.html:30
-#: .\templates\analysis\result.html:30
+#: .\templates\analysis\result.html:41
 msgid "Status"
 msgstr "الحالة"
 
-#: .\analysis\views.py:420 .\templates\analysis\pdf_report.html:67
+#: .\analysis\views.py:588 .\templates\analysis\pdf_report.html:99
 #: .\templates\analysis\recs_loading.html:45
-#: .\templates\analysis\result.html:43
+#: .\templates\analysis\result.html:64
 msgid "AI Recommendations"
 msgstr "توصيات الذكاء الاصطناعي"
 
-#: .\analysis\views.py:477
-#| msgid "AI Recommendations"
+#: .\analysis\views.py:639
 msgid "AI Recommendations (continued)"
 msgstr "توصيات الذكاء الاصطناعي (متابعة)"
 
-#: .\templates\analysis\pdf_report.html:45
+#: .\templates\analysis\pdf_report.html:49
 msgid "Jadwa AI - Analysis Report"
 msgstr ""
 
-#: .\templates\analysis\recs_loading.html:58
-msgid "Generating recommendations, please wait..."
-msgstr "جارٍ توليد التوصيات، فضلاً انتظر..."
+#: .\templates\analysis\pdf_report.html:61
+#, fuzzy
+#| msgid "Feasibility Decision"
+msgid "Feasibility Score"
+msgstr "قرار الجدوى"
 
-#: .\templates\analysis\recs_loading.html:68
+#: .\templates\analysis\recs_loading.html:34
+#: .\templates\analysis\result.html:54
+msgid "Feasible"
+msgstr "قابل للتنفيذ"
+
+#: .\templates\analysis\recs_loading.html:36
+#: .\templates\analysis\result.html:56
+msgid "Not Feasible"
+msgstr "غير قابل للتنفيذ"
+
+#: .\templates\analysis\recs_loading.html:59
+msgid "Generating AI recommendations..."
+msgstr "جارٍ توليد توصيات الذكاء الاصطناعي..."
+
+#: .\templates\analysis\recs_loading.html:69
 msgid "Back"
 msgstr "رجوع"
 
-#: .\templates\analysis\result.html:51
+#: .\templates\analysis\result.html:69
+msgid "Generate Recommendations"
+msgstr "توليد التوصيات"
+
+#: .\templates\analysis\result.html:82
 #, fuzzy
 #| msgid "Generate Recommendations"
 msgid "Failed to generate recommendations."
 msgstr "توليد التوصيات"
 
-#: .\templates\analysis\result.html:53
-msgid "Try Again"
-msgstr ""
-
-#: .\templates\analysis\result.html:58
-#| msgid "Generate Recommendations"
+#: .\templates\analysis\result.html:85
 msgid "Generating AI recommendations…"
 msgstr "توليد التوصيات…"
 
-#: .\templates\analysis\result.html:93
-msgid "Recommendations have not been generated yet."
-msgstr "لم يتم توليد التوصيات بعد."
-
-#: .\templates\analysis\result.html:95
-msgid "Generate Recommendations"
-msgstr "توليد التوصيات"
-
-#: .\templates\analysis\result.html:105
+#: .\templates\analysis\result.html:195
 msgid "Download PDF"
 msgstr "تحميل ملف PDF"
 
-#: .\templates\analysis\result.html:109 .\templates\pages\project_new.html:12
+#: .\templates\analysis\result.html:199 .\templates\pages\project_new.html:64
 msgid "Back to Dashboard"
 msgstr "العودة إلى لوحة التحكم"
 
@@ -162,11 +340,6 @@ msgstr ""
 #: .\templates\pages\landing.html:24 .\templates\pages\landing.html:27
 msgid "Start Feasibility Analysis"
 msgstr "ابدأ تحليل الجدوى"
-
-#: .\templates\pages\landing.html:37 .\templates\pages\success_stories.html:17
-#: .\templates\partials\footer.html:21 .\templates\partials\navbar.html:17
-msgid "Product"
-msgstr "المنتج"
 
 #: .\templates\pages\landing.html:38
 msgid "What You Get with Jadwa AI"
@@ -379,22 +552,6 @@ msgstr "الموضوع"
 msgid "Select a topic"
 msgstr "اختر موضوعًا"
 
-#: .\templates\pages\landing.html:232
-msgid "Request a demo"
-msgstr "طلب عرض توضيحي"
-
-#: .\templates\pages\landing.html:233
-msgid "Support"
-msgstr "الدعم"
-
-#: .\templates\pages\landing.html:234
-msgid "Partnership"
-msgstr "شراكة"
-
-#: .\templates\pages\landing.html:235
-msgid "Other"
-msgstr "أخرى"
-
 #: .\templates\pages\landing.html:237
 msgid "Please select a topic."
 msgstr "يرجى اختيار موضوع."
@@ -491,21 +648,93 @@ msgstr "5. التواصل"
 msgid "If you have any questions regarding privacy, please contact us at"
 msgstr "إذا كان لديك أي استفسارات تتعلق بالخصوصية، يرجى التواصل معنا عبر"
 
-#: .\templates\pages\project_new.html:7
+#: .\templates\pages\project_new.html:11
 #, fuzzy
 #| msgid "Project"
 msgid "Add Project"
 msgstr "المشروع"
 
-#: .\templates\pages\project_new.html:9
-msgid "This page will include the project form in the next phase."
+#: .\templates\pages\project_new.html:34
+msgid "Keep it short (max 80 characters)."
 msgstr ""
 
-#: .\templates\pages\project_new.html:13
+#: .\templates\pages\project_new.html:56
+msgid "Show result"
+msgstr ""
+
+#: .\templates\pages\project_new.html:67
 #, fuzzy
 #| msgid "← Back to homepage"
 msgid "Back to Home"
 msgstr "← العودة للصفحة الرئيسية"
+
+#: .\templates\pages\project_new.html:239
+#, fuzzy
+#| msgid "Full name is required."
+msgid "Project name is required."
+msgstr "الاسم الكامل مطلوب."
+
+#: .\templates\pages\project_new.html:242
+msgid "Project name is too short."
+msgstr ""
+
+#: .\templates\pages\project_new.html:249
+#, fuzzy
+#| msgid "Please select a topic."
+msgid "Please select a project type."
+msgstr "يرجى اختيار موضوع."
+
+#: .\templates\pages\project_new.html:256
+#, fuzzy
+#| msgid "Please select a topic."
+msgid "Please select a region."
+msgstr "يرجى اختيار موضوع."
+
+#: .\templates\pages\project_new.html:263
+#, fuzzy
+#| msgid "Please select a topic."
+msgid "Please select a city."
+msgstr "يرجى اختيار موضوع."
+
+#: .\templates\pages\project_new.html:272
+#, fuzzy
+#| msgid "Please select a topic."
+msgid "Please specify the location."
+msgstr "يرجى اختيار موضوع."
+
+#: .\templates\pages\project_new.html:280
+msgid "Write it like: منطقة القصيم, عنيزة"
+msgstr ""
+
+#: .\templates\pages\project_new.html:291
+#, fuzzy
+#| msgid "Please select a topic."
+msgid "Please select a project location type."
+msgstr "يرجى اختيار موضوع."
+
+#: .\templates\pages\project_new.html:298
+#, fuzzy
+#| msgid "Message is required."
+msgid "Project budget is required."
+msgstr "الرسالة مطلوبة."
+
+#: .\templates\pages\project_new.html:301
+#: .\templates\pages\project_new.html:311
+#: .\templates\pages\project_new.html:321
+msgid "Enter a valid positive number."
+msgstr ""
+
+#: .\templates\pages\project_new.html:308
+#, fuzzy
+#| msgid "Message is required."
+msgid "Project duration is required."
+msgstr "الرسالة مطلوبة."
+
+#: .\templates\pages\project_new.html:318
+#, fuzzy
+#| msgid "Full name is required."
+msgid "Number of employees is required."
+msgstr "الاسم الكامل مطلوب."
 
 #: .\templates\pages\success_stories.html:18
 #: .\templates\partials\footer.html:22 .\templates\partials\navbar.html:18
@@ -652,6 +881,12 @@ msgstr "الشروط"
 msgid "All rights reserved."
 msgstr "جميع الحقوق محفوظة."
 
+#~ msgid "Generating recommendations, please wait..."
+#~ msgstr "جارٍ توليد التوصيات، فضلاً انتظر..."
+
+#~ msgid "Recommendations have not been generated yet."
+#~ msgstr "لم يتم توليد التوصيات بعد."
+
 # ===== Register =====
 #~ msgid "Register"
 #~ msgstr "إنشاء حساب"
@@ -659,8 +894,3 @@ msgstr "جميع الحقوق محفوظة."
 #~ msgid "Registration page will be available soon."
 #~ msgstr "صفحة إنشاء الحساب ستكون متاحة قريبًا."
 
-msgid "Generating AI recommendations..."
-msgstr "جارٍ توليد توصيات الذكاء الاصطناعي..."
-
-msgid "Decision Threshold"
-msgstr "حد القرار"
