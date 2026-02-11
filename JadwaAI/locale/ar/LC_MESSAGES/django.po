@@ -70,13 +70,7 @@ msgstr "الوصف (اختياري)"
 
 
 
-#: .\JADWA_AI\forms.py:104 .\JADWA_AI\forms.py:105 .\JADWA_AI\forms.py:106
-#: .\JADWA_AI\forms.py:108 .\JADWA_AI\forms.py:112 .\JADWA_AI\forms.py:113
-#: .\JADWA_AI\forms.py:114 .\JADWA_AI\forms.py:115
-#, fuzzy
-#| msgid "Message is required."
-msgid "This field is required."
-msgstr "الرسالة مطلوبة."
+
 
 #: .\JADWA_AI\forms.py:109
 #, fuzzy
@@ -618,7 +612,6 @@ msgid "Your name"
 msgstr "اسمك"
 
 #: .\templates\pages\landing.html:219
-#, fuzzy
 #| msgid " name is required."
 msgid "Full name is required."
 msgstr "الاسم الكامل مطلوب."
@@ -954,3 +947,22 @@ msgstr "جميع الحقوق محفوظة."
 
 #~ msgid "Registration page will be available soon."
 #~ msgstr "صفحة إنشاء الحساب ستكون متاحة قريبًا."
+
+msgid "Login to Jadwa AI"
+msgstr "تسجيل الدخول إلى جدوى AI"
+
+msgid "Access your dashboard and start your feasibility analysis."
+msgstr "ادخل إلى لوحة التحكم وابدأ تحليل الجدوى الخاص بك."
+
+msgid "Forgot your password?"
+msgstr "هل نسيت كلمة المرور؟"
+
+msgid "Reset it"
+msgstr "إعادة تعيين"
+
+msgid "Don't have an account?"
+msgstr "ليس لديك حساب؟"
+
+msgid "Create one"
+msgstr "إنشاء حساب"
+

@@ -822,3 +822,112 @@ select.form-input{
   background: #f3f5f9;
   border-radius: 6px;
 }
+/* ===== Account Dropdown (Fix) ===== */
+.nav-account{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* dropdown box */
+.nav-dropdown{
+  display:none;
+  position:absolute;
+  top: calc(100% + 10px);    /* تحت الأيقونة مباشرة */
+  inset-inline-end: 0;       /* يمين في RTL/ LTR تلقائي */
+  inset-inline-start: auto;
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 12px 28px rgba(0,0,0,0.10);
+  min-width:190px;
+  padding:10px;
+  z-index: 9999;
+}
+
+.nav-account.is-open .nav-dropdown{ display:block; }
+
+/* link styles */
+.nav-dropdown a,
+.nav-dropdown .dropdown-link{
+  display:block;
+  width:100%;
+  padding:10px 12px;
+  color:#222;
+  text-decoration:none;
+  background:none;
+  border:none;
+  font:inherit;
+  cursor:pointer;
+  text-align:start;          /* بدل left عشان العربي */
+  border-radius:10px;
+}
+
+.nav-dropdown a:hover,
+.nav-dropdown .dropdown-link:hover{
+  background:#f3f5f9;
+}
+.nav, .nav-inner{ overflow: visible; }
+/* ===== Clean minimal auth links ===== */
+
+.auth-links-clean{
+  margin-top:16px;
+  text-align:center;
+}
+
+.auth-links-clean p{
+  margin:8px 0;
+  color:#64748b;      /* نفس الرمادي اللي بالصورة */
+  font-size:14px;
+  font-weight:400;    /* مو بولد */
+}
+
+.auth-link-clean{
+  color:#64748b;      /* نفس لون الجملة بالبداية */
+  text-decoration:none;
+  font-weight:400;    /* تأكيد انه مو بولد */
+  transition:color .2s ease;
+}
+
+.auth-link-clean:hover{
+  color:#0a2fbf;      /* يصير أزرق عند المرور */
+  text-decoration:underline;
+}
+.legal-page{
+  background: #fafafa;
+  min-height: 90vh;
+}
+/* ===== Ultra Soft Pink Validation ===== */
+
+/* لا نغير لون العنوان */
+.form-row.is-error .form-label{
+  color:inherit !important;
+}
+
+/* الإطار الناعم جداً */
+.form-row.is-error input,
+.form-row.is-error select,
+.form-row.is-error textarea{
+  border:1px solid #e7a6a6 !important;  /* وردي خفيف */
+  background:#fff;
+  border-radius:20px;
+
+  /* الهالة الناعمة جداً */
+  box-shadow:
+    0 0 0 6px rgba(231,166,166,.12);
+}
+
+/* رسالة الخطأ فقط */
+.form-row.is-error .form-error{
+  margin-top:8px;
+  font-size:14px;
+  font-weight:500;
+  color:#b42318;
+}
+.form-error{ display:block ; }
+.form-error{
+  margin-top:10px;
+  font-size:13.5px;
+  font-weight:600;
+  color:#b42318;
+  opacity:.92;
+}
