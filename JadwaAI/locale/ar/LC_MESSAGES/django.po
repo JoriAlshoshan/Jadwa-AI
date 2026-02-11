@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-10 17:54+0300\n"
+"POT-Creation-Date: 2026-02-11 11:55+0300\n"
 "PO-Revision-Date: 2026-01-25 19:40+0300\n"
 "Last-Translator: Jadwa AI Team\n"
 "Language-Team: Arabic\n"
@@ -17,194 +17,283 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: .\JADWA_AI\models.py:42 .\templates\pages\landing.html:232
+#: .\JADWA_AI\forms.py:13 .\JADWA_AI\forms.py:148
+#: .\templates\pages\landing.html:223
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+#: .\JADWA_AI\forms.py:20 .\JADWA_AI\forms.py:26
+msgid "Username"
+msgstr ""
+
+#: .\JADWA_AI\forms.py:29
+msgid "Password"
+msgstr ""
+
+#: .\JADWA_AI\forms.py:73
+msgid "Example: Qassim Region, Unaizah"
+msgstr "مثال: منطقة القصيم، عنيزة"
+
+#: .\JADWA_AI\forms.py:83
+msgid "Describe competitors and target audience (optional)"
+msgstr "وصف المنافسين والجمهور المستهدف (اختياري)."
+
+msgid "Project Name"
+msgstr "اسم المشروع"
+
+msgid "Project Type"
+msgstr "نوع المشروع"
+
+msgid "Region"
+msgstr "المنطقة"
+
+msgid "City"
+msgstr "المدينة"
+
+msgid "Specify Location"
+msgstr "تحديد الموقع"
+
+msgid "Project Location Type"
+msgstr "نوع موقع المشروع"
+
+msgid "Project Budget"
+msgstr "ميزانية المشروع"
+
+msgid "Project Duration"
+msgstr "مدة المشروع"
+
+msgid "Number Of Employees"
+msgstr "عدد الموظفين"
+
+msgid "Description (Optional)"
+msgstr "الوصف (اختياري)"
+
+
+
+#: .\JADWA_AI\forms.py:104 .\JADWA_AI\forms.py:105 .\JADWA_AI\forms.py:106
+#: .\JADWA_AI\forms.py:108 .\JADWA_AI\forms.py:112 .\JADWA_AI\forms.py:113
+#: .\JADWA_AI\forms.py:114 .\JADWA_AI\forms.py:115
+#, fuzzy
+#| msgid "Message is required."
+msgid "This field is required."
+msgstr "الرسالة مطلوبة."
+
+#: .\JADWA_AI\forms.py:109
+#, fuzzy
+#| msgid "Please select a city."
+msgid "Please select a city from the list."
+msgstr "يرجى اختيار المدينة."
+
+#: .\JADWA_AI\forms.py:111 .\JADWA_AI\forms.py:131
+#: .\templates\pages\project_new.html:106
+#, fuzzy
+#| msgid "Please select a project location type."
+msgid "Please specify the location."
+msgstr "يرجى اختيار نوع موقع المشروع."
+
+#: .\JADWA_AI\forms.py:138
+msgid "Write it like: Qassim Region, Unaizah"
+msgstr ""
+
+#: .\JADWA_AI\forms.py:155
+msgid "OTP Code"
+msgstr ""
+
+#: .\JADWA_AI\models.py:41 .\templates\pages\landing.html:232
 msgid "Request a demo"
 msgstr "طلب عرض توضيحي"
 
-#: .\JADWA_AI\models.py:43 .\templates\pages\landing.html:233
+#: .\JADWA_AI\models.py:42 .\templates\pages\landing.html:233
 msgid "Support"
 msgstr "الدعم"
 
-#: .\JADWA_AI\models.py:44 .\templates\pages\landing.html:234
+#: .\JADWA_AI\models.py:43 .\templates\pages\landing.html:234
 msgid "Partnership"
 msgstr "شراكة"
 
-#: .\JADWA_AI\models.py:45 .\JADWA_AI\models.py:83 .\JADWA_AI\models.py:110
-#: .\JADWA_AI\models.py:118 .\templates\pages\landing.html:235
+#: .\JADWA_AI\models.py:44 .\JADWA_AI\models.py:82 .\JADWA_AI\models.py:109
+#: .\JADWA_AI\models.py:117 .\templates\pages\landing.html:235
+#: .\templates\pages\project_new.html:114
 msgid "Other"
 msgstr "أخرى"
 
-#: .\JADWA_AI\models.py:62
+#: .\JADWA_AI\models.py:61
 msgid "Service"
 msgstr "خدمة"
 
-#: .\JADWA_AI\models.py:63 .\templates\pages\landing.html:37
+#: .\JADWA_AI\models.py:62 .\templates\pages\landing.html:37
 #: .\templates\pages\success_stories.html:17
 #: .\templates\partials\footer.html:21 .\templates\partials\navbar.html:17
 msgid "Product"
-msgstr "المنتج"
+msgstr "منتج"
 
-#: .\JADWA_AI\models.py:64 .\JADWA_AI\models.py:125
+#: .\JADWA_AI\models.py:63 .\JADWA_AI\models.py:124
 msgid "Hybrid"
-msgstr "هجينة"
+msgstr "هجين"
 
-#: .\JADWA_AI\models.py:69 .\JADWA_AI\models.py:87
-#: .\templates\pages\project_new.html:108
+#: .\JADWA_AI\models.py:68 .\JADWA_AI\models.py:86
 msgid "---------"
 msgstr "---------"
 
-#: .\JADWA_AI\models.py:70
+#: .\JADWA_AI\models.py:69
 msgid "Riyadh Region"
 msgstr "منطقة الرياض"
 
-#: .\JADWA_AI\models.py:71
+#: .\JADWA_AI\models.py:70
 msgid "Qassim Region"
 msgstr "منطقة القصيم"
 
-#: .\JADWA_AI\models.py:72
+#: .\JADWA_AI\models.py:71
 msgid "Eastern Region"
 msgstr "المنطقة الشرقية"
 
-#: .\JADWA_AI\models.py:73
+#: .\JADWA_AI\models.py:72
 msgid "Makkah Region"
 msgstr "منطقة مكة المكرمة"
 
-#: .\JADWA_AI\models.py:74
+#: .\JADWA_AI\models.py:73
 msgid "Madinah Region"
 msgstr "منطقة المدينة المنورة"
 
-#: .\JADWA_AI\models.py:75
+#: .\JADWA_AI\models.py:74
 msgid "Asir Region"
 msgstr "منطقة عسير"
 
-#: .\JADWA_AI\models.py:76
+#: .\JADWA_AI\models.py:75
 msgid "Tabuk Region"
 msgstr "منطقة تبوك"
 
-#: .\JADWA_AI\models.py:77
+#: .\JADWA_AI\models.py:76
 msgid "Jazan Region"
 msgstr "منطقة جازان"
 
-#: .\JADWA_AI\models.py:78
+#: .\JADWA_AI\models.py:77
 msgid "Hail Region"
 msgstr "منطقة حائل"
 
-#: .\JADWA_AI\models.py:79
+#: .\JADWA_AI\models.py:78
 msgid "Al Jouf Region"
 msgstr "منطقة الجوف"
 
-#: .\JADWA_AI\models.py:80
+#: .\JADWA_AI\models.py:79
 msgid "Najran Region"
 msgstr "منطقة نجران"
 
-#: .\JADWA_AI\models.py:81
+#: .\JADWA_AI\models.py:80
 msgid "Al Bahah Region"
 msgstr "منطقة الباحة"
 
-#: .\JADWA_AI\models.py:82
+#: .\JADWA_AI\models.py:81
 msgid "Northern Borders"
 msgstr "منطقة الحدود الشمالية"
 
-#: .\JADWA_AI\models.py:88
+#: .\JADWA_AI\models.py:87
 msgid "Riyadh"
 msgstr "الرياض"
 
-#: .\JADWA_AI\models.py:89
+#: .\JADWA_AI\models.py:88
 msgid "Diriyah"
 msgstr "الدرعية"
 
-#: .\JADWA_AI\models.py:90
+#: .\JADWA_AI\models.py:89
 msgid "Al Kharj"
 msgstr "الخرج"
 
-#: .\JADWA_AI\models.py:91
+#: .\JADWA_AI\models.py:90
 msgid "Buraidah"
 msgstr "بريدة"
 
-#: .\JADWA_AI\models.py:92
+#: .\JADWA_AI\models.py:91
 msgid "Unaizah"
 msgstr "عنيزة"
 
-#: .\JADWA_AI\models.py:93
+#: .\JADWA_AI\models.py:92
 msgid "Ar Rass"
 msgstr "الرس"
 
-#: .\JADWA_AI\models.py:94
+#: .\JADWA_AI\models.py:93
 msgid "Dammam"
 msgstr "الدمام"
 
-#: .\JADWA_AI\models.py:95
+#: .\JADWA_AI\models.py:94
 msgid "Khobar"
 msgstr "الخبر"
 
-#: .\JADWA_AI\models.py:96
+#: .\JADWA_AI\models.py:95
 msgid "Dhahran"
 msgstr "الظهران"
 
-#: .\JADWA_AI\models.py:97
+#: .\JADWA_AI\models.py:96
 msgid "Jubail"
 msgstr "الجبيل"
 
-#: .\JADWA_AI\models.py:98
+#: .\JADWA_AI\models.py:97
 msgid "Jeddah"
 msgstr "جدة"
 
-#: .\JADWA_AI\models.py:99
+#: .\JADWA_AI\models.py:98
 msgid "Taif"
 msgstr "الطائف"
 
-#: .\JADWA_AI\models.py:100
+#: .\JADWA_AI\models.py:99
 msgid "Madinah"
 msgstr "المدينة المنورة"
 
-#: .\JADWA_AI\models.py:101
+#: .\JADWA_AI\models.py:100
 msgid "Abha"
 msgstr "أبها"
 
-#: .\JADWA_AI\models.py:102
+#: .\JADWA_AI\models.py:101
 msgid "Khamis Mushait"
 msgstr "خميس مشيط"
 
-#: .\JADWA_AI\models.py:103
+#: .\JADWA_AI\models.py:102
 msgid "Tabuk"
 msgstr "تبوك"
 
-#: .\JADWA_AI\models.py:104
+#: .\JADWA_AI\models.py:103
 msgid "Jazan"
 msgstr "جازان"
 
-#: .\JADWA_AI\models.py:105
+#: .\JADWA_AI\models.py:104
 msgid "Hail"
 msgstr "حائل"
 
-#: .\JADWA_AI\models.py:106
+#: .\JADWA_AI\models.py:105
 msgid "Sakaka"
 msgstr "سكاكا"
 
-#: .\JADWA_AI\models.py:107
+#: .\JADWA_AI\models.py:106
 msgid "Arar"
 msgstr "عرعر"
 
-#: .\JADWA_AI\models.py:108
+#: .\JADWA_AI\models.py:107
 msgid "Najran"
 msgstr "نجران"
 
-#: .\JADWA_AI\models.py:109
+#: .\JADWA_AI\models.py:108
 msgid "Al Bahah"
 msgstr "الباحة"
 
-#: .\JADWA_AI\models.py:123
+#: .\JADWA_AI\models.py:122
 msgid "On-site"
 msgstr "حضوري"
 
-#: .\JADWA_AI\models.py:124
+#: .\JADWA_AI\models.py:123
 msgid "Online"
 msgstr "عن بُعد"
+
+#: .\JadwaAI\settings.py:75
+msgid "English"
+msgstr ""
+
+#: .\JadwaAI\settings.py:76
+msgid "Arabic"
+msgstr ""
 
 #: .\analysis\views.py:241
 msgid "Analysis completed successfully!"
 msgstr "تم إكمال التحليل بنجاح!"
-
 
 #: .\analysis\views.py:402 .\templates\analysis\pdf_report.html:102
 msgid "No recommendations generated yet."
@@ -308,7 +397,7 @@ msgstr "توليد التوصيات…"
 msgid "Download PDF"
 msgstr "تحميل ملف PDF"
 
-#: .\templates\analysis\result.html:199 .\templates\pages\project_new.html:64
+#: .\templates\analysis\result.html:199 .\templates\pages\project_new.html:65
 msgid "Back to Dashboard"
 msgstr "العودة إلى لوحة التحكم"
 
@@ -529,12 +618,10 @@ msgid "Your name"
 msgstr "اسمك"
 
 #: .\templates\pages\landing.html:219
+#, fuzzy
+#| msgid " name is required."
 msgid "Full name is required."
 msgstr "الاسم الكامل مطلوب."
-
-#: .\templates\pages\landing.html:223
-msgid "Email"
-msgstr "البريد الإلكتروني"
 
 #: .\templates\pages\landing.html:224
 msgid "you@email.com"
@@ -649,92 +736,66 @@ msgid "If you have any questions regarding privacy, please contact us at"
 msgstr "إذا كان لديك أي استفسارات تتعلق بالخصوصية، يرجى التواصل معنا عبر"
 
 #: .\templates\pages\project_new.html:11
-#, fuzzy
-#| msgid "Project"
 msgid "Add Project"
-msgstr "المشروع"
+msgstr "إضافة مشروع"
 
-#: .\templates\pages\project_new.html:34
+#: .\templates\pages\project_new.html:35
 msgid "Keep it short (max 80 characters)."
-msgstr ""
+msgstr "يرجى إدخاله باختصار (بحد أقصى 80 حرفًا)."
 
-#: .\templates\pages\project_new.html:56
+#: .\templates\pages\project_new.html:57
 msgid "Show result"
-msgstr ""
+msgstr "عرض النتيجة"
 
-#: .\templates\pages\project_new.html:67
-#, fuzzy
-#| msgid "← Back to homepage"
+#: .\templates\pages\project_new.html:68
 msgid "Back to Home"
-msgstr "← العودة للصفحة الرئيسية"
+msgstr "العودة للصفحة الرئيسية"
 
-#: .\templates\pages\project_new.html:239
-#, fuzzy
-#| msgid "Full name is required."
+
+
+#: .\templates\pages\project_new.html:101
 msgid "Project name is required."
-msgstr "الاسم الكامل مطلوب."
+msgstr "اسم المشروع مطلوب."
 
-#: .\templates\pages\project_new.html:242
+#: .\templates\pages\project_new.html:102
 msgid "Project name is too short."
-msgstr ""
+msgstr "اسم المشروع قصير جدًا."
 
-#: .\templates\pages\project_new.html:249
-#, fuzzy
-#| msgid "Please select a topic."
+#: .\templates\pages\project_new.html:103
 msgid "Please select a project type."
-msgstr "يرجى اختيار موضوع."
+msgstr "يرجى تحديد نوع المشروع."
 
-#: .\templates\pages\project_new.html:256
-#, fuzzy
-#| msgid "Please select a topic."
+#: .\templates\pages\project_new.html:104
 msgid "Please select a region."
-msgstr "يرجى اختيار موضوع."
+msgstr "يرجى اختيار المنطقة."
 
-#: .\templates\pages\project_new.html:263
-#, fuzzy
-#| msgid "Please select a topic."
+#: .\templates\pages\project_new.html:105
 msgid "Please select a city."
-msgstr "يرجى اختيار موضوع."
+msgstr "يرجى اختيار المدينة."
 
-#: .\templates\pages\project_new.html:272
-#, fuzzy
-#| msgid "Please select a topic."
-msgid "Please specify the location."
-msgstr "يرجى اختيار موضوع."
-
-#: .\templates\pages\project_new.html:280
+#: .\templates\pages\project_new.html:107
 msgid "Write it like: منطقة القصيم, عنيزة"
-msgstr ""
+msgstr "اكتبيها مثل: منطقة القصيم، عنيزة"
 
-#: .\templates\pages\project_new.html:291
-#, fuzzy
-#| msgid "Please select a topic."
+#: .\templates\pages\project_new.html:108
 msgid "Please select a project location type."
-msgstr "يرجى اختيار موضوع."
+msgstr "يرجى اختيار نوع موقع المشروع."
 
-#: .\templates\pages\project_new.html:298
-#, fuzzy
-#| msgid "Message is required."
+#: .\templates\pages\project_new.html:109
 msgid "Project budget is required."
-msgstr "الرسالة مطلوبة."
+msgstr "ميزانية المشروع مطلوبة."
 
-#: .\templates\pages\project_new.html:301
-#: .\templates\pages\project_new.html:311
-#: .\templates\pages\project_new.html:321
-msgid "Enter a valid positive number."
-msgstr ""
-
-#: .\templates\pages\project_new.html:308
-#, fuzzy
-#| msgid "Message is required."
+#: .\templates\pages\project_new.html:110
 msgid "Project duration is required."
-msgstr "الرسالة مطلوبة."
+msgstr "مدة المشروع مطلوبة."
 
-#: .\templates\pages\project_new.html:318
-#, fuzzy
-#| msgid "Full name is required."
+#: .\templates\pages\project_new.html:111
 msgid "Number of employees is required."
-msgstr "الاسم الكامل مطلوب."
+msgstr "يرجى إدخال عدد الموظفين."
+
+#: .\templates\pages\project_new.html:112
+msgid "Enter a valid positive number."
+msgstr "أدخلي رقمًا موجبًا صحيحًا."
 
 #: .\templates\pages\success_stories.html:18
 #: .\templates\partials\footer.html:22 .\templates\partials\navbar.html:18
@@ -893,4 +954,3 @@ msgstr "جميع الحقوق محفوظة."
 
 #~ msgid "Registration page will be available soon."
 #~ msgstr "صفحة إنشاء الحساب ستكون متاحة قريبًا."
-

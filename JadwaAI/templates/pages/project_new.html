@@ -10,7 +10,7 @@
   <div style="max-width:850px; width:100%;">
     <h1 class="form-title">{% trans "Add Project" %}</h1>
 
-    <div class="form-box" style="direction:{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %};">
+<div class="form-box {% if request.LANGUAGE_CODE == 'ar' %}lang-ar{% else %}lang-en{% endif %}">
       <form action="{% url 'project_new' %}" method="post" id="projectForm" novalidate>
         {% csrf_token %}
 
@@ -18,10 +18,11 @@
           {% for field in form %}
 
             <tr {% if field.name == "project_location_other" %} id="row_location_other" style="display:none;" {% endif %}>
-              <td style="width: 260px; vertical-align: middle; text-align:{% if LANGUAGE_CODE == 'ar' %}right{% else %}left{% endif %};">
+<td style="width: 260px; vertical-align: middle;">
                 <label for="{{ field.id_for_label }}">
-                  {{ field.label }}
-                </label>
+{{ field.label }}
+</label>
+
               </td>
 
               <td style="vertical-align: middle;">
@@ -71,6 +72,9 @@
   </div>
 </div>
 
+<!-- =========================
+     Region -> Cities mapping
+========================== -->
 <script>
 window.REGION_TO_CITIES = {
   riyadh:   ["riyadh", "diriyah", "kharj", "other"],
@@ -90,8 +94,29 @@ window.REGION_TO_CITIES = {
 };
 </script>
 
+<!-- =========================
+     Translated messages for JS
+========================== -->
+<script>
+  const MSG_REQUIRED_NAME = "{% trans 'Project name is required.' %}";
+  const MSG_SHORT_NAME = "{% trans 'Project name is too short.' %}";
+  const MSG_SELECT_TYPE = "{% trans 'Please select a project type.' %}";
+  const MSG_SELECT_REGION = "{% trans 'Please select a region.' %}";
+  const MSG_SELECT_CITY = "{% trans 'Please select a city.' %}";
+  const MSG_SPECIFY_LOCATION = "{% trans 'Please specify the location.' %}";
+  const MSG_LOCATION_FORMAT = "{% trans 'Write it like: منطقة القصيم, عنيزة' %}";
+  const MSG_SELECT_LOCATION_TYPE = "{% trans 'Please select a project location type.' %}";
+  const MSG_BUDGET_REQUIRED = "{% trans 'Project budget is required.' %}";
+  const MSG_DURATION_REQUIRED = "{% trans 'Project duration is required.' %}";
+  const MSG_EMP_REQUIRED = "{% trans 'Number of employees is required.' %}";
+  const MSG_POSITIVE = "{% trans 'Enter a valid positive number.' %}";
 
+  const TXT_OTHER = "{% trans 'Other' %}";
+</script>
 
+<!-- =========================
+     Validation
+========================== -->
 <script>
 (function () {
   const form = document.getElementById("projectForm");
@@ -175,31 +200,31 @@ window.REGION_TO_CITIES = {
 
     const nameVal = (nameInput?.value || "").trim();
     if (!nameVal) {
-      setErr("project_name", "{% trans 'Project name is required.' %}");
+      setErr("project_name", MSG_REQUIRED_NAME);
       ok = false;
     } else if (nameVal.length < 3) {
-      setErr("project_name", "{% trans 'Project name is too short.' %}");
+      setErr("project_name", MSG_SHORT_NAME);
       ok = false;
     } else {
       setErr("project_name", "");
     }
 
     if (isEmpty(typeSelect)) {
-      setErr("Project_type", "{% trans 'Please select a project type.' %}");
+      setErr("Project_type", MSG_SELECT_TYPE);
       ok = false;
     } else {
       setErr("Project_type", "");
     }
 
     if (isEmpty(regionSelect)) {
-      setErr("project_region", "{% trans 'Please select a region.' %}");
+      setErr("project_region", MSG_SELECT_REGION);
       ok = false;
     } else {
       setErr("project_region", "");
     }
 
     if (isEmpty(citySelect)) {
-      setErr("project_city", "{% trans 'Please select a city.' %}");
+      setErr("project_city", MSG_SELECT_CITY);
       ok = false;
     } else {
       setErr("project_city", "");
@@ -208,7 +233,7 @@ window.REGION_TO_CITIES = {
     if (isOtherSelected()) {
       const otherVal = (otherInput?.value || "").trim();
       if (!otherVal) {
-        setErr("project_location_other", "{% trans 'Please specify the location.' %}");
+        setErr("project_location_other", MSG_SPECIFY_LOCATION);
         ok = false;
       } else {
         const low = otherVal.toLowerCase().trim();
@@ -216,7 +241,7 @@ window.REGION_TO_CITIES = {
           "qassim","riyadh","makkah","madinah","eastern","asir","tabuk","jazan","hail","jouf","najran","bahah","northern"
         ]);
         if (!allowedEnglish.has(low) && !otherVal.includes("منطقة") && !otherVal.includes(",") && !otherVal.includes("،")) {
-          setErr("project_location_other", "{% trans 'Write it like: منطقة القصيم, عنيزة' %}");
+          setErr("project_location_other", MSG_LOCATION_FORMAT);
           ok = false;
         } else {
           setErr("project_location_other", "");
@@ -227,37 +252,37 @@ window.REGION_TO_CITIES = {
     }
 
     if (isEmpty(locTypeSelect)) {
-      setErr("project_location_type", "{% trans 'Please select a project location type.' %}");
+      setErr("project_location_type", MSG_SELECT_LOCATION_TYPE);
       ok = false;
     } else {
       setErr("project_location_type", "");
     }
 
     if (isEmpty(budgetInput)) {
-      setErr("project_budget", "{% trans 'Project budget is required.' %}");
+      setErr("project_budget", MSG_BUDGET_REQUIRED);
       ok = false;
     } else if (!isPositiveNumber(budgetInput)) {
-      setErr("project_budget", "{% trans 'Enter a valid positive number.' %}");
+      setErr("project_budget", MSG_POSITIVE);
       ok = false;
     } else {
       setErr("project_budget", "");
     }
 
     if (isEmpty(durationInput)) {
-      setErr("project_duration", "{% trans 'Project duration is required.' %}");
+      setErr("project_duration", MSG_DURATION_REQUIRED);
       ok = false;
     } else if (!isPositiveNumber(durationInput)) {
-      setErr("project_duration", "{% trans 'Enter a valid positive number.' %}");
+      setErr("project_duration", MSG_POSITIVE);
       ok = false;
     } else {
       setErr("project_duration", "");
     }
 
     if (isEmpty(employeesInput)) {
-      setErr("number_of_employees", "{% trans 'Number of employees is required.' %}");
+      setErr("number_of_employees", MSG_EMP_REQUIRED);
       ok = false;
     } else if (!isPositiveNumber(employeesInput)) {
-      setErr("number_of_employees", "{% trans 'Enter a valid positive number.' %}");
+      setErr("number_of_employees", MSG_POSITIVE);
       ok = false;
     } else {
       setErr("number_of_employees", "");
@@ -268,6 +293,9 @@ window.REGION_TO_CITIES = {
 })();
 </script>
 
+<!-- =========================
+     Hide Django errors on change
+========================== -->
 <script>
 document.getElementById("projectForm")?.addEventListener("change", function(e){
   const name = e.target?.name;
@@ -281,6 +309,9 @@ document.getElementById("projectForm")?.addEventListener("change", function(e){
 });
 </script>
 
+<!-- =========================
+     Region -> Filter Cities + Other toggle
+========================== -->
 <script>
 (function () {
   const regionSelect = document.getElementById("id_project_region");
@@ -288,7 +319,6 @@ document.getElementById("projectForm")?.addEventListener("change", function(e){
   const otherRow     = document.getElementById("row_location_other");
   if (!regionSelect || !citySelect) return;
 
-  // خذي نسخة من الخيارات الأصلية (لو كانت موجودة)
   const allCityOptions = Array.from(citySelect.options).map(opt => ({
     value: opt.value,
     label: opt.text
@@ -303,7 +333,6 @@ document.getElementById("projectForm")?.addEventListener("change", function(e){
       .replace(/[-_]/g, "");
   }
 
-  // نعمل نسخة من الماب بمفاتيح مطبّعة
   const REGION_TO_CITIES_NORM = {};
   Object.keys(window.REGION_TO_CITIES || {}).forEach(k => {
     REGION_TO_CITIES_NORM[norm(k)] = window.REGION_TO_CITIES[k];
@@ -313,10 +342,11 @@ document.getElementById("projectForm")?.addEventListener("change", function(e){
     const regionKey = norm(regionSelect.value);
     const allowed = REGION_TO_CITIES_NORM[regionKey] || [];
 
-    // إذا ما لقينا mapping: لا تكسّرين القائمة، خليه يعرض كل المدن اللي موجودة
     citySelect.innerHTML = "";
 
-    const source = allCityOptions.length ? allCityOptions : [{value:"", label:"----"}, {value:"other", label:"Other"}];
+    const source = allCityOptions.length
+      ? allCityOptions
+      : [{value:"", label:"----"}, {value:"other", label: TXT_OTHER}];
 
     source.forEach(opt => {
       const v = opt.value;
@@ -347,7 +377,5 @@ document.getElementById("projectForm")?.addEventListener("change", function(e){
   toggleOther();
 })();
 </script>
-
-
 
 {% endblock %}
