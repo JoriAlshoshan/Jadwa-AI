@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-11 11:55+0300\n"
+"POT-Creation-Date: 2026-02-12 11:47+0300\n"
 "PO-Revision-Date: 2026-01-25 19:40+0300\n"
 "Last-Translator: Jadwa AI Team\n"
 "Language-Team: Arabic\n"
@@ -17,18 +17,18 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: .\JADWA_AI\forms.py:13 .\JADWA_AI\forms.py:148
+#: .\JADWA_AI\forms.py:13 .\JADWA_AI\forms.py:147
 #: .\templates\pages\landing.html:223
 msgid "Email"
 msgstr "البريد الإلكتروني"
 
 #: .\JADWA_AI\forms.py:20 .\JADWA_AI\forms.py:26
 msgid "Username"
-msgstr ""
+msgstr "اسم المستخدم"
 
 #: .\JADWA_AI\forms.py:29
 msgid "Password"
-msgstr ""
+msgstr "كلمة المرور"
 
 #: .\JADWA_AI\forms.py:73
 msgid "Example: Qassim Region, Unaizah"
@@ -38,60 +38,74 @@ msgstr "مثال: منطقة القصيم، عنيزة"
 msgid "Describe competitors and target audience (optional)"
 msgstr "وصف المنافسين والجمهور المستهدف (اختياري)."
 
+#: .\JADWA_AI\forms.py:88
 msgid "Project Name"
 msgstr "اسم المشروع"
 
+#: .\JADWA_AI\forms.py:89
 msgid "Project Type"
 msgstr "نوع المشروع"
 
+#: .\JADWA_AI\forms.py:90
 msgid "Region"
 msgstr "المنطقة"
 
+#: .\JADWA_AI\forms.py:91
 msgid "City"
 msgstr "المدينة"
 
+#: .\JADWA_AI\forms.py:92
 msgid "Specify Location"
 msgstr "تحديد الموقع"
 
+#: .\JADWA_AI\forms.py:93
 msgid "Project Location Type"
 msgstr "نوع موقع المشروع"
 
+#: .\JADWA_AI\forms.py:94
 msgid "Project Budget"
 msgstr "ميزانية المشروع"
 
+#: .\JADWA_AI\forms.py:95
 msgid "Project Duration"
 msgstr "مدة المشروع"
 
+#: .\JADWA_AI\forms.py:96
 msgid "Number Of Employees"
 msgstr "عدد الموظفين"
 
+#: .\JADWA_AI\forms.py:97
 msgid "Description (Optional)"
 msgstr "الوصف (اختياري)"
 
+#: .\JADWA_AI\forms.py:103 .\JADWA_AI\forms.py:104 .\JADWA_AI\forms.py:105
+#: .\JADWA_AI\forms.py:107 .\JADWA_AI\forms.py:111 .\JADWA_AI\forms.py:112
+#: .\JADWA_AI\forms.py:113 .\JADWA_AI\forms.py:114
+#, fuzzy
+#| msgid "Message is required."
+msgid "This field is required."
+msgstr "الرسالة مطلوبة."
 
-
-
-
-#: .\JADWA_AI\forms.py:109
+#: .\JADWA_AI\forms.py:108
 #, fuzzy
 #| msgid "Please select a city."
 msgid "Please select a city from the list."
 msgstr "يرجى اختيار المدينة."
 
-#: .\JADWA_AI\forms.py:111 .\JADWA_AI\forms.py:131
+#: .\JADWA_AI\forms.py:110 .\JADWA_AI\forms.py:130
 #: .\templates\pages\project_new.html:106
 #, fuzzy
 #| msgid "Please select a project location type."
 msgid "Please specify the location."
 msgstr "يرجى اختيار نوع موقع المشروع."
 
-#: .\JADWA_AI\forms.py:138
+#: .\JADWA_AI\forms.py:137
 msgid "Write it like: Qassim Region, Unaizah"
-msgstr ""
+msgstr "اكتبيها مثل: منطقة القصيم، عنيزة"
 
-#: .\JADWA_AI\forms.py:155
+#: .\JADWA_AI\forms.py:154
 msgid "OTP Code"
-msgstr ""
+msgstr "رمز التحقق"
 
 #: .\JADWA_AI\models.py:41 .\templates\pages\landing.html:232
 msgid "Request a demo"
@@ -279,11 +293,12 @@ msgstr "عن بُعد"
 
 #: .\JadwaAI\settings.py:75
 msgid "English"
-msgstr ""
+msgstr "الإنجليزية"
 
 #: .\JadwaAI\settings.py:76
 msgid "Arabic"
-msgstr ""
+msgstr "العربية"
+
 
 #: .\analysis\views.py:241
 msgid "Analysis completed successfully!"
@@ -347,7 +362,7 @@ msgstr "توصيات الذكاء الاصطناعي (متابعة)"
 
 #: .\templates\analysis\pdf_report.html:49
 msgid "Jadwa AI - Analysis Report"
-msgstr ""
+msgstr "تقرير تحليل جدوى AI"
 
 #: .\templates\analysis\pdf_report.html:61
 #, fuzzy
@@ -378,7 +393,6 @@ msgid "Generate Recommendations"
 msgstr "توليد التوصيات"
 
 #: .\templates\analysis\result.html:82
-#, fuzzy
 #| msgid "Generate Recommendations"
 msgid "Failed to generate recommendations."
 msgstr "توليد التوصيات"
@@ -407,6 +421,41 @@ msgstr "مرحبًا،"
 #: .\templates\pages\dashboard.html:12 .\templates\partials\navbar.html:57
 msgid "Logout"
 msgstr "تسجيل الخروج"
+
+#: .\templates\pages\forgot_password.html:44
+#: .\templates\registration\login.html:54
+msgid "Forgot your password?"
+msgstr "هل نسيت كلمة المرور؟"
+
+
+#: .\templates\pages\forgot_password.html:48
+msgid "Enter your email and well send you a verification code."
+msgstr "أدخل بريدك الإلكتروني وسنرسل لك رمز التحقق."
+
+
+#: .\templates\pages\forgot_password.html:64
+msgid "Email address"
+msgstr "البريد الإلكتروني"
+
+
+#: .\templates\pages\forgot_password.html:70
+#| msgid "Enter Project Details"
+msgid "Enter your email"
+msgstr "أدخل بريدك الإلكتروني"
+
+#: .\templates\pages\forgot_password.html:81
+msgid "Send OTP"
+msgstr "إرسال رمز التحقق"
+
+
+#: .\templates\pages\forgot_password.html:87
+msgid "Remember your password?"
+msgstr "تذكرت كلمة المرور؟"
+
+#: .\templates\pages\forgot_password.html:89
+#: .\templates\partials\footer.html:34 .\templates\registration\login.html:48
+msgid "Login"
+msgstr "تسجيل الدخول"
 
 #: .\templates\pages\landing.html:18
 msgid "Business Feasibility Powered by AI"
@@ -578,8 +627,8 @@ msgid "Digital Payments · Trusted"
 msgstr "مدفوعات رقمية · موثوق"
 
 #: .\templates\pages\landing.html:181
-msgid "View more success stories →"
-msgstr "عرض المزيد من قصص النجاح →"
+msgid "View more success stories"
+msgstr "عرض المزيد من قصص النجاح"
 
 #: .\templates\pages\landing.html:191 .\templates\pages\success_stories.html:20
 #: .\templates\partials\footer.html:24 .\templates\partials\footer.html:45
@@ -612,7 +661,6 @@ msgid "Your name"
 msgstr "اسمك"
 
 #: .\templates\pages\landing.html:219
-#| msgid " name is required."
 msgid "Full name is required."
 msgstr "الاسم الكامل مطلوب."
 
@@ -744,8 +792,6 @@ msgstr "عرض النتيجة"
 msgid "Back to Home"
 msgstr "العودة للصفحة الرئيسية"
 
-
-
 #: .\templates\pages\project_new.html:101
 msgid "Project name is required."
 msgstr "اسم المشروع مطلوب."
@@ -789,6 +835,31 @@ msgstr "يرجى إدخال عدد الموظفين."
 #: .\templates\pages\project_new.html:112
 msgid "Enter a valid positive number."
 msgstr "أدخلي رقمًا موجبًا صحيحًا."
+
+#: .\templates\pages\register.html:33
+#| msgid "Create Account"
+msgid "Create your Jadwa AI account"
+msgstr "إنشاء حساب"
+
+#: .\templates\pages\register.html:34
+msgid "Sign up to start analyzing feasibility projects instantly."
+msgstr "سجّل الآن لبدء تحليل مشاريع الجدوى فورًا."
+
+
+#: .\templates\pages\register.html:54
+msgid "Sign Up"
+msgstr "إنشاء حساب"
+
+
+#: .\templates\pages\register.html:60
+msgid "Already have an account?"
+msgstr "هل لديك حساب بالفعل؟"
+
+
+#: .\templates\pages\register.html:62
+#| msgid "Login"
+msgid "Login here"
+msgstr "تسجيل الدخول"
 
 #: .\templates\pages\success_stories.html:18
 #: .\templates\partials\footer.html:22 .\templates\partials\navbar.html:18
@@ -837,8 +908,8 @@ msgid "SaaS · SMEs"
 msgstr "SaaS · منشآت صغيرة ومتوسطة"
 
 #: .\templates\pages\success_stories.html:113
-msgid "← Back to homepage"
-msgstr "← العودة للصفحة الرئيسية"
+msgid "Back to homepage"
+msgstr "العودة للصفحة الرئيسية"
 
 # ===== Terms & Conditions =====
 #: .\templates\pages\terms.html:9
@@ -915,10 +986,6 @@ msgstr "استكشف"
 msgid "Account"
 msgstr "الحساب"
 
-#: .\templates\partials\footer.html:34
-msgid "Login"
-msgstr "تسجيل الدخول"
-
 #: .\templates\partials\footer.html:35
 msgid "Create Account"
 msgstr "إنشاء حساب"
@@ -935,34 +1002,42 @@ msgstr "الشروط"
 msgid "All rights reserved."
 msgstr "جميع الحقوق محفوظة."
 
+#: .\templates\registration\login.html:12
+msgid "Login to Jadwa AI"
+msgstr "تسجيل الدخول إلى جدوى AI"
+
+
+#: .\templates\registration\login.html:16
+msgid "Access your dashboard and start your feasibility analysis."
+msgstr "ادخل إلى لوحة التحكم وابدأ تحليل الجدوى الخاص بك."
+
+
+#: .\templates\registration\login.html:56
+msgid "Reset it"
+msgstr "إعادة تعيين"
+
+
+#: .\templates\registration\login.html:61
+msgid "Don't have an account?"
+msgstr "ليس لديك حساب؟"
+
+
+#: .\templates\registration\login.html:63
+#| msgid "Create Account"
+msgid "Create one"
+msgstr "إنشاء حساب"
+
 #~ msgid "Generating recommendations, please wait..."
 #~ msgstr "جارٍ توليد التوصيات، فضلاً انتظر..."
 
 #~ msgid "Recommendations have not been generated yet."
 #~ msgstr "لم يتم توليد التوصيات بعد."
 
-# ===== Register =====
-#~ msgid "Register"
-#~ msgstr "إنشاء حساب"
+
 
 #~ msgid "Registration page will be available soon."
 #~ msgstr "صفحة إنشاء الحساب ستكون متاحة قريبًا."
 
-msgid "Login to Jadwa AI"
-msgstr "تسجيل الدخول إلى جدوى AI"
 
-msgid "Access your dashboard and start your feasibility analysis."
-msgstr "ادخل إلى لوحة التحكم وابدأ تحليل الجدوى الخاص بك."
 
-msgid "Forgot your password?"
-msgstr "هل نسيت كلمة المرور؟"
-
-msgid "Reset it"
-msgstr "إعادة تعيين"
-
-msgid "Don't have an account?"
-msgstr "ليس لديك حساب؟"
-
-msgid "Create one"
-msgstr "إنشاء حساب"
 

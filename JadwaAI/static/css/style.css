@@ -931,3 +931,56 @@ select.form-input{
   color:#b42318;
   opacity:.92;
 }
+.contact-form input{
+  width:100%;
+  padding:12px 16px;
+  border:1px solid #cbd5e1;
+  border-radius:20px;
+  box-sizing:border-box;
+  transition:all .2s ease;
+}
+.link-text{
+  color:#64748B;        /* اللون الرمادي كله */
+}
+
+.link-text a{
+  color:#64748B;        /* نفس لون النص */
+  text-decoration:none; /* بدون خط */
+  font-weight:500;
+  transition:color .2s ease;
+}
+
+.link-text a:hover,
+.link-text a:active{
+  color:#1e40ff;        /* أزرق عند المرور أو الضغط */
+}
+
+.link-text a:visited{
+  color:#64748B;        /* يمنع البنفسجي */
+}
+.link-text{
+  color:#64748B;
+}
+
+.link-text a{
+  color:#64748B;        /* اللون الطبيعي */
+  text-decoration:none; /* بدون خط */
+  font-weight:500;
+  transition:color .2s ease;
+}
+
+/* فقط عند مرور الماوس */
+.link-text a:hover{
+  color:#0a2fbf;
+    text-decoration:underline; /* يظهر الخط */
+
+}
+/* اخفاء رسائل الخطأ افتراضياً */
+.form-error { 
+  display: none; 
+}
+
+/* إظهارها فقط إذا صار فيه خطأ */
+.form-row.is-error .form-error {
+  display: block;
+}

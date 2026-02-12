@@ -9,16 +9,27 @@ User = get_user_model()
 
 class JadwaUserCreationForm(UserCreationForm):
     email = forms.EmailField(
+        label=_("Email"),          # ✅ هذا اللي يترجم كلمة Email
         required=True,
-        widget=forms.EmailInput(attrs={'placeholder': _("Email"), 'class': 'form-input'})
+        widget=forms.EmailInput(attrs={
+            'placeholder': _("Email"),
+            'class': 'form-input'
+        })
     )
 
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ("username", "email")
-        widgets = {
-            "username": forms.TextInput(attrs={'placeholder': _("Username"), 'class': 'form-input'}),
+        labels = {            
+            "username": _("Username"),
         }
+        widgets = {
+            "username": forms.TextInput(attrs={
+                'placeholder': _("Username"),
+                'class': 'form-input'
+            }),
+        }
+
 
 
 class JadwaAuthenticationForm(AuthenticationForm):
