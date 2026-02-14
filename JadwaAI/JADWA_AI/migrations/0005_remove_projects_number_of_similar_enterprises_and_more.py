@@ -18,8 +18,6 @@ class Migration(migrations.Migration):
             model_name='projects',
             name='num_of_similar_enterprises',
 
-            field=models.IntegerField(blank=True, null=True),
-
             field=models.IntegerField(blank=True, editable=False, null=True),
         ),
     ]
