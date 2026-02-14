@@ -1,46 +1,163 @@
-{% extends "base.html" %} {% load static i18n %} {% block content %}
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+
+<style>
+/* ===== Soft Pink Validation (same style) ===== */
+.form-row.is-error .form-label{
+  color:inherit !important;
+}
+
+.form-row.is-error input,
+.form-row.is-error select,
+.form-row.is-error textarea{
+  border:1px solid #e7a6a6 !important;
+  background:#fff;
+  border-radius:20px;
+  box-shadow:0 0 0 6px rgba(231,166,166,.12);
+}
+
+.form-error{
+  margin-top:8px;
+  font-size:14px;
+  font-weight:500;
+  color:#b42318;
+  display:block;
+}
+
+/* ===== Clean auth links ===== */
+.auth-links-clean{
+  margin-top:18px;
+  text-align:center;
+  color:#64748b;
+  font-size:18px;
+  line-height:1.9;
+}
+
+.auth-links-clean p{
+  margin:8px 0;
+}
+
+.auth-link-clean{
+  color:#64748b;              /* نفس اللون اللي تبينه */
+  text-decoration:none;       /* بدون خط */
+  font-weight:500;
+  transition:color .15s ease, text-decoration .15s ease;
+}
+
+.auth-link-clean:hover{
+  color:#0a2fbf;              /* أزرق عند المرور */
+  text-decoration:underline;  /* underline عند المرور */
+}
+
+.auth-link-clean:active,
+.auth-link-clean:focus{
+  color:#0a2fbf;              /* أزرق عند الضغط */
+  text-decoration:underline;
+  outline:none;
+}
+</style>
+
 <div class="page">
-    <section class="legal-page">
-        <div class="legal-container" style="max-width:420px; margin:0 auto;">
+  <section class="legal-page">
+    <div class="legal-container" style="max-width:420px; margin:0 auto;">
 
-            <!-- Logo and heading -->
-            <div style="text-align:center; margin-bottom:34px;">
-                <!-- <img src="{% static 'img/jadwa-logo.png' %}" alt="Logo" style="height:80px; margin-bottom:16px;"> -->
-                <h2 style="margin-bottom:12px; color:#0b0f1a;">Login to Jadwa AI</h2>
-                <p style="margin-bottom:30px; color:#64748b;">Access your dashboard and start your feasibility analysis.</p>
-            </div>
+      <div style="text-align:center; margin-bottom:34px;">
+        <h2 style="margin-bottom:12px; color:#0b0f1a;">
+          {% trans "Login to Jadwa AI" %}
+        </h2>
 
-            <!-- Messages -->
-            {% if messages %} {% for message in messages %}
-            <div class="inline-msg inline-msg--error">{{ message }}</div>
-            {% endfor %} {% endif %}
+        <p style="margin-bottom:30px; color:#64748b;">
+          {% trans "Access your dashboard and start your feasibility analysis." %}
+        </p>
+      </div>
 
-            <!-- Login form -->
-            <form method="post" class="contact-form">
-                {% csrf_token %} {% for field in form %}
-                <div class="form-row {% if field.errors %}is-error{% endif %}">
-                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label> {{ field }} {% if field.errors %}
-                    <div class="form-error">{{ field.errors|striptags }}</div>
-                    {% endif %}
-                </div>
-                {% endfor %}
-                <button type="submit" class="btn btn-full" style="margin-top:12px;">Login</button>
-            </form>
+      {# ✅ حذفنا messages بالكامل عشان ما تتكرر إذا رجعتي للصفحة #}
 
-            <!-- Forgot Password -->
-            <p style="margin-top:14px; text-align:center; color:#64748b;">
-                Forgot your password?
-                <a href="{% url 'forgot_password' %}" class="contact-link">
-                    Reset it
-                </a>
-            </p>
+      <form method="post" class="contact-form" novalidate>
+        {% csrf_token %}
 
-            <!-- Signup -->
-            <p style="margin-top:18px; color:#64748b;">
-                Don't have an account? <a href="{% url 'signup' %}" class="contact-link">Create one</a>
-            </p>
+        {# ✅ خطأ عام واحد فقط (مثلاً بيانات الدخول غير صحيحة) #}
+        {% if form.non_field_errors %}
+          <div class="form-error" style="margin-bottom:12px;">
+            {{ form.non_field_errors|striptags }}
+          </div>
+        {% endif %}
 
-        </div>
-    </section>
+        {% for field in form %}
+          <div class="form-row {% if field.errors %}is-error{% endif %}">
+            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+            {{ field }}
+
+            {% if field.errors %}
+              <div class="form-error">{{ field.errors.0 }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-full" style="margin-top:12px;">
+          {% trans "Login" %}
+        </button>
+      </form>
+
+      <div class="auth-links-clean">
+        <p>
+          {% trans "Forgot your password?" %}
+          <a href="{% url 'forgot_password' %}" class="auth-link-clean">
+            {% trans "Reset it" %}
+          </a>
+        </p>
+
+        <p>
+          {% trans "Don't have an account?" %}
+          <a href="{% url 'signup' %}" class="auth-link-clean">
+            {% trans "Create one" %}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </section>
 </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  function clearError(field){
+    const row = field.closest(".form-row");
+    if(!row) return;
+
+    // إذا فيه كتابة، شيل الخطأ
+    if ((field.value || "").trim() !== "") {
+      row.classList.remove("is-error");
+
+      const error = row.querySelector(".form-error");
+      // لا نحذف non_field_errors اللي فوق (لأنه خارج row)
+      if (error) error.remove();
+    }
+  }
+
+  document.querySelectorAll(".form-row input, .form-row textarea, .form-row select")
+    .forEach(function(field){
+
+      ["input","change","keyup"].forEach(evt => {
+        field.addEventListener(evt, function(){ clearError(field); });
+      });
+
+      field.addEventListener("paste", function(){
+        setTimeout(() => clearError(field), 0);
+      });
+
+      // للـ autofill
+      setTimeout(() => clearError(field), 200);
+    });
+
+});
+</script>
 {% endblock %}

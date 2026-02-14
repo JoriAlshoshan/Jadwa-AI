@@ -10,29 +10,26 @@
   <div style="max-width:850px; width:100%;">
     <h1 class="form-title">{% trans "Add Project" %}</h1>
 
-    <div class="form-box" style="direction:{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %};">
-      {# ✅ novalidate: يمنع Bubble حق المتصفح ويخلّي رسائلنا تظهر #}
+<div class="form-box {% if request.LANGUAGE_CODE == 'ar' %}lang-ar{% else %}lang-en{% endif %}">
       <form action="{% url 'project_new' %}" method="post" id="projectForm" novalidate>
         {% csrf_token %}
 
         <table>
           {% for field in form %}
 
-            {# ✅ نخفي صف Other افتراضيًا ونظهره بالـ JS #}
             <tr {% if field.name == "project_location_other" %} id="row_location_other" style="display:none;" {% endif %}>
-              <td style="width: 260px; vertical-align: middle; text-align:{% if LANGUAGE_CODE == 'ar' %}right{% else %}left{% endif %};">
+<td style="width: 260px; vertical-align: middle;">
                 <label for="{{ field.id_for_label }}">
-                  {{ field.label }}
-                </label>
+{{ field.label }}
+</label>
+
               </td>
 
               <td style="vertical-align: middle;">
-                {# ✅ wrapper للحقل عشان نقدر نحط وردي حوله #}
                 <div class="field-wrap {% if field.errors %}field-error-wrap{% endif %}" id="wrap_{{ field.name }}" style="width: 100%;">
 
                   {{ field }}
 
-                  {# ✅ Counters + UX for project name #}
                   {% if field.name == "project_name" %}
                     <div style="display:flex; justify-content:space-between; margin-top:6px;">
                       <small style="color:#6b7280;">{% trans "Keep it short (max 80 characters)." %}</small>
@@ -40,10 +37,8 @@
                     </div>
                   {% endif %}
 
-                  {# ✅ خطأ لطيف من JS (بدل bubble) #}
                   <div class="error-text" id="err_{{ field.name }}" style="display:none;"></div>
 
-                  {# ✅ أخطاء Django من الباك-إند #}
                   {% if field.errors %}
                     <div class="error-text" id="djerr_{{ field.name }}">
                       {{ field.errors.0 }}
@@ -56,30 +51,6 @@
 
           {% endfor %}
         </table>
-
-        <!-- {# ✅ Description اختياري (مو داخل الفورم الأصلي) #}
-        <div style="margin-top:18px;">
-          <label for="id_description" style="display:block; margin-bottom:8px;">
-            {% trans "Description" %} <span style="color:#6b7280;">({% trans "Optional" %})</span>
-          </label>
-
-          <div class="field-wrap" id="wrap_description">
-            <textarea
-              id="id_description"
-              name="description"
-              rows="4"
-              maxlength="400"
-              placeholder="{% trans 'Briefly describe the idea, target customers, and how it works.' %}"
-            >{% if request.POST.description %}{{ request.POST.description }}{% endif %}</textarea>
-
-            <div style="display:flex; justify-content:space-between; margin-top:6px;">
-              <small style="color:#6b7280;">{% trans "Helps AI recommendations." %}</small>
-              <small style="color:#6b7280;"><span id="descCount">0</span>/400</small>
-            </div>
-
-            <div class="error-text" id="err_description" style="display:none;"></div>
-          </div>
-        </div> -->
 
         <div style="margin-top: 40px; text-align: center;">
           <button type="submit" class="btn-full" style="width: 100%; max-width: 300px;">
@@ -101,78 +72,51 @@
   </div>
 </div>
 
+<!-- =========================
+     Region -> Cities mapping
+========================== -->
 <script>
-  window.REGION_TO_CITIES = {
-    "riyadh":   ["riyadh_city", "diriyah", "kharj", "other"],
-    "qassim":   ["buraidah", "unaizah", "ras", "other"],
-    "eastern":  ["dammam", "khobar", "dhahran", "jubail", "other"],
-    "makkah":   ["jeddah", "taif", "other"],
-    "madinah":  ["madinah_city", "other"],
-    "asir":     ["abha", "khamees", "other"],
-    "tabuk":    ["tabuk_city", "other"],
-    "jazan":    ["jazan_city", "other"],
-    "hail":     ["hail_city", "other"],
-    "jouf":     ["sakaka", "other"],
-    "northern": ["arar", "other"],
-    "najran":   ["najran_city", "other"],
-    "bahah":    ["bahah_city", "other"],
-    "other":    ["other"]
-  };
+window.REGION_TO_CITIES = {
+  riyadh:   ["riyadh", "diriyah", "kharj", "other"],
+  qassim:   ["buraidah", "unaizah", "ras", "other"],
+  eastern:  ["dammam", "khobar", "dhahran", "jubail", "other"],
+  makkah:   ["jeddah", "taif", "other"],
+  madinah:  ["madinah", "other"],
+  asir:     ["abha", "khamees", "other"],
+  tabuk:    ["tabuk", "other"],
+  jazan:    ["jazan", "other"],
+  hail:     ["hail", "other"],
+  jouf:     ["sakaka", "other"],
+  northern: ["arar", "other"],
+  najran:   ["najran", "other"],
+  bahah:    ["bahah", "other"],
+  other:    ["other"]
+};
 </script>
 
+<!-- =========================
+     Translated messages for JS
+========================== -->
 <script>
-  (function () {
-    const regionSelect = document.getElementById("id_project_region");
-    const citySelect   = document.getElementById("id_project_city");
-    const otherRow   = document.getElementById("row_location_other");
-    const regionToCities = window.REGION_TO_CITIES || {};
+  const MSG_REQUIRED_NAME = "{% trans 'Project name is required.' %}";
+  const MSG_SHORT_NAME = "{% trans 'Project name is too short.' %}";
+  const MSG_SELECT_TYPE = "{% trans 'Please select a project type.' %}";
+  const MSG_SELECT_REGION = "{% trans 'Please select a region.' %}";
+  const MSG_SELECT_CITY = "{% trans 'Please select a city.' %}";
+  const MSG_SPECIFY_LOCATION = "{% trans 'Please specify the location.' %}";
+  const MSG_LOCATION_FORMAT = "{% trans 'Write it like: منطقة القصيم, عنيزة' %}";
+  const MSG_SELECT_LOCATION_TYPE = "{% trans 'Please select a project location type.' %}";
+  const MSG_BUDGET_REQUIRED = "{% trans 'Project budget is required.' %}";
+  const MSG_DURATION_REQUIRED = "{% trans 'Project duration is required.' %}";
+  const MSG_EMP_REQUIRED = "{% trans 'Number of employees is required.' %}";
+  const MSG_POSITIVE = "{% trans 'Enter a valid positive number.' %}";
 
-    const allCityOptions = [];
-    if (citySelect) {
-      for (const opt of citySelect.options) {
-        allCityOptions.push({ value: opt.value, label: opt.text });
-      }
-    }
-
-    function setCityOptionsForRegion(regionValue) {
-      if (!citySelect) return;
-
-      const allowed = regionToCities[regionValue] || ["other"];
-      const current = citySelect.value;
-
-      citySelect.innerHTML = "";
-      allowed.forEach(val => {
-        const match = allCityOptions.find(o => o.value === val);
-        const opt = document.createElement("option");
-        opt.value = val;
-        opt.textContent = match ? match.label : val;
-        citySelect.appendChild(opt);
-      });
-
-      if (allowed.includes(current)) citySelect.value = current;
-      else citySelect.value = allowed[0] || "other";
-    }
-
-    function toggleOtherRow() {
-      if (!otherRow) return;
-      const isOther =
-        (regionSelect && regionSelect.value === "other") ||
-        (citySelect && citySelect.value === "other");
-      otherRow.style.display = isOther ? "" : "none";
-    }
-
-    regionSelect?.addEventListener("change", function () {
-      setCityOptionsForRegion(regionSelect.value);
-      toggleOtherRow();
-    });
-
-    citySelect?.addEventListener("change", toggleOtherRow);
-
-    if (regionSelect) setCityOptionsForRegion(regionSelect.value);
-    toggleOtherRow();
-  })();
+  const TXT_OTHER = "{% trans 'Other' %}";
 </script>
 
+<!-- =========================
+     Validation
+========================== -->
 <script>
 (function () {
   const form = document.getElementById("projectForm");
@@ -181,8 +125,15 @@
   const nameInput = document.getElementById("id_project_name");
   const nameCount = document.getElementById("nameCount");
 
-  const descInput = document.getElementById("id_description");
-  const descCount = document.getElementById("descCount");
+  const typeSelect = document.getElementById("id_Project_type");
+  const regionSelect = document.getElementById("id_project_region");
+  const citySelect   = document.getElementById("id_project_city");
+  const otherInput   = document.getElementById("id_project_location_other");
+
+  const locTypeSelect = document.getElementById("id_project_location_type");
+  const budgetInput = document.getElementById("id_project_budget");
+  const durationInput = document.getElementById("id_project_duration");
+  const employeesInput = document.getElementById("id_number_of_employees");
 
   if (nameInput) nameInput.setAttribute("maxlength", "80");
 
@@ -197,10 +148,8 @@
       }
       if (wrap) wrap.classList.add("field-error-wrap");
 
-      // اخفي خطأ Django لو موجود عشان ما يتكرر
       const dj = document.getElementById("djerr_" + fieldName);
       if (dj) dj.style.display = "none";
-
     } else {
       if (errEl) {
         errEl.style.display = "none";
@@ -216,19 +165,12 @@
   }
 
   updateCounter(nameInput, nameCount);
-  updateCounter(descInput, descCount);
 
   nameInput?.addEventListener("input", () => {
     updateCounter(nameInput, nameCount);
     setErr("project_name", "");
   });
 
-  descInput?.addEventListener("input", () => {
-    updateCounter(descInput, descCount);
-    setErr("description", "");
-  });
-
-  // ✅ امسح أي ستايل خطأ لما المستخدم يكتب بأي حقل
   form.addEventListener("input", function(e){
     const el = e.target;
     const name = el?.getAttribute("name");
@@ -236,36 +178,204 @@
     setErr(name, "");
   });
 
+  function isOtherSelected() {
+    return (regionSelect?.value === "other") || (citySelect?.value === "other");
+  }
+
+  function isEmpty(el) {
+    if (!el) return true;
+    return ((el.value ?? "").toString().trim() === "");
+  }
+
+  function isPositiveNumber(el) {
+    if (!el) return false;
+    const v = (el.value ?? "").toString().trim();
+    if (!v) return false;
+    const n = Number(v);
+    return Number.isFinite(n) && n > 0;
+  }
+
   form.addEventListener("submit", function (e) {
     let ok = true;
 
-    // مثال: تحقق من الاسم فقط (وخلّ بقية الحقول على Django)
     const nameVal = (nameInput?.value || "").trim();
     if (!nameVal) {
-      setErr("project_name", "{% trans 'Project name is required.' %}");
+      setErr("project_name", MSG_REQUIRED_NAME);
       ok = false;
     } else if (nameVal.length < 3) {
-      setErr("project_name", "{% trans 'Project name is too short.' %}");
+      setErr("project_name", MSG_SHORT_NAME);
       ok = false;
+    } else {
+      setErr("project_name", "");
+    }
+
+    if (isEmpty(typeSelect)) {
+      setErr("Project_type", MSG_SELECT_TYPE);
+      ok = false;
+    } else {
+      setErr("Project_type", "");
+    }
+
+    if (isEmpty(regionSelect)) {
+      setErr("project_region", MSG_SELECT_REGION);
+      ok = false;
+    } else {
+      setErr("project_region", "");
+    }
+
+    if (isEmpty(citySelect)) {
+      setErr("project_city", MSG_SELECT_CITY);
+      ok = false;
+    } else {
+      setErr("project_city", "");
+    }
+
+    if (isOtherSelected()) {
+      const otherVal = (otherInput?.value || "").trim();
+      if (!otherVal) {
+        setErr("project_location_other", MSG_SPECIFY_LOCATION);
+        ok = false;
+      } else {
+        const low = otherVal.toLowerCase().trim();
+        const allowedEnglish = new Set([
+          "qassim","riyadh","makkah","madinah","eastern","asir","tabuk","jazan","hail","jouf","najran","bahah","northern"
+        ]);
+        if (!allowedEnglish.has(low) && !otherVal.includes("منطقة") && !otherVal.includes(",") && !otherVal.includes("،")) {
+          setErr("project_location_other", MSG_LOCATION_FORMAT);
+          ok = false;
+        } else {
+          setErr("project_location_other", "");
+        }
+      }
+    } else {
+      setErr("project_location_other", "");
+    }
+
+    if (isEmpty(locTypeSelect)) {
+      setErr("project_location_type", MSG_SELECT_LOCATION_TYPE);
+      ok = false;
+    } else {
+      setErr("project_location_type", "");
+    }
+
+    if (isEmpty(budgetInput)) {
+      setErr("project_budget", MSG_BUDGET_REQUIRED);
+      ok = false;
+    } else if (!isPositiveNumber(budgetInput)) {
+      setErr("project_budget", MSG_POSITIVE);
+      ok = false;
+    } else {
+      setErr("project_budget", "");
+    }
+
+    if (isEmpty(durationInput)) {
+      setErr("project_duration", MSG_DURATION_REQUIRED);
+      ok = false;
+    } else if (!isPositiveNumber(durationInput)) {
+      setErr("project_duration", MSG_POSITIVE);
+      ok = false;
+    } else {
+      setErr("project_duration", "");
+    }
+
+    if (isEmpty(employeesInput)) {
+      setErr("number_of_employees", MSG_EMP_REQUIRED);
+      ok = false;
+    } else if (!isPositiveNumber(employeesInput)) {
+      setErr("number_of_employees", MSG_POSITIVE);
+      ok = false;
+    } else {
+      setErr("number_of_employees", "");
     }
 
     if (!ok) e.preventDefault();
   });
 })();
 </script>
+
+<!-- =========================
+     Hide Django errors on change
+========================== -->
 <script>
-document.getElementById("projectForm").addEventListener("change", function(e){
-  const name = e.target.name;
+document.getElementById("projectForm")?.addEventListener("change", function(e){
+  const name = e.target?.name;
   if (!name) return;
 
-  // اخفي رسالة Django
   const dj = document.getElementById("djerr_" + name);
   if (dj) dj.style.display = "none";
 
-  // شيلي الإطار الأحمر
   const wrap = document.getElementById("wrap_" + name);
   if (wrap) wrap.classList.remove("field-error-wrap");
 });
+</script>
+
+<!-- =========================
+     Region -> Filter Cities + Other toggle
+========================== -->
+<script>
+(function () {
+  const regionSelect = document.getElementById("id_project_region");
+  const citySelect   = document.getElementById("id_project_city");
+  const otherRow     = document.getElementById("row_location_other");
+  if (!regionSelect || !citySelect) return;
+
+  const allCityOptions = Array.from(citySelect.options).map(opt => ({
+    value: opt.value,
+    label: opt.text
+  }));
+
+  function norm(v){
+    return (v || "")
+      .toString()
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "")
+      .replace(/[-_]/g, "");
+  }
+
+  const REGION_TO_CITIES_NORM = {};
+  Object.keys(window.REGION_TO_CITIES || {}).forEach(k => {
+    REGION_TO_CITIES_NORM[norm(k)] = window.REGION_TO_CITIES[k];
+  });
+
+  function updateCities(resetCity = true) {
+    const regionKey = norm(regionSelect.value);
+    const allowed = REGION_TO_CITIES_NORM[regionKey] || [];
+
+    citySelect.innerHTML = "";
+
+    const source = allCityOptions.length
+      ? allCityOptions
+      : [{value:"", label:"----"}, {value:"other", label: TXT_OTHER}];
+
+    source.forEach(opt => {
+      const v = opt.value;
+      if (v === "" || !allowed.length || allowed.includes(v)) {
+        const o = document.createElement("option");
+        o.value = opt.value;
+        o.textContent = opt.label;
+        citySelect.appendChild(o);
+      }
+    });
+
+    if (resetCity) citySelect.value = "";
+  }
+
+  function toggleOther() {
+    const show = norm(regionSelect.value) === "other" || norm(citySelect.value) === "other";
+    if (otherRow) otherRow.style.display = show ? "" : "none";
+  }
+
+  regionSelect.addEventListener("change", () => {
+    updateCities(true);
+    toggleOther();
+  });
+
+  citySelect.addEventListener("change", toggleOther);
+
+  updateCities(false);
+  toggleOther();
+})();
 </script>
 
 {% endblock %}

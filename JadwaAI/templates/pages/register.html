@@ -1,37 +1,150 @@
-{% extends "base.html" %} {% load static i18n %} {% block content %}
+{% extends "base.html" %}
+{% load static i18n %}
+{% block content %}
+
+<style>
+/* ===== Inputs ===== */
+.contact-form input,
+.contact-form select,
+.contact-form textarea{
+  width:100%;
+  padding:12px 16px;
+  border:1px solid #cbd5e1;
+  border-radius:20px;
+  box-sizing:border-box;
+  transition:all .2s ease;
+}
+
+/* ===== Soft Pink Error ===== */
+.form-row.is-error input,
+.form-row.is-error select,
+.form-row.is-error textarea{
+  border:1px solid #e7a6a6 !important;
+  box-shadow:0 0 0 6px rgba(231,166,166,.12);
+  background:#fff;
+}
+
+.form-error{
+  margin-top:8px;
+  font-size:14px;
+  font-weight:500;
+  color:#b42318;
+  display:block;
+}
+
+/* ===== Labels spacing ===== */
+.form-row{
+  margin-bottom:16px;
+}
+.form-row label{
+  display:block;
+  font-weight:600;
+  margin-bottom:8px;
+}
+
+/* ===== Clean link text like you want ===== */
+.link-text{
+  margin-top:18px;
+  text-align:center;
+  color:#64748b;
+  font-size:18px;
+}
+
+.link-text a{
+  color:#64748b;          /* نفس اللون الرمادي */
+  text-decoration:none;   /* بدون خط */
+  font-weight:500;
+  transition:color .15s ease, text-decoration .15s ease;
+}
+.link-text a:hover{
+  color:#0a2fbf;          /* أزرق عند المرور */
+  text-decoration:underline;
+}
+.link-text a:active,
+.link-text a:focus{
+  color:#0a2fbf;          /* أزرق عند الضغط */
+  text-decoration:underline;
+  outline:none;
+}
+</style>
+
 <div class="page">
-    <section class="legal-page">
-        <div class="legal-container" style="max-width:420px; margin:0 auto;">
+  <section class="legal-page">
+    <div class="legal-container" style="max-width:420px; margin:0 auto;">
 
-            <!-- Logo and heading -->
-            <div style="text-align:center; margin-bottom:34px;">
-                <!-- <img src="{% static 'img/jadwa-logo.png' %}" alt="Logo" style="height:80px; margin-bottom:16px;"> -->
-                <h2 style="margin-bottom:12px; color:#0b0f1a;">Create your Jadwa AI account</h2>
-                <p style="margin-bottom:30px; color:#64748b;">Sign up to start analyzing feasibility projects instantly.</p>
-            </div>
+      <div style="text-align:center; margin-bottom:34px;">
+        <h2 style="margin-bottom:12px; color:#0b0f1a;">
+          {% trans "Create your Jadwa AI account" %}
+        </h2>
+        <p style="margin-bottom:30px; color:#64748b;">
+          {% trans "Sign up to start analyzing feasibility projects instantly." %}
+        </p>
+      </div>
 
-            <!-- Messages -->
-            {% if messages %} {% for message in messages %}
-            <div class="inline-msg inline-msg--error">{{ message }}</div>
-            {% endfor %} {% endif %}
+      <form method="post" class="contact-form" novalidate
+            style="direction:{% if request.LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %};">
+        {% csrf_token %}
 
-            <!-- Registration form -->
-            <form method="post" class="contact-form">
-                {% csrf_token %} {% for field in form %}
-                <div class="form-row {% if field.errors %}is-error{% endif %}">
-                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label> {{ field }} {% if field.errors %}
-                    <div class="form-error">{{ field.errors|striptags }}</div>
-                    {% endif %}
-                </div>
-                {% endfor %}
-                <button type="submit" class="btn btn-full" style="margin-top:12px;">Sign Up</button>
-            </form>
+        {# ✅ ما نعرض أي رسائل فوق #}
 
-            <p style="margin-top:18px; color:#64748b;">
-                Already have an account? <a href="{% url 'login' %}" class="contact-link">Login here</a>
-            </p>
+        {% for field in form %}
+          <div class="form-row {% if field.errors %}is-error{% endif %}">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
 
-        </div>
-    </section>
+            {{ field }}
+
+            {% if field.errors %}
+              <div class="form-error">{{ field.errors|striptags }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-full" style="margin-top:12px;">
+          {% trans "Sign Up" %}
+        </button>
+      </form>
+
+      <p class="link-text">
+        {% trans "Already have an account?" %}
+        <a href="{% url 'login' %}">
+          {% trans "Login here" %}
+        </a>
+      </p>
+
+    </div>
+  </section>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+  function clearError(field){
+    const row = field.closest(".form-row");
+    if(!row) return;
+
+    if ((field.value || "").trim() !== "") {
+      row.classList.remove("is-error");
+      const error = row.querySelector(".form-error");
+      if(error) error.remove();
+    }
+  }
+
+  document.querySelectorAll(".contact-form input, .contact-form select, .contact-form textarea")
+    .forEach(function(field){
+
+      ["input","change","keyup"].forEach(evt => {
+        field.addEventListener(evt, function(){ clearError(field); });
+      });
+
+      field.addEventListener("paste", function(){
+        setTimeout(() => clearError(field), 0);
+      });
+
+      // Autofill
+      setTimeout(() => clearError(field), 200);
+    });
+
+});
+</script>
+
 {% endblock %}
