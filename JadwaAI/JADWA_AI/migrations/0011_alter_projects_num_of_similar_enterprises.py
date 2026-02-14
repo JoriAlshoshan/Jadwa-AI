@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('JADWA_AI', '0010_remove_projects_number_of_similar_enterprises_and_more'),
+        ('JADWA_AI', '0010_alter_projects_project_type_and_more'),
     ]
 
     operations = [
