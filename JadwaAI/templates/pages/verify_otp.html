@@ -1,53 +1,215 @@
-{% extends "base.html" %} {% load static i18n %} {% block content %}
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block content %}
 <div class="page">
-    <section class="legal-page">
-        <div class="legal-container" style="max-width:420px; margin:0 auto;">
+  <section class="legal-page">
+    <div class="legal-container" style="max-width:420px; margin:0 auto;">
 
-            <!-- Heading -->
-            <div style="text-align:center; margin-bottom:34px;">
-                <h2 style="margin-bottom:12px; color:#0b0f1a;">
-                    Verify OTP
-                </h2>
-                <p style="margin-bottom:30px; color:#64748b;">
-                    Enter the 6-digit code sent to your email.
-                </p>
-            </div>
+      <!-- Heading -->
+      <div style="text-align:center; margin-bottom:34px;">
+        <h2 style="margin-bottom:12px; color:#0b0f1a;">
+          {% trans "Verify OTP" %}
+        </h2>
+        <p style="margin-bottom:30px; color:#64748b;">
+          {% trans "Enter the 6-digit code sent to your email." %}
+        </p>
+      </div>
 
-            <!-- Messages -->
-            {% if messages %} {% for message in messages %}
-            <div class="inline-msg inline-msg--error">{{ message }}</div>
-            {% endfor %} {% endif %}
+      <!-- Django messages -->
+      {% if messages %}
+        {% for message in messages %}
+          <div class="inline-msg {% if 'error' in message.tags %}inline-msg--error-light{% else %}inline-msg--soft{% endif %}" style="margin-bottom:12px;">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
 
-            <!-- OTP Form -->
-            <form method="post" class="contact-form">
-                {% csrf_token %}
+      <!-- Custom error (مثل Forgot Password) -->
+      <div id="otpError" class="inline-msg inline-msg--error-light" style="display:none; margin-bottom:12px;">
+        {% trans "This field is required." %}
+      </div>
 
-                <div style="display:flex; gap:10px; justify-content:center; margin-bottom:20px;">
-                    {% for i in "123456" %}
-                    <input type="text" name="otp{{ forloop.counter }}" maxlength="1" required style="
-                                width:48px;
-                                height:52px;
-                                text-align:center;
-                                font-size:20px;
-                                border:1px solid #cbd5e1;
-                                border-radius:8px;
-                            "> {% endfor %}
-                </div>
+      <!-- OTP Form -->
+      <form method="post" class="contact-form" id="otpForm" novalidate>
+        {% csrf_token %}
 
-                <button type="submit" class="btn btn-full">
-                    Verify
-                </button>
-            </form>
-
-            <!-- Resend -->
-            <p style="margin-top:18px; text-align:center; color:#64748b;">
-                Didn’t receive the code?
-                <a href="{% url 'forgot_password' %}" class="contact-link">
-                    Resend OTP
-                </a>
-            </p>
-
+        <div style="display:flex; gap:10px; justify-content:center; margin-bottom:20px;">
+          {% for i in "123456" %}
+            <input
+              type="text"
+              name="otp{{ forloop.counter }}"
+              id="otp{{ forloop.counter }}"
+              inputmode="numeric"
+              maxlength="1"
+              autocomplete="one-time-code"
+              class="otp-input"
+              aria-label="OTP digit {{ forloop.counter }}"
+              style="
+                width:48px;
+                height:52px;
+                text-align:center;
+                font-size:20px;
+                font-weight:800;
+                border:1px solid #cbd5e1;
+                border-radius:10px;
+                outline:none;
+                transition:0.2s;
+                background:#fff;
+              ">
+          {% endfor %}
         </div>
-    </section>
+
+        <!-- hidden يجمع الكود كامل (مهم للباك اند) -->
+        <input type="hidden" name="otp" id="otpHidden">
+
+        <button type="submit" class="btn btn-full">
+          {% trans "Verify" %}
+        </button>
+      </form>
+
+      <!-- Resend -->
+      <p style="margin-top:18px; text-align:center; color:#64748b;">
+        {% trans "Didn’t receive the code?" %}
+        <a href="{% url 'forgot_password' %}" class="contact-link">
+          {% trans "Resend OTP" %}
+        </a>
+      </p>
+
+    </div>
+  </section>
 </div>
+
+<style>
+/* نفس الرسالة الرمادي الخفيفة */
+.inline-msg.inline-msg--soft{
+  background:#f1f5f9;
+  color:#0f172a;
+  border:1px solid #cbd5e1;
+  border-radius:16px;
+  padding:14px 16px;
+  font-size:16px;
+}
+
+/* نفس الأحمر الخفيف مثل Forgot password */
+.inline-msg.inline-msg--error-light{
+  background:#fff5f5;
+  color:#d93025;
+  border:1px solid #f3b4b4;
+  border-radius:16px;
+  padding:14px 16px;
+  font-size:16px;
+}
+
+/* مربعات OTP طبيعي */
+.otp-input:focus{
+  border-color:#2563eb !important;
+  box-shadow:0 0 0 2px rgba(37,99,235,.15) !important;
+}
+
+/* وقت الخطأ: بوردر أحمر خفيف فقط (بدون وردي قوي) */
+.otp-input.is-error{
+  border-color:#f3b4b4 !important;
+  box-shadow:0 0 0 6px rgba(217,48,37,.08) !important;
+}
+
+/* رسالة الخطأ: أحمر هادي جدًا */
+.inline-msg.inline-msg--error-light{
+  background:#fff7f7;          /* أفتح */
+  color:#c02626;               /* أهدى من b91c1c */
+  border:1px solid #f6c7c7;    /* بوردر أفتح */
+  border-radius:16px;
+  padding:14px 16px;
+  font-size:16px;
+}
+
+/* مربعات OTP وقت الخطأ: بوردر خفيف + ظل خفيف جدًا */
+.otp-input.is-error{
+  border-color:#f6c7c7 !important;
+  box-shadow:0 0 0 3px rgba(192,38,38,.06) !important;  /* كان كبير */
+}
+
+/* (اختياري) لو تبين حتى الخلفية ما تتغير أبدًا */
+.otp-input{
+  background:#fff !important;
+}
+
+</style>
+
+<script>
+(function () {
+  const form = document.getElementById("otpForm");
+  const inputs = Array.from(document.querySelectorAll(".otp-input"));
+  const hidden = document.getElementById("otpHidden");
+  const errBox = document.getElementById("otpError");
+
+  function getOtp() {
+    return inputs.map(i => (i.value || "").trim()).join("");
+  }
+
+  function clearUiError() {
+    errBox.style.display = "none";
+    inputs.forEach(i => i.classList.remove("is-error"));
+  }
+
+  function showUiError(msg) {
+    errBox.textContent = msg;
+    errBox.style.display = "block";
+    inputs.forEach(i => i.classList.add("is-error"));
+  }
+
+  // digits only + auto next + hide error while typing
+  inputs.forEach((inp, idx) => {
+    inp.addEventListener("input", () => {
+      inp.value = inp.value.replace(/\D/g, "");
+      clearUiError();
+
+      if (inp.value && idx < inputs.length - 1) {
+        inputs[idx + 1].focus();
+      }
+      hidden.value = getOtp();
+    });
+
+    inp.addEventListener("keydown", (e) => {
+      clearUiError();
+
+      if (e.key === "Backspace" && !inp.value && idx > 0) {
+        inputs[idx - 1].focus();
+      }
+      hidden.value = getOtp();
+    });
+
+    // paste كامل 6 أرقام
+    inp.addEventListener("paste", (e) => {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData("text");
+      const digits = (text || "").replace(/\D/g, "").slice(0, 6);
+
+      digits.split("").forEach((d, i) => {
+        if (inputs[i]) inputs[i].value = d;
+      });
+
+      clearUiError();
+      hidden.value = getOtp();
+
+      const last = Math.min(digits.length, 6) - 1;
+      if (last >= 0 && inputs[last]) inputs[last].focus();
+    });
+  });
+
+  // submit validation
+  form.addEventListener("submit", (e) => {
+    const otp = getOtp();
+    hidden.value = otp;
+
+    if (otp.length !== 6) {
+      e.preventDefault();
+      showUiError("{% trans 'This field is required.' %}");
+      const firstEmpty = inputs.find(i => !i.value);
+      (firstEmpty || inputs[0]).focus();
+    }
+  });
+})();
+</script>
+
 {% endblock %}

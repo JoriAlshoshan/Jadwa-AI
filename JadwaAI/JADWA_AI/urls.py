@@ -6,7 +6,6 @@ urlpatterns = [
     path("", views.landing, name="landing"),
     path("success-stories/", views.success_stories, name="success_stories"),
 
-    path("dashboard/", views.dashboard, name="dashboard"),
     path("register/", views.register, name="register"),
 
     path("projects/new/", views.project_new, name="project_new"),
@@ -23,4 +22,8 @@ urlpatterns = [
     path("forgot-password/", views.forgot_password, name="forgot_password"),
     path("verify-otp/", views.verify_otp, name="verify_otp"),
     path("reset-password/", views.reset_password, name="reset_password"),
+
+    
+    path("dashboard/", views.user_dashboard, name="dashboard"),
+
 ]

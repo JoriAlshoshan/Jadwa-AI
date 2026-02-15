@@ -7,6 +7,8 @@ from django.contrib.auth import get_user_model, login
 import random
 from analysis.models import AnalysisResult
 from django.utils import translation
+from django.db.models import OuterRef, Subquery
+from django.utils.translation import gettext as _
 
 
 from .models import ContactMessage, PasswordResetOTP, Projects
@@ -118,7 +120,7 @@ def forgot_password(request):
             )
 
             request.session["reset_user_id"] = user.id
-            messages.success(request, "OTP sent to your email.")
+            messages.success(request, _("OTP sent to your email."))
             return redirect("verify_otp")
     else:
         form = ForgotPasswordForm()
@@ -150,9 +152,9 @@ def verify_otp(request):
                 request.session["otp_verified"] = True
                 return redirect("reset_password")
             else:
-                messages.error(request, "Invalid or expired OTP.")
+                messages.error(request, _("Invalid or expired OTP."))
         else:
-            messages.error(request, "Please enter all 6 digits correctly.")
+            messages.error(request, _("Please enter all 6 digits correctly."))
     else:
         form = OTPForm()
 
@@ -181,17 +183,6 @@ def reset_password(request):
         form = ResetPasswordForm(user)
 
     return render(request, "pages/reset_password.html", {"form": form})
-
-
-# =======================
-# User (After Login)
-# =======================
-
-@login_required
-def dashboard(request):
-    return render(request, "pages/dashboard.html")
-
-
 # =======================
 # Project Create (After Login)
 # =======================
@@ -201,11 +192,9 @@ def project_new(request):
         form = ProjectInformationForm(request.POST)
         if form.is_valid():
             project = form.save(commit=False)
-
-            if hasattr(project, "user_id"):
-                project.user = request.user
-
+            project.user = request.user  
             project.save()
+
             return redirect("run_analysis", project_id=project.pk)
 
         messages.error(request, "Please fix the errors below.")
@@ -316,3 +305,22 @@ def contact_submit(request):
 
     messages.success(request, "Message sent successfully. We will get back to you shortly.")
     return redirect("/#contact")
+
+
+@login_required
+def user_dashboard(request):
+    qs = Projects.objects.filter(user=request.user).order_by("-id")
+
+    last_result = AnalysisResult.objects.filter(project_id=OuterRef("pk")).order_by("-id")
+
+    projects = qs.annotate(
+        last_score=Subquery(last_result.values("probability")[:1]),   # بدل feasibility_score
+        last_decision=Subquery(last_result.values("label")[:1]),      # بدل decision
+        last_result_id=Subquery(last_result.values("id")[:1]),
+    )
+
+    return render(request, "pages/dashboard.html", {
+        "projects": projects,
+        "profile_name": request.user.get_full_name() or request.user.username,
+        "profile_email": request.user.email,
+    })

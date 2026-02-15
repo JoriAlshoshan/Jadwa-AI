@@ -1041,3 +1041,23 @@ msgstr "إنشاء حساب"
 
 
 
+msgid "Verify OTP"
+msgstr "تأكيد رمز التحقق"
+
+msgid "Enter the 6-digit code sent to your email."
+msgstr "أدخل رمز التحقق المكون من 6 أرقام المرسل إلى بريدك الإلكتروني."
+
+msgid "OTP sent to your email."
+msgstr "تم إرسال رمز التحقق إلى بريدك الإلكتروني."
+
+msgid "Verify"
+msgstr "تحقق"
+
+msgid "Didn’t receive the code?"
+msgstr "لم تستلم الرمز؟"
+
+msgid "Resend OTP"
+msgstr "إعادة إرسال الرمز"
+
+msgid "Invalid or expired OTP."
+msgstr "رمز التحقق غير صحيح أو منتهي."

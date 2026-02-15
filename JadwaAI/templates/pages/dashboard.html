@@ -2,15 +2,117 @@
 {% load i18n %}
 
 {% block content %}
-<div class="container" style="padding:60px 0;">
+<div class="page-container" style="padding:26px; max-width:1100px; margin:0 auto;">
 
-  <h1>{% trans "Dashboard" %}</h1>
-  <p>{% trans "Welcome," %} {{ user.username }}</p>
+  <!-- Top row: Title + Add Project -->
+  <div style="display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; align-items:center; margin-bottom:14px; padding-right:10px;">
 
-  <form action="{% url 'logout' %}" method="post" style="margin-top:30px;">
-    {% csrf_token %}
-    <button type="submit" class="btn">{% trans "Logout" %}</button>
-  </form>
+    <div style="min-width:320px;">
+      <h1 style="margin:0; font-size:26px;">{% trans "Dashboard" %}</h1>
+      <p style="margin:6px 0 0; color:#64748b; font-size:14px;">
+        {% trans "Manage your projects and run feasibility analysis." %}
+      </p>
+    </div>
+
+    <!-- ✅ تم تعديل المحاذاة -->
+    <a href="{% url 'project_new' %}"
+       class="btn"
+       style="padding:10px 16px; font-size:14px; border-radius:999px; min-width:180px; text-align:center; margin-right:8px;">
+      {% trans "Add Project" %}
+    </a>
+  </div>
+
+  <!-- Profile summary -->
+  <div style="background:#fff; border:1px solid rgba(15,23,42,.10); border-radius:16px; padding:14px 16px; margin-bottom:14px;">
+    <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center;">
+
+      <div>
+        <div style="font-weight:800; font-size:15px; line-height:1.2;">{{ profile_name }}</div>
+        <div style="color:#64748b; font-size:13px; margin-top:2px;">{{ profile_email }}</div>
+      </div>
+
+      <!-- ✅ داخل الكارد + نفس المقاس -->
+      <a href="#"
+         class="btn btn-outline"
+         style="padding:10px 16px; font-size:14px; border-radius:999px; min-width:180px; text-align:center;">
+        {% trans "Edit Profile" %}
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Projects list -->
+  <div style="background:#fff; border:1px solid rgba(15,23,42,.10); border-radius:16px; overflow:hidden;">
+    <div style="padding:12px 16px; border-bottom:1px solid rgba(15,23,42,.08); font-weight:800; font-size:14px;">
+      {% trans "My Projects" %}
+    </div>
+
+    {% if projects %}
+      <div style="padding:10px 14px;">
+        {% for p in projects %}
+          <div style="border:1px solid rgba(15,23,42,.08); border-radius:14px; padding:12px 14px; margin:10px 0;">
+            <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center;">
+
+              <div style="min-width:260px;">
+                <div style="font-weight:900; font-size:16px; line-height:1.2;">
+                  {{ p.project_name|default:"Project" }}
+                </div>
+
+                {% if p.last_result_id %}
+                  <div style="margin-top:6px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; font-size:13px;">
+                    <span style="padding:3px 9px; border-radius:999px; background:rgba(34,197,94,.10); border:1px solid rgba(34,197,94,.22);">
+                      {% trans "Analyzed" %}
+                    </span>
+
+                    <span style="color:#64748b;">
+                      {% trans "Score" %}: <b style="color:#0f172a;">{{ p.last_score|floatformat:2 }}%</b>
+                    </span>
+
+                    <span style="color:#64748b;">
+                      {% trans "Decision" %}: <b style="color:#0f172a;">{{ p.last_decision }}</b>
+                    </span>
+                  </div>
+                {% else %}
+                  <div style="margin-top:6px; font-size:13px; color:#64748b;">
+                    <span style="padding:3px 9px; border-radius:999px; background:rgba(148,163,184,.12); border:1px solid rgba(148,163,184,.22);">
+                      {% trans "Not analyzed yet" %}
+                    </span>
+                  </div>
+                {% endif %}
+              </div>
+
+              <!-- Actions -->
+              <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end;">
+                {% if p.last_result_id %}
+                  <a class="btn"
+                     href="{% url 'analysis_result' p.last_result_id %}"
+                     style="padding:9px 14px; font-size:13px; border-radius:999px; min-width:140px; text-align:center;">
+                    {% trans "View Result" %}
+                  </a>
+
+                  <a href="{% url 'analysis_pdf' p.last_result_id %}"
+                     style="font-size:13px; font-weight:700; color:#2563eb; text-decoration:none; padding:6px 4px;">
+                    {% trans "Download PDF" %}
+                  </a>
+                {% else %}
+                  <a class="btn btn-outline"
+                     href="{% url 'run_analysis' p.id %}"
+                     style="padding:9px 14px; font-size:13px; border-radius:999px; min-width:140px; text-align:center;">
+                    {% trans "Run Analysis" %}
+                  </a>
+                {% endif %}
+              </div>
+
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div style="padding:16px; color:#64748b; font-size:14px;">
+        {% trans "No projects yet. Click Add Project to get started." %}
+      </div>
+    {% endif %}
+  </div>
 
 </div>
 {% endblock %}
