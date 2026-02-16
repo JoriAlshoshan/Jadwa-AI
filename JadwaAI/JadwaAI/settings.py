@@ -12,7 +12,7 @@ SECRET_KEY = 'django-insecure-76w&fgvc7)uu+bd433yt&i+c1_nmgn!_h-fm1cvk#j5wf@e7si
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'JADWA_AI',
     'analysis',
+    'django.contrib.sites',
 ]
 
 MIDDLEWARE = [
@@ -100,6 +101,7 @@ EMAIL_HOST = "smtppro.zoho.sa"
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST_USER = "contact@jadwa-ai.com"
 EMAIL_HOST_PASSWORD = "JadwaAI@2026!"
 CONTACT_NOTIFY_EMAIL = "contact@jadwa-ai.com"
@@ -118,3 +120,19 @@ LOGOUT_REDIRECT_URL = "/"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+SITE_ID = 1
+
+if not DEBUG:
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = "DENY"
+
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+    SECURE_SSL_REDIRECT = True
