@@ -9,6 +9,15 @@ from .num_similar_enterprises import get_similar_enterprises
 
 class User(AbstractUser):
     email = models.EmailField(unique=True)
+    region_custom = models.CharField(max_length=80, blank=True, null=True)
+    city_custom = models.CharField(max_length=80, blank=True, null=True)
+
+    profile_image = models.ImageField(upload_to="profiles/", null=True, blank=True)
+    bio = models.CharField(max_length=180, blank=True, null=True)
+    region = models.CharField(max_length=50, blank=True, null=True)
+    city = models.CharField(max_length=50, blank=True, null=True)
+    linkedin = models.URLField(blank=True, null=True)
+
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
 

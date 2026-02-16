@@ -1,0 +1,308 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+<div class="page-container" style="padding:26px; max-width:900px; margin:0 auto;">
+
+  <div style="background:#fff; border:1px solid rgba(15,23,42,.10); border-radius:18px; padding:22px;">
+    <h1 style="margin:0 0 6px; font-size:28px; font-weight:900;">{% trans "Edit Profile" %}</h1>
+    <p style="margin:0 0 18px; color:#64748b;">{% trans "Update your profile details and profile picture." %}</p>
+
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <!-- =========================
+           Avatar (Professional UI)
+      ========================== -->
+      <div style="display:flex; gap:18px; align-items:center; margin-bottom:18px; flex-wrap:wrap;">
+
+        <div style="position:relative; width:92px; height:92px;">
+          <!-- ✅ Preview Image OR Fallback -->
+          {% if profile_image_url %}
+            <img id="previewImage"
+                 src="{{ profile_image_url }}"
+                 alt="Profile"
+                 style="width:92px; height:92px; border-radius:999px; object-fit:cover; border:2px solid rgba(15,23,42,.10); background:#f1f5f9;">
+            <div id="previewFallback" style="display:none;"></div>
+          {% else %}
+            <div id="previewFallback"
+                 style="width:92px; height:92px; border-radius:999px; border:2px solid rgba(15,23,42,.10); background:#f1f5f9; display:flex; align-items:center; justify-content:center;">
+              <span style="font-weight:900; color:#475569; font-size:24px;">
+                {% if request.user.first_name %}
+                  {{ request.user.first_name|slice:":1"|upper }}
+                {% elif request.user.get_full_name %}
+                  {{ request.user.get_full_name|slice:":1"|upper }}
+                {% elif request.user.username %}
+                  {{ request.user.username|slice:":1"|upper }}
+                {% else %}
+                  {{ request.user.email|slice:":1"|upper }}
+                {% endif %}
+              </span>
+            </div>
+
+            <img id="previewImage"
+                 src=""
+                 alt="Profile"
+                 style="display:none; width:92px; height:92px; border-radius:999px; object-fit:cover; border:2px solid rgba(15,23,42,.10); background:#f1f5f9;">
+          {% endif %}
+
+          <!-- Change Photo Button -->
+          <label for="id_profile_image"
+                 title="{% trans 'Change photo' %}"
+                 id="pencilBtn"
+                 style="
+                   position:absolute;
+                   right:-6px;
+                   bottom:-6px;
+                   width:36px;
+                   height:36px;
+                   border-radius:999px;
+                   background:#f1f5f9;
+                   border:1px solid rgba(15,23,42,.12);
+                   display:flex;
+                   align-items:center;
+                   justify-content:center;
+                   cursor:pointer;
+                   box-shadow:0 6px 14px rgba(2,6,23,.12);
+                   transition:all .2s ease;
+                 ">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16" height="16" viewBox="0 0 24 24"
+                 fill="none" stroke="#1e293b"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"/>
+              <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
+            </svg>
+          </label>
+        </div>
+
+        <div style="flex:1; min-width:260px;">
+          <div style="font-weight:900; font-size:16px;">
+            {{ request.user.get_full_name|default:request.user.username }}
+          </div>
+          <div style="color:#64748b; font-size:13px; margin-top:2px;">
+            {{ request.user.email }}
+          </div>
+          <div style="margin-top:8px; font-size:12px; color:#94a3b8;">
+            {% trans "Click the pencil icon to upload a new picture." %}
+          </div>
+
+          <!-- hide native input -->
+          <div style="display:none;">
+            {{ form.profile_image }}
+          </div>
+
+          {% if form.profile_image.errors %}
+            <div style="color:#b42318; font-size:13px; margin-top:8px;">
+              {{ form.profile_image.errors|striptags }}
+            </div>
+          {% endif %}
+        </div>
+
+      </div>
+
+      <!-- =========================
+           Form Fields
+      ========================== -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+
+        <div>
+          <label style="font-weight:800; font-size:13px; display:block; margin-bottom:6px;">
+            {% trans "First Name" %}
+          </label>
+          {{ form.first_name }}
+          {% if form.first_name.errors %}
+            <div style="color:#b42318; font-size:13px; margin-top:6px;">
+              {{ form.first_name.errors|striptags }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div>
+          <label style="font-weight:800; font-size:13px; display:block; margin-bottom:6px;">
+            {% trans "Last Name" %}
+          </label>
+          {{ form.last_name }}
+          {% if form.last_name.errors %}
+            <div style="color:#b42318; font-size:13px; margin-top:6px;">
+              {{ form.last_name.errors|striptags }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div style="grid-column:1/-1;">
+          <label style="font-weight:800; font-size:13px; display:block; margin-bottom:6px;">
+            {% trans "Bio" %}
+          </label>
+          {{ form.bio }}
+          {% if form.bio.errors %}
+            <div style="color:#b42318; font-size:13px; margin-top:6px;">
+              {{ form.bio.errors|striptags }}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Region -->
+        <div>
+          <label style="font-weight:800; font-size:13px; display:block; margin-bottom:6px;">
+            {% trans "Region" %}
+          </label>
+          {{ form.region }}
+          {% if form.region.errors %}
+            <div style="color:#b42318; font-size:13px; margin-top:6px;">
+              {{ form.region.errors|striptags }}
+            </div>
+          {% endif %}
+
+          <div id="regionOtherWrap" style="display:none; margin-top:10px;">
+            {{ form.region_custom }}
+            {% if form.region_custom.errors %}
+              <div style="color:#b42318; font-size:13px; margin-top:6px;">
+                {{ form.region_custom.errors|striptags }}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- City -->
+        <div>
+          <label style="font-weight:800; font-size:13px; display:block; margin-bottom:6px;">
+            {% trans "City" %}
+          </label>
+          {{ form.city }}
+          {% if form.city.errors %}
+            <div style="color:#b42318; font-size:13px; margin-top:6px;">
+              {{ form.city.errors|striptags }}
+            </div>
+          {% endif %}
+
+          <div id="cityOtherWrap" style="display:none; margin-top:10px;">
+            {{ form.city_custom }}
+            {% if form.city_custom.errors %}
+              <div style="color:#b42318; font-size:13px; margin-top:6px;">
+                {{ form.city_custom.errors|striptags }}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div style="grid-column:1/-1;">
+          <label style="font-weight:800; font-size:13px; display:block; margin-bottom:6px;">
+            {% trans "LinkedIn" %}
+          </label>
+          {{ form.linkedin }}
+          {% if form.linkedin.errors %}
+            <div style="color:#b42318; font-size:13px; margin-top:6px;">
+              {{ form.linkedin.errors|striptags }}
+            </div>
+          {% endif %}
+        </div>
+
+      </div>
+
+      <!-- =========================
+           Actions
+      ========================== -->
+      <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:18px; flex-wrap:wrap;">
+        <a href="{% url 'dashboard' %}" class="btn btn-outline" style="padding:10px 18px; border-radius:999px;">
+          {% trans "Cancel" %}
+        </a>
+        <button type="submit" class="btn" style="padding:10px 18px; border-radius:999px; min-width:160px;">
+          {% trans "Save Changes" %}
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const pencil = document.getElementById("pencilBtn");
+  if (pencil) {
+    pencil.addEventListener("mouseenter", () => pencil.style.background = "#e2e8f0");
+    pencil.addEventListener("mouseleave", () => pencil.style.background = "#f1f5f9");
+  }
+
+  const input = document.getElementById("id_profile_image");
+  const img = document.getElementById("previewImage");
+  const fallback = document.getElementById("previewFallback");
+
+  if (input) {
+    input.addEventListener("change", function(e){
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const url = URL.createObjectURL(file);
+      if (fallback) fallback.style.display = "none";
+      if (img) {
+        img.style.display = "block";
+        img.src = url;
+      }
+    });
+  }
+
+  const regionToCities = JSON.parse('{{ region_to_cities_json|escapejs }}');
+  const regionSelect = document.getElementById("id_region");
+  const citySelect = document.getElementById("id_city");
+
+  const regionOtherWrap = document.getElementById("regionOtherWrap");
+  const cityOtherWrap   = document.getElementById("cityOtherWrap");
+
+  if (!regionSelect || !citySelect) return;
+
+  function rebuildCities(keepValue){
+    const region = regionSelect.value || "";
+    const cities = regionToCities[region] || [];
+
+    citySelect.innerHTML = "";
+
+    const opt0 = document.createElement("option");
+    opt0.value = "";
+    opt0.textContent = "{% trans 'Select city' %}";
+    citySelect.appendChild(opt0);
+
+    cities.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c;
+      opt.textContent = (c === "other") ? "{% trans 'Other' %}" : (c.charAt(0).toUpperCase() + c.slice(1));
+      citySelect.appendChild(opt);
+    });
+
+    if (keepValue && cities.includes(keepValue)) citySelect.value = keepValue;
+    else citySelect.value = "";
+  }
+
+  function toggleOther(){
+    const r = regionSelect.value || "";
+    const c = citySelect.value || "";
+
+    if (r === "other") {
+      if (regionOtherWrap) regionOtherWrap.style.display = "block";
+      if (cityOtherWrap) cityOtherWrap.style.display = "block";
+      return;
+    }
+
+    if (regionOtherWrap) regionOtherWrap.style.display = "none";
+
+    if (c === "other") {
+      if (cityOtherWrap) cityOtherWrap.style.display = "block";
+    } else {
+      if (cityOtherWrap) cityOtherWrap.style.display = "none";
+    }
+  }
+
+  const initialCity = citySelect.value;
+  rebuildCities(initialCity);
+  toggleOther();
+
+  regionSelect.addEventListener("change", function(){
+    rebuildCities("");
+    toggleOther();
+  });
+
+  citySelect.addEventListener("change", toggleOther);
+})();
+</script>
+{% endblock %}
