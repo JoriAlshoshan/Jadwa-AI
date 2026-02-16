@@ -11,6 +11,11 @@ from django.utils import translation
 from django.utils.translation import gettext as _
 from django.db.models import OuterRef, Subquery, FloatField, ExpressionWrapper
 from django.core.files.storage import default_storage
+from django.utils.translation import gettext as _
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from .forms import JadwaUserCreationForm, account_activation_token
+from django.contrib.auth import get_user_model
 
 from analysis.models import AnalysisResult
 
@@ -24,7 +29,7 @@ from .forms import (
     EditProfileForm,
     REGION_TO_CITIES,
 )
-from .models import ContactMessage, PasswordResetOTP, Projects
+from .models import User, ContactMessage, PasswordResetOTP, Projects
 
 User = get_user_model()
 
@@ -87,10 +92,29 @@ def jadwa_signup(request):
     if request.method == "POST":
         form = JadwaUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, _("Your account has been created successfully! You are now logged in."))
-            return redirect("dashboard")
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+
+            from django.urls import reverse
+            from .forms import account_activation_token
+            activation_link = request.build_absolute_uri(
+                reverse("activate_account", kwargs={"uid": user.pk, "token": account_activation_token.make_token(user)})
+            )
+
+            send_mail(
+                subject=_("Activate your Jadwa AI account"),
+                message=_(
+                    f"Hi {user.username},\n\n"
+                    f"Please click the link below to activate your account:\n{activation_link}\n\n"
+                    "Thank you for joining Jadwa AI!"
+                ),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.email],
+            )
+  
+            messages.success(request, _("Your account was created. Check your email to activate it."))
+            return redirect("login")
         else:
             for field, errors in form.errors.items():
                 for error in errors:
@@ -100,7 +124,23 @@ def jadwa_signup(request):
 
     return render(request, "pages/register.html", {"form": form})
 
+def activate_account(request, uid, token):
+    user = get_object_or_404(User, pk=uid)
 
+    if account_activation_token.check_token(user, token):
+        if not user.is_active:
+            user.is_active = True
+            user.save()
+            login(request, user)
+            messages.success(request, _(f"Welcome {user.username}, Your account has been activated successfully."))
+        else:
+            messages.info(request, _("Your account is already active."))
+
+        return redirect("dashboard")  
+    else:
+        messages.error(request, _("Activation link is invalid or expired."))
+        return redirect("login")
+    
 # =======================
 # Login
 # =======================

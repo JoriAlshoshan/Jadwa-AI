@@ -18,6 +18,9 @@ class User(AbstractUser):
     city = models.CharField(max_length=50, blank=True, null=True)
     linkedin = models.URLField(blank=True, null=True)
 
+    is_active = models.BooleanField(default=False)
+    activation_token = models.CharField(max_length=36, blank=True, null=True)
+    
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
 
@@ -239,7 +242,6 @@ class Projects(models.Model):
 
     class Meta:
         db_table = "projects_table"
-
 
 class PasswordResetOTP(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

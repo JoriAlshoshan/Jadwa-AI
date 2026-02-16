@@ -6,6 +6,17 @@ from .models import Projects
 
 User = get_user_model()
 
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+import six
+
+class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
+    def _make_hash_value(self, user, timestamp):
+        return (
+            six.text_type(user.pk) + six.text_type(timestamp) + six.text_type(user.is_active)
+        )
+
+account_activation_token = AccountActivationTokenGenerator()
+
 
 # =========================================
 # Edit Profile Form (Dropdown Region/City)
@@ -182,7 +193,6 @@ class EditProfileForm(forms.ModelForm):
 # =========================================
 # Auth Forms
 # =========================================
-
 class JadwaUserCreationForm(UserCreationForm):
     email = forms.EmailField(
         label=_("Email"),
@@ -203,6 +213,19 @@ class JadwaUserCreationForm(UserCreationForm):
                 "class": "form-input",
             }),
         }
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError(_("This email is already registered."))
+        return email
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.is_active = False  
+        if commit:
+            user.save()
+        return user
 
 
 class JadwaAuthenticationForm(AuthenticationForm):
