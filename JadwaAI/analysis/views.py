@@ -45,12 +45,15 @@ def has_arabic(text: str) -> bool:
 
 
 def ensure_arabic_font():
-    font_path = r"C:\Windows\Fonts\tahoma.ttf"
+    font_path = os.path.join(settings.BASE_DIR, "static", "fonts", "tahoma.ttf")
+
     if not os.path.exists(font_path):
-        raise FileNotFoundError("tahoma.ttf not found in C:\\Windows\\Fonts")
+        raise FileNotFoundError("Put tahoma.ttf inside static/fonts/")
 
     if "ArabicFont" not in pdfmetrics.getRegisteredFontNames():
         pdfmetrics.registerFont(TTFont("ArabicFont", font_path))
+
+
 
 
 def wrap_ltr_lines(p: canvas.Canvas, text: str, max_width: float, font_name: str, font_size: int):

@@ -17,15 +17,22 @@
       </div>
 
       <!-- Django messages -->
-      {% if messages %}
+      <!-- {% if messages %}
         {% for message in messages %}
           <div class="inline-msg {% if 'error' in message.tags %}inline-msg--error-light{% else %}inline-msg--soft{% endif %}" style="margin-bottom:12px;">
             {{ message }}
           </div>
         {% endfor %}
-      {% endif %}
+      {% endif %} -->
 
       <!-- Custom error (مثل Forgot Password) -->
+       {# ✅ Server-side errors (OTP wrong/expired) #}
+{% if otp_invalid %}
+  <div class="inline-msg inline-msg--error-light" style="margin-bottom:12px;">
+    {% trans "Invalid or expired OTP." %}
+  </div>
+{% endif %}
+
       <div id="otpError" class="inline-msg inline-msg--error-light" style="display:none; margin-bottom:12px;">
         {% trans "This field is required." %}
       </div>

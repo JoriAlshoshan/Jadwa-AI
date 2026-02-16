@@ -128,16 +128,15 @@ def forgot_password(request):
     return render(request, "pages/forgot_password.html", {"form": form})
 
 
-# =======================
-# Verify OTP
-# =======================
-
 def verify_otp(request):
     user_id = request.session.get("reset_user_id")
     if not user_id:
         return redirect("forgot_password")
 
     user = get_object_or_404(User, id=user_id)
+
+    otp_invalid = False
+    otp_incomplete = False
 
     if request.method == "POST":
         otp_digits = [request.POST.get(f"otp{i}", "") for i in range(1, 7)]
@@ -152,13 +151,18 @@ def verify_otp(request):
                 request.session["otp_verified"] = True
                 return redirect("reset_password")
             else:
-                messages.error(request, _("Invalid or expired OTP."))
+                otp_invalid = True   # ✅ الرمز غلط/منتهي
         else:
-            messages.error(request, _("Please enter all 6 digits correctly."))
+            otp_incomplete = True   # ✅ ما كتب 6 أرقام صح
     else:
         form = OTPForm()
 
-    return render(request, "pages/verify_otp.html", {"form": form})
+    return render(request, "pages/verify_otp.html", {
+        "form": form,
+        "otp_invalid": otp_invalid,
+        "otp_incomplete": otp_incomplete,
+    })
+
 
 
 # =======================

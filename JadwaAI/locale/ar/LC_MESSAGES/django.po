@@ -78,13 +78,6 @@ msgstr "عدد الموظفين"
 msgid "Description (Optional)"
 msgstr "الوصف (اختياري)"
 
-#: .\JADWA_AI\forms.py:103 .\JADWA_AI\forms.py:104 .\JADWA_AI\forms.py:105
-#: .\JADWA_AI\forms.py:107 .\JADWA_AI\forms.py:111 .\JADWA_AI\forms.py:112
-#: .\JADWA_AI\forms.py:113 .\JADWA_AI\forms.py:114
-#, fuzzy
-#| msgid "Message is required."
-msgid "This field is required."
-msgstr "الرسالة مطلوبة."
 
 #: .\JADWA_AI\forms.py:108
 #, fuzzy
@@ -1061,3 +1054,30 @@ msgstr "إعادة إرسال الرمز"
 
 msgid "Invalid or expired OTP."
 msgstr "رمز التحقق غير صحيح أو منتهي."
+
+# ===== Reset Password =====
+msgid "Reset Password"
+msgstr "إعادة تعيين كلمة المرور"
+
+msgid "Create a new password for your account."
+msgstr "أنشئ كلمة مرور جديدة لحسابك."
+
+msgid "New password"
+msgstr "كلمة المرور الجديدة"
+
+msgid "Enter new password"
+msgstr "أدخل كلمة المرور الجديدة"
+
+msgid "Confirm password"
+msgstr "تأكيد كلمة المرور"
+
+msgid "Confirm new password"
+msgstr "أعد إدخال كلمة المرور الجديدة"
+
+msgid "Remembered your password?"
+msgstr "تذكرت كلمة المرور؟"
+
+
+# ===== Common validation =====
+msgid "This field is required."
+msgstr "هذا الحقل مطلوب."
