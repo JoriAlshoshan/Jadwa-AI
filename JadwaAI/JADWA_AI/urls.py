@@ -27,6 +27,8 @@ urlpatterns = [
     
     path("dashboard/", views.user_dashboard, name="dashboard"),
     path("profile/edit/", views.edit_profile, name="edit_profile"),
-
+    path("projects/<int:pk>/delete/", views.project_delete, name="project_delete"),
+    path("projects/<int:pk>/", views.project_detail, name="project_detail"),   # لاحقًا
+    path("projects/<int:pk>/edit/", views.project_edit, name="project_edit"), # لاحقًا
 
 ]

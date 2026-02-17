@@ -30,6 +30,61 @@ from .forms import (
     REGION_TO_CITIES,
 )
 from .models import User, ContactMessage, PasswordResetOTP, Projects
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.decorators.http import require_POST
+from django.contrib import messages
+from django.utils.translation import gettext as _
+
+from .models import Projects
+from .forms import ProjectInformationForm
+from django.views.decorators.http import require_POST
+from django.contrib import messages
+from django.utils.translation import gettext as _
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+
+from .models import Projects
+from analysis.models import AnalysisResult
+
+
+@login_required
+@require_POST
+def project_delete(request, pk):
+    project = get_object_or_404(Projects, pk=pk, user=request.user)
+
+    AnalysisResult.objects.filter(user=request.user, project_id=project.id).delete()
+
+    AnalysisResult.objects.filter(user=request.user, project_name=project.project_name).delete()
+
+    project.delete()
+
+    messages.success(request, _("Project deleted successfully."))
+    return redirect("dashboard")
+
+
+
+@login_required
+def project_detail(request, pk):
+    project = get_object_or_404(Projects, pk=pk, user=request.user)
+    return render(request, "pages/project_detail.html", {"project": project})
+
+
+@login_required
+def project_edit(request, pk):
+    # تعديل مشروع (Edit) باستخدام نفس الفورم
+    project = get_object_or_404(Projects, pk=pk, user=request.user)
+
+    if request.method == "POST":
+        form = ProjectInformationForm(request.POST, instance=project)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _("Project updated successfully."))
+            return redirect("dashboard")
+    else:
+        form = ProjectInformationForm(instance=project)
+
+    return render(request, "pages/project_edit.html", {"form": form, "project": project})
 
 User = get_user_model()
 

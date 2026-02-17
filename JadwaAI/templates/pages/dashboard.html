@@ -2,6 +2,304 @@
 {% load i18n %}
 
 {% block content %}
+<style>
+/* ===== Toast Messages (WOW) ===== */
+.toast-wrap{
+  position: fixed;
+  top: 88px;                 /* ✅ نزّلناه تحت الناف */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+
+  width: min(1100px, calc(100% - 32px)); /* ✅ نفس كونتينر الداشبورد */
+  display: grid;
+  gap: 10px;
+}
+
+.toast{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:14px 16px;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid rgba(15,23,42,.10);
+  box-shadow:0 18px 60px rgba(2,6,23,.18);
+  animation: toastIn .18s ease-out forwards;
+  position: relative;
+  overflow:hidden;
+}
+@keyframes toastIn{
+  from{ opacity:0; transform: translateY(-6px) scale(.99); }
+  to{ opacity:1; transform: translateY(0) scale(1); }
+}
+.toast::before{
+  content:"";
+  position:absolute;
+  left:0; top:0; bottom:0;
+  width:6px;
+  background:#0a2fbf;
+}
+.toast.success::before{ background:#16a34a; }
+.toast.error::before{ background:#b42318; }
+.toast.warning::before{ background:#f59e0b; }
+.toast.info::before{ background:#0a2fbf; }
+
+.toast-icon{
+  width:36px; height:36px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  flex:0 0 auto;
+  background:#f1f5f9;
+  border:1px solid rgba(15,23,42,.08);
+  color:#0f172a;
+}
+.toast.success .toast-icon{ background:rgba(34,197,94,.12); color:#166534; border-color:rgba(34,197,94,.22); }
+.toast.error .toast-icon{ background:rgba(239,68,68,.12); color:#991b1b; border-color:rgba(239,68,68,.22); }
+.toast.warning .toast-icon{ background:rgba(245,158,11,.12); color:#92400e; border-color:rgba(245,158,11,.22); }
+.toast.info .toast-icon{ background:rgba(59,130,246,.12); color:#1d4ed8; border-color:rgba(59,130,246,.22); }
+
+.toast-body{
+  flex:1 1 auto;
+  min-width:0;
+}
+.toast-title{
+  font-weight:900;
+  color:#0f172a;
+  margin:0 0 2px;
+  font-size:14px;
+}
+.toast-text{
+  margin:0;
+  color:#475569;
+  font-size:13px;
+  line-height:1.7;
+  word-break:break-word;
+}
+.toast-close{
+  background:#f8fafc;
+  border:1px solid rgba(15,23,42,.08);
+  cursor:pointer;
+  width:36px; height:36px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+  transition:all .15s ease;
+}
+.toast-close:hover{ background:#f1f5f9; transform:translateY(-1px); }
+
+html[dir="rtl"] .toast{ direction:rtl; }
+html[dir="rtl"] .toast::before{ left:auto; right:0; }
+
+/* ===== WOW Menu (⋯) ===== */
+.menu-wrapper{ position:relative; display:inline-block; }
+
+.menu-btn{
+  background:none; border:none; cursor:pointer;
+  font-size:22px; padding:6px 10px; border-radius:10px;
+  transition:background .2s ease;
+  line-height:1;
+}
+.menu-btn:hover{ background:#f1f5f9; }
+
+.menu-dropdown{
+  position:absolute; right:0; top:36px;
+  background:#fff; border-radius:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.10);
+  padding:8px; display:none; min-width:180px;
+  z-index:50;
+  border:1px solid rgba(15,23,42,.08);
+}
+
+.menu-item{
+  display:block; padding:10px 12px; border-radius:10px;
+  text-decoration:none; color:#0f172a; font-size:14px;
+  font-weight:600;
+  white-space:nowrap;
+  background:none;
+  border:none;
+  width:100%;
+  text-align:left;
+  cursor:pointer;
+}
+html[dir="rtl"] .menu-item{ text-align:right; }
+
+.menu-item:hover{ background:#f1f5f9; }
+.menu-item.danger{ color:#b42318; }
+.menu-item.danger:hover{ background:#fee2e2; }
+
+/* align actions row */
+.actions-row{
+  display:flex; gap:10px; flex-wrap:wrap;
+  align-items:center; justify-content:flex-end;
+}
+
+/* ===== Delete Modal (Soft + Center Buttons) ===== */
+.modal-backdrop{
+  position:fixed; inset:0;
+  background:rgba(15,23,42,.50);
+  display:none;
+  align-items:center; justify-content:center;
+  z-index:999;
+  padding:16px;
+  backdrop-filter: blur(10px);
+}
+
+.modal{
+  width:min(560px, 100%);
+  background:#fff;
+  border:1px solid rgba(15,23,42,.08);
+  border-radius:24px;
+  box-shadow:0 24px 80px rgba(2,6,23,.30);
+  overflow:hidden;
+  animation: modalPop .18s ease-out forwards;
+}
+
+@keyframes modalPop{
+  from{ opacity:0; transform: translateY(10px) scale(.985); }
+  to{ opacity:1; transform: translateY(0) scale(1); }
+}
+
+.modal-head{
+  padding:18px 22px;
+  border-bottom:1px solid rgba(15,23,42,.06);
+  display:flex; justify-content:space-between; align-items:center;
+}
+
+.modal-title{
+  font-weight:900;
+  font-size:20px;
+  margin:0;
+  color:#0f172a;
+  letter-spacing:-.02em;
+}
+
+.modal-close{
+  background:#f8fafc;
+  border:1px solid rgba(15,23,42,.08);
+  cursor:pointer;
+  width:42px; height:42px;
+  border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px;
+  transition:all .15s ease;
+}
+.modal-close:hover{ background:#f1f5f9; transform:translateY(-1px); }
+
+.modal-body{
+  padding:18px 22px 10px;
+  color:#334155;
+  font-size:14px;
+  line-height:1.85;
+}
+
+.modal-warning{
+  display:flex; gap:12px; align-items:flex-start;
+  padding:14px 14px;
+  border-radius:18px;
+  background:rgba(245,158,11,.08);
+  border:1px solid rgba(245,158,11,.14);
+  color:#7c2d12;
+}
+
+.modal-warning .icon{
+  width:34px; height:34px;
+  border-radius:14px;
+  background:rgba(245,158,11,.14);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:900;
+  flex:0 0 auto;
+}
+
+.modal-project{
+  margin-top:14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 14px;
+  border-radius:16px;
+  background:#f8fafc;
+  border:1px solid rgba(15,23,42,.08);
+  font-weight:900;
+  color:#0f172a;
+}
+
+.modal-project .dot{
+  width:10px; height:10px;
+  border-radius:999px;
+  background:#0a2fbf;
+}
+
+.modal-actions{
+  padding:16px 22px 22px;
+  border-top:1px solid rgba(15,23,42,.06);
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.modal-actions .btn,
+.modal-actions button{
+  min-width:190px;
+  border-radius:999px;
+  padding:12px 18px;
+  font-weight:900;
+}
+
+.modal-actions .btn-outline{
+  background:#fff;
+  border:1px solid rgba(15,23,42,.14);
+  color:#0f172a;
+  transition:all .15s ease;
+}
+.modal-actions .btn-outline:hover{ background:#f8fafc; transform:translateY(-1px); }
+
+.btn-danger{
+  background:linear-gradient(180deg,#cf2e24,#a81912);
+  color:#fff;
+  border:none;
+  box-shadow:0 12px 28px rgba(185,28,28,.22);
+  transition:all .15s ease;
+}
+.btn-danger:hover{ filter:brightness(.98); transform:translateY(-1px); }
+</style>
+
+{# ===== Messages (only dashboard) ===== #}
+{% if messages %}
+  <div class="toast-wrap" id="toastWrap">
+    {% for message in messages %}
+      {# Django tags: success | error | warning | info #}
+      <div class="toast {{ message.tags|default:'info' }}" role="status" aria-live="polite">
+        <div class="toast-icon">
+          {% if 'success' in message.tags %}✓
+          {% elif 'error' in message.tags %}! 
+          {% elif 'warning' in message.tags %}! 
+          {% else %}i{% endif %}
+        </div>
+
+        <div class="toast-body">
+          <p class="toast-title">
+            {% if 'success' in message.tags %}{% trans "Success" %}
+            {% elif 'error' in message.tags %}{% trans "Error" %}
+            {% elif 'warning' in message.tags %}{% trans "Warning" %}
+            {% else %}{% trans "Info" %}{% endif %}
+          </p>
+          <p class="toast-text">{{ message }}</p>
+        </div>
+
+        <button type="button" class="toast-close" aria-label="Close">✕</button>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
 <div class="page-container" style="padding:26px; max-width:1100px; margin:0 auto;">
 
   <!-- Top row: Title + Add Project -->
@@ -20,7 +318,7 @@
     </a>
   </div>
 
-  <!-- Profile summary (ONE card only) -->
+  <!-- Profile summary -->
   <div style="background:#fff; border:1px solid rgba(15,23,42,.10); border-radius:16px; padding:16px 18px; margin-bottom:14px;">
     <div style="display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; align-items:center;">
 
@@ -47,7 +345,6 @@
           <div style="font-weight:900; font-size:16px; line-height:1.2;">{{ profile_name }}</div>
           <div style="color:#64748b; font-size:13px; margin-top:3px;">{{ profile_email }}</div>
 
-          {# ===== Location line (supports OTHER + avoids fake placeholders) ===== #}
           {% with r=region_label|default_if_none:"" c=city_label|default_if_none:"" %}
             {% if r %}
               <div style="margin-top:6px; font-size:13px; color:#64748b;">
@@ -63,7 +360,6 @@
               </div>
             {% endif %}
           {% endwith %}
-
         </div>
       </div>
 
@@ -155,7 +451,7 @@
               </div>
 
               <!-- Actions -->
-              <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end;">
+              <div class="actions-row">
                 {% if p.last_result_id %}
                   <a class="btn"
                      href="{% url 'analysis_result' p.last_result_id %}"
@@ -174,6 +470,24 @@
                     {% trans "Run Analysis" %}
                   </a>
                 {% endif %}
+
+                <!-- WOW menu (⋯) -->
+                <div class="menu-wrapper">
+                  <button type="button" class="menu-btn" aria-label="More">⋯</button>
+
+                  <div class="menu-dropdown">
+                    <a href="{% url 'project_detail' p.id %}" class="menu-item">{% trans "Project Details" %}</a>
+                    <a href="{% url 'project_edit' p.id %}" class="menu-item">{% trans "Edit Project" %}</a>
+
+                    <button type="button"
+                            class="menu-item danger js-open-delete"
+                            data-project-id="{{ p.id }}"
+                            data-project-name="{{ p.project_name|default:'Project' }}">
+                      {% trans "Delete Project" %}
+                    </button>
+                  </div>
+                </div>
+
               </div>
 
             </div>
@@ -188,4 +502,136 @@
   </div>
 
 </div>
+
+<!-- Delete Modal -->
+<div class="modal-backdrop" id="deleteModal" role="dialog" aria-modal="true">
+  <div class="modal" style="direction:{% if request.LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %};">
+
+    <div class="modal-head">
+      <h3 class="modal-title">{% trans "Delete Project" %}</h3>
+      <button type="button" class="modal-close" id="closeDeleteModal" aria-label="Close">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-warning">
+        <div class="icon">!</div>
+        <div>
+          {% trans "Are you sure you want to delete this project? This action cannot be undone." %}
+        </div>
+      </div>
+
+      <div class="modal-project">
+        <span class="dot"></span>
+        <span id="deleteProjectName">—</span>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn btn-outline" id="cancelDelete">
+        {% trans "Cancel" %}
+      </button>
+
+      <form method="post" id="deleteForm" action="" data-action-template="/projects/__ID__/delete/" style="margin:0;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">
+          {% trans "Delete" %}
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  // ===== Toast close + auto hide =====
+  const toastWrap = document.getElementById("toastWrap");
+  if (toastWrap){
+    toastWrap.querySelectorAll(".toast-close").forEach(btn=>{
+      btn.addEventListener("click", ()=> btn.closest(".toast").remove());
+    });
+    setTimeout(()=>{
+      toastWrap.querySelectorAll(".toast").forEach(t=> t.remove());
+    }, 3500);
+  }
+
+  // ===== Dropdown menu (⋯) =====
+  document.querySelectorAll(".menu-btn").forEach(btn => {
+    btn.addEventListener("click", function(e){
+      e.stopPropagation();
+      const menu = this.nextElementSibling;
+
+      document.querySelectorAll(".menu-dropdown").forEach(m => {
+        if(m !== menu) m.style.display = "none";
+      });
+
+      menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    });
+  });
+
+  document.addEventListener("click", () => {
+    document.querySelectorAll(".menu-dropdown").forEach(m => m.style.display = "none");
+  });
+
+  // ===== Delete modal =====
+  const modal = document.getElementById("deleteModal");
+  const closeBtn = document.getElementById("closeDeleteModal");
+  const cancelBtn = document.getElementById("cancelDelete");
+  const nameBox = document.getElementById("deleteProjectName");
+  const form = document.getElementById("deleteForm");
+  const deleteBtn = form ? form.querySelector(".btn-danger") : null;
+
+  function openModal(projectId, projectName){
+    const tpl = form.dataset.actionTemplate || `/projects/__ID__/delete/`;
+    form.action = tpl.replace("__ID__", projectId);
+    nameBox.textContent = projectName || "Project";
+    modal.style.display = "flex";
+    if (deleteBtn){
+      deleteBtn.disabled = false;
+      deleteBtn.textContent = "{% trans 'Delete' %}";
+      deleteBtn.style.opacity = "1";
+      deleteBtn.style.cursor = "pointer";
+    }
+  }
+
+  function closeModal(){
+    modal.style.display = "none";
+  }
+
+  document.querySelectorAll(".js-open-delete").forEach(btn => {
+    btn.addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      const pid = this.dataset.projectId;
+      const pname = this.dataset.projectName;
+      document.querySelectorAll(".menu-dropdown").forEach(m => m.style.display = "none");
+      openModal(pid, pname);
+    });
+  });
+
+  closeBtn.addEventListener("click", closeModal);
+  cancelBtn.addEventListener("click", closeModal);
+
+  modal.addEventListener("click", function(e){
+    if(e.target === modal) closeModal();
+  });
+
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape") closeModal();
+  });
+
+  // ===== Prevent double submit + loading state =====
+  if (form && deleteBtn){
+    form.addEventListener("submit", function () {
+      deleteBtn.disabled = true;
+      deleteBtn.innerHTML = "{% trans 'Deleting...' %} ";
+      deleteBtn.style.opacity = "0.7";
+      deleteBtn.style.cursor = "not-allowed";
+    });
+  }
+
+});
+</script>
+
 {% endblock %}
