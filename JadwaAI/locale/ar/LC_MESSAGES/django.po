@@ -1081,3 +1081,8 @@ msgstr "تذكرت كلمة المرور؟"
 # ===== Common validation =====
 msgid "This field is required."
 msgstr "هذا الحقل مطلوب."
+
+# ===== Common validation =====
+msgid "This email is already registered."
+msgstr "هذا البريد الإلكتروني مستخدم بالفعل."
+

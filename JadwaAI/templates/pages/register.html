@@ -118,14 +118,45 @@
 <script>
 document.addEventListener("DOMContentLoaded", function() {
 
+  // خزّني القيمة الأصلية لكل حقل وقت تحميل الصفحة
+  document.querySelectorAll(".contact-form input, .contact-form select, .contact-form textarea")
+    .forEach(function(field){
+      field.dataset.initialValue = (field.value || "");
+    });
+
+  function isRequiredMessage(msg){
+    msg = (msg || "").toLowerCase();
+    // English / Arabic common required messages
+    return msg.includes("this field is required") ||
+           msg.includes("هذا الحقل مطلوب") ||
+           msg.includes("مطلوب");
+  }
+
   function clearError(field){
     const row = field.closest(".form-row");
     if(!row) return;
 
-    if ((field.value || "").trim() !== "") {
+    const errorEl = row.querySelector(".form-error");
+    if(!errorEl) return;
+
+    const msg = (errorEl.textContent || "").trim();
+    const value = (field.value || "").trim();
+    const initial = (field.dataset.initialValue || "").trim();
+
+    // 1) إذا الخطأ Required: نخفيه بمجرد ما فيه قيمة
+    if (isRequiredMessage(msg)) {
+      if (value !== "") {
+        row.classList.remove("is-error");
+        errorEl.remove();
+      }
+      return;
+    }
+
+    // 2) إذا الخطأ مو Required (مثل email already exists):
+    // نخليه موجود… وما نحذفه إلا إذا المستخدم غيّر قيمة الحقل عن القيمة الأصلية
+    if (value !== "" && value !== initial) {
       row.classList.remove("is-error");
-      const error = row.querySelector(".form-error");
-      if(error) error.remove();
+      errorEl.remove();
     }
   }
 
@@ -146,5 +177,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 </script>
+
 
 {% endblock %}
