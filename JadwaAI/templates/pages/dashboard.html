@@ -272,34 +272,37 @@ html[dir="rtl"] .menu-item{ text-align:right; }
 
 </style>
 
-{# ===== Messages (only dashboard) ===== #}
 {% if messages %}
   <div class="toast-wrap" id="toastWrap">
     {% for message in messages %}
-      {# Django tags: success | error | warning | info #}
-      <div class="toast {{ message.tags|default:'info' }}" role="status" aria-live="polite">
-        <div class="toast-icon">
-          {% if 'success' in message.tags %}✓
-          {% elif 'error' in message.tags %}! 
-          {% elif 'warning' in message.tags %}! 
-          {% else %}i{% endif %}
-        </div>
+      {% with m=message|stringformat:"s" %}
+        {% if "recommend" not in m|lower and "توص" not in m %}
+          <div class="toast {{ message.tags|default:'info' }}" role="status" aria-live="polite">
+            <div class="toast-icon">
+              {% if 'success' in message.tags %}✓
+              {% elif 'error' in message.tags %}! 
+              {% elif 'warning' in message.tags %}! 
+              {% else %}i{% endif %}
+            </div>
 
-        <div class="toast-body">
-          <p class="toast-title">
-            {% if 'success' in message.tags %}{% trans "Success" %}
-            {% elif 'error' in message.tags %}{% trans "Error" %}
-            {% elif 'warning' in message.tags %}{% trans "Warning" %}
-            {% else %}{% trans "Info" %}{% endif %}
-          </p>
-          <p class="toast-text">{{ message }}</p>
-        </div>
+            <div class="toast-body">
+              <p class="toast-title">
+                {% if 'success' in message.tags %}{% trans "Success" %}
+                {% elif 'error' in message.tags %}{% trans "Error" %}
+                {% elif 'warning' in message.tags %}{% trans "Warning" %}
+                {% else %}{% trans "Info" %}{% endif %}
+              </p>
+              <p class="toast-text">{{ message }}</p>
+            </div>
 
-        <button type="button" class="toast-close" aria-label="Close">✕</button>
-      </div>
+            <button type="button" class="toast-close" aria-label="Close">✕</button>
+          </div>
+        {% endif %}
+      {% endwith %}
     {% endfor %}
   </div>
 {% endif %}
+
 
 <div class="page-container" style="padding:26px; max-width:1100px; margin:0 auto;">
 

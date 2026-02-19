@@ -92,21 +92,24 @@
       </div>
 
       <!-- City (SHOW EXACT USER TEXT IF PROVIDED) -->
-      <div class="pd-row pd-label">{% trans "City" %}</div>
-      <div class="pd-row pd-val">
-        {# 1) لو المستخدم كتب نص المدينة يدويًا نعرضه #}
-        {% if project.project_city_other %}
-          {{ project.project_city_other }}
-        {# 2) لو اختار "other" بس ما كتب شيء #}
-        {% elif project.project_city == "other" %}
-          <span class="pd-muted">—</span>
-        {# 3) لو اختار مدينة من القائمة #}
-        {% elif project.project_city %}
-          {{ project.get_project_city_display|default:project.project_city }}
-        {% else %}
-          <span class="pd-muted">—</span>
-        {% endif %}
-      </div>
+     <!-- City -->
+<div class="pd-row pd-label">{% trans "City" %}</div>
+<div class="pd-row pd-val">
+
+  {% if project.project_city == "other" %}
+    {{ project.project_location_other|default:"—" }}
+
+  {% elif project.project_city %}
+    {{ project.get_project_city_display }}
+
+  {% else %}
+    <span class="pd-muted">—</span>
+
+  {% endif %}
+
+</div>
+
+
 
       <!-- Budget -->
       <div class="pd-row pd-label">{% trans "Budget" %}</div>
@@ -143,7 +146,7 @@
       </div>
 
       <!-- Economic Indicator -->
-      <div class="pd-row pd-label">{% trans "Economic Indicator" %}</div>
+      <div class="pd-row pd-label">{% trans "Economic Indicator (dataset)" %}</div>
       <div class="pd-row pd-val">
         {% if project.economic_indicator %}
           {{ project.economic_indicator }}

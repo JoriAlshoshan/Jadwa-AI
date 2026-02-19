@@ -80,22 +80,20 @@ def project_edit(request, pk):
         if form.is_valid():
             project = form.save(commit=False)
 
-            # احسب الرقم من الداتا ست مرة ثانية
-            sector = project.project_type
-            region_loc = project.project_region
+            # ✅ خذيها من الفورم
+            sector = form.cleaned_data.get("Project_type") or form.cleaned_data.get("project_type")
+            region_loc = form.cleaned_data.get("project_region")
+
             project.num_of_similar_enterprises = get_similar_enterprises(sector, region_loc)
 
             project.save()
-
             messages.success(request, _("Project updated successfully."))
             return redirect("dashboard")
     else:
         form = ProjectInformationForm(instance=project)
 
-    return render(request, "pages/project_edit.html", {
-        "form": form,
-        "project": project
-    })
+    return render(request, "pages/project_edit.html", {"form": form, "project": project})
+
 
 User = get_user_model()
 
@@ -332,9 +330,10 @@ def project_new(request):
             project = form.save(commit=False)
             project.user = request.user
 
-            # احسب الرقم من الداتا ست وخزّنه في DB
-            sector = project.project_type
-            region_loc = project.project_region
+            # ✅ خذي القيم من الفورم (عشان project_type مو موجود بالموديل)
+            sector = form.cleaned_data.get("Project_type") or form.cleaned_data.get("project_type")
+            region_loc = form.cleaned_data.get("project_region")
+
             project.num_of_similar_enterprises = get_similar_enterprises(sector, region_loc)
 
             project.save()
@@ -343,9 +342,9 @@ def project_new(request):
         messages.error(request, _("Please fix the errors below."))
         return render(request, "pages/project_new.html", {"form": form})
 
-    # GET
     form = ProjectInformationForm()
     return render(request, "pages/project_new.html", {"form": form})
+
 
 
 # =======================

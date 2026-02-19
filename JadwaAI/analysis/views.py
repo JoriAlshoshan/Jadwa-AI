@@ -241,7 +241,7 @@ def run_analysis(request, project_id):
         recommendations_status_en="pending",
     )
 
-    messages.success(request, _("Analysis completed successfully!"))
+    # messages.success(request, _("Analysis completed successfully!"))
     return redirect("analysis_result", result_id=saved_result.id)
 
 
