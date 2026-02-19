@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<style>
+  .pd-wrap{ padding:26px; max-width:1000px; margin:0 auto; }
+  .pd-head{ margin-bottom:18px; }
+  .pd-title{ margin:0; font-size:36px; font-weight:900; letter-spacing:-.02em; color:#0f172a; }
+  .pd-sub{ margin:6px 0 0; color:#64748b; font-size:14px; }
+
+  .pd-card{
+    background:#fff;
+    border:1px solid rgba(15,23,42,.10);
+    border-radius:18px;
+    padding:18px;
+    box-shadow:0 12px 30px rgba(2,6,23,.06);
+  }
+
+  .pd-grid{
+    display:grid;
+    grid-template-columns: 220px 1fr;
+    gap:10px 14px;
+    align-items:flex-start;
+  }
+
+  .pd-row{ padding:10px 0; border-bottom:1px dashed rgba(15,23,42,.10); }
+  .pd-row:last-child{ border-bottom:none; }
+
+  .pd-label{ font-weight:900; color:#0f172a; font-size:14px; }
+  .pd-val{ color:#0f172a; font-size:14px; line-height:1.85; }
+  .pd-muted{ color:#94a3b8; font-weight:700; }
+
+  .pd-pill{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:6px 12px; border-radius:999px;
+    background:#f8fafc; border:1px solid rgba(15,23,42,.08);
+    font-weight:900; color:#0f172a;
+  }
+  .pd-dot{ width:9px; height:9px; border-radius:999px; background:#0a2fbf; }
+
+  .pd-desc{
+    margin-top:6px; padding:14px 14px; border-radius:16px;
+    background:rgba(2,6,23,.02);
+    border:1px solid rgba(15,23,42,.08);
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+
+  .pd-actions{
+    display:flex; gap:12px; justify-content:center;
+    margin-top:18px; flex-wrap:wrap;
+  }
+  .pd-actions .btn{ min-width:220px; border-radius:999px; padding:12px 18px; font-weight:900; }
+
+  html[dir="rtl"] .pd-grid{ grid-template-columns: 1fr 220px; }
+  html[dir="rtl"] .pd-label, html[dir="rtl"] .pd-val{ text-align:right; }
+
+  @media (max-width: 720px){
+    .pd-grid{ grid-template-columns: 1fr; }
+    html[dir="rtl"] .pd-grid{ grid-template-columns: 1fr; }
+    .pd-title{ font-size:30px; }
+  }
+</style>
+
+<div class="pd-wrap">
+  <div class="pd-head">
+    <h1 class="pd-title">{{ project.project_name|default:"-" }}</h1>
+    <p class="pd-sub">{% trans "Project Details" %}</p>
+  </div>
+
+  <div class="pd-card" style="direction:{% if request.LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %};">
+    <div class="pd-grid">
+
+      <!-- Type -->
+      <div class="pd-row pd-label">{% trans "Type" %}</div>
+      <div class="pd-row pd-val">
+        {% if project.Project_type %}
+          {{ project.get_project_type_display|default:project.Project_type }}
+        {% else %}
+          <span class="pd-muted">—</span>
+        {% endif %}
+      </div>
+
+      <!-- Region -->
+      <div class="pd-row pd-label">{% trans "Region" %}</div>
+      <div class="pd-row pd-val">
+        {% if project.project_region %}
+          {{ project.get_project_region_display|default:project.project_region }}
+        {% else %}
+          <span class="pd-muted">—</span>
+        {% endif %}
+      </div>
+
+      <!-- City (SHOW EXACT USER TEXT IF PROVIDED) -->
+      <div class="pd-row pd-label">{% trans "City" %}</div>
+      <div class="pd-row pd-val">
+        {# 1) لو المستخدم كتب نص المدينة يدويًا نعرضه #}
+        {% if project.project_city_other %}
+          {{ project.project_city_other }}
+        {# 2) لو اختار "other" بس ما كتب شيء #}
+        {% elif project.project_city == "other" %}
+          <span class="pd-muted">—</span>
+        {# 3) لو اختار مدينة من القائمة #}
+        {% elif project.project_city %}
+          {{ project.get_project_city_display|default:project.project_city }}
+        {% else %}
+          <span class="pd-muted">—</span>
+        {% endif %}
+      </div>
+
+      <!-- Budget -->
+      <div class="pd-row pd-label">{% trans "Budget" %}</div>
+      <div class="pd-row pd-val">
+        {% if project.project_budget %}
+          <span class="pd-pill">
+            <span class="pd-dot"></span>
+            {{ project.project_budget }}
+            <span style="color:#64748b; font-weight:800;">SAR</span>
+          </span>
+        {% else %}
+          <span class="pd-muted">—</span>
+        {% endif %}
+      </div>
+
+      <!-- Duration -->
+      <div class="pd-row pd-label">{% trans "Duration (days)" %}</div>
+      <div class="pd-row pd-val">
+        {% if project.project_duration %}
+          {{ project.project_duration }}
+        {% else %}
+          <span class="pd-muted">—</span>
+        {% endif %}
+      </div>
+
+      <!-- Employees -->
+      <div class="pd-row pd-label">{% trans "Employees" %}</div>
+      <div class="pd-row pd-val">
+        {% if project.number_of_employees %}
+          {{ project.number_of_employees }}
+        {% else %}
+          <span class="pd-muted">—</span>
+        {% endif %}
+      </div>
+
+      <!-- Economic Indicator -->
+      <div class="pd-row pd-label">{% trans "Economic Indicator" %}</div>
+      <div class="pd-row pd-val">
+        {% if project.economic_indicator %}
+          {{ project.economic_indicator }}
+        {% else %}
+          <span class="pd-muted">—</span>
+        {% endif %}
+      </div>
+
+      <!-- Similar Enterprises -->
+      <div class="pd-row pd-label">{% trans "Similar enterprises (dataset)" %}</div>
+      <div class="pd-row pd-val">
+        {% if project.num_of_similar_enterprises %}
+          <span class="pd-pill">
+            <span class="pd-dot"></span>
+            {{ project.num_of_similar_enterprises }}
+          </span>
+        {% else %}
+          <span class="pd-muted">—</span>
+        {% endif %}
+      </div>
+
+      <!-- Location (SHOW EXACT USER TEXT IF PROVIDED) -->
+      <div class="pd-row pd-label">{% trans "Location" %}</div>
+      <div class="pd-row pd-val">
+        {# 1) لو المستخدم كتب نص يدوي للموقع نعرضه دائمًا #}
+        {% if project.project_location_other %}
+          {{ project.project_location_other }}
+        {# 2) لو نوع الموقع other #}
+        {% elif project.project_location_type == "other" %}
+          <span class="pd-muted">—</span>
+        {# 3) لو قيمة الموقع من القائمة وكانت "Other" لا نعرضها #}
+        {% elif project.project_location and project.project_location != "Other" and project.project_location != "other" %}
+          {{ project.project_location }}
+        {% else %}
+          <span class="pd-muted">—</span>
+        {% endif %}
+      </div>
+
+      <!-- Description -->
+      <div class="pd-row pd-label">{% trans "Description" %}</div>
+      <div class="pd-row pd-val">
+        {% if project.description %}
+          <div class="pd-desc">{{ project.description }}</div>
+        {% else %}
+          <span class="pd-muted">—</span>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+
+  <div class="pd-actions">
+    <a class="btn" href="{% url 'project_edit' project.id %}">{% trans "Edit Project" %}</a>
+    <a class="btn btn-outline" href="{% url 'dashboard' %}">{% trans "Back" %}</a>
+  </div>
+</div>
+{% endblock %}

@@ -18,6 +18,7 @@ from .forms import JadwaUserCreationForm, account_activation_token
 from django.contrib.auth import get_user_model
 
 from analysis.models import AnalysisResult
+from .num_similar_enterprises import get_similar_enterprises
 
 from .forms import (
     ProjectInformationForm,
@@ -72,19 +73,29 @@ def project_detail(request, pk):
 
 @login_required
 def project_edit(request, pk):
-    # تعديل مشروع (Edit) باستخدام نفس الفورم
     project = get_object_or_404(Projects, pk=pk, user=request.user)
 
     if request.method == "POST":
         form = ProjectInformationForm(request.POST, instance=project)
         if form.is_valid():
-            form.save()
+            project = form.save(commit=False)
+
+            # احسب الرقم من الداتا ست مرة ثانية
+            sector = project.project_type
+            region_loc = project.project_region
+            project.num_of_similar_enterprises = get_similar_enterprises(sector, region_loc)
+
+            project.save()
+
             messages.success(request, _("Project updated successfully."))
             return redirect("dashboard")
     else:
         form = ProjectInformationForm(instance=project)
 
-    return render(request, "pages/project_edit.html", {"form": form, "project": project})
+    return render(request, "pages/project_edit.html", {
+        "form": form,
+        "project": project
+    })
 
 User = get_user_model()
 
@@ -320,12 +331,19 @@ def project_new(request):
         if form.is_valid():
             project = form.save(commit=False)
             project.user = request.user
+
+            # احسب الرقم من الداتا ست وخزّنه في DB
+            sector = project.project_type
+            region_loc = project.project_region
+            project.num_of_similar_enterprises = get_similar_enterprises(sector, region_loc)
+
             project.save()
             return redirect("run_analysis", project_id=project.pk)
 
         messages.error(request, _("Please fix the errors below."))
         return render(request, "pages/project_new.html", {"form": form})
 
+    # GET
     form = ProjectInformationForm()
     return render(request, "pages/project_new.html", {"form": form})
 
