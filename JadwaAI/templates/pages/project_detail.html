@@ -60,6 +60,15 @@
     html[dir="rtl"] .pd-grid{ grid-template-columns: 1fr; }
     .pd-title{ font-size:30px; }
   }
+  .pd-val{
+  color:#0f172a;
+  font-size:14px;
+  line-height:1.9;
+}
+.pd-val{
+  letter-spacing:0.2px;
+}
+
 </style>
 
 <div class="pd-wrap">
@@ -168,22 +177,23 @@
         {% endif %}
       </div>
 
-      <!-- Location (SHOW EXACT USER TEXT IF PROVIDED) -->
-      <div class="pd-row pd-label">{% trans "Location" %}</div>
-      <div class="pd-row pd-val">
-        {# 1) لو المستخدم كتب نص يدوي للموقع نعرضه دائمًا #}
-        {% if project.project_location_other %}
-          {{ project.project_location_other }}
-        {# 2) لو نوع الموقع other #}
-        {% elif project.project_location_type == "other" %}
-          <span class="pd-muted">—</span>
-        {# 3) لو قيمة الموقع من القائمة وكانت "Other" لا نعرضها #}
-        {% elif project.project_location and project.project_location != "Other" and project.project_location != "other" %}
-          {{ project.project_location }}
-        {% else %}
-          <span class="pd-muted">—</span>
-        {% endif %}
-      </div>
+    <!-- Location -->
+<div class="pd-row pd-label">{% trans "Location" %}</div>
+
+<div class="pd-row pd-val">
+
+  {% if project.project_location_other %}
+    {{ project.project_location_other|title }}, Saudi Arabia
+
+  {% elif project.project_location_type != "other" and project.project_location and project.project_location != "Other" and project.project_location != "other" %}
+    {{ project.project_location|title }}, Saudi Arabia
+
+  {% else %}
+    <span class="pd-muted">—</span>
+  {% endif %}
+
+</div>
+
 
       <!-- Description -->
       <div class="pd-row pd-label">{% trans "Description" %}</div>

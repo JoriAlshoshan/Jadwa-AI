@@ -212,7 +212,7 @@ class Projects(models.Model):
                 self.project_location = "Other"
 
         effective_loc = ", ".join([p.strip() for p in str(effective_loc).split(",") if p.strip()])
-
+        
         raw = (effective_loc or "").strip()
         norm = self.TEXT_LOC_NORMALIZE.get(raw.lower())
         if norm:

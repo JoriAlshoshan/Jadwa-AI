@@ -307,25 +307,62 @@ class ProjectInformationForm(forms.ModelForm):
     def clean(self):
         cleaned = super().clean()
 
-        region = cleaned.get("project_region")
-        city = cleaned.get("project_city")
+        region = (cleaned.get("project_region") or "").strip().lower()
+        city = (cleaned.get("project_city") or "").strip().lower()
         other = (cleaned.get("project_location_other") or "").strip()
 
-        if (region == "other" or city == "other"):
-            if not other:
-                self.add_error("project_location_other", _("Please specify the location."))
-            else:
-                low = other.lower().strip()
-                if low in {"qassim", "riyadh", "makkah", "madinah", "eastern", "asir", "tabuk", "jazan", "hail", "jouf", "najran", "bahah", "northern"}:
-                    pass
-                else:
-                    if not ("," in other or "،" in other) and "منطقة" not in other:
-                        self.add_error("project_location_other", _("Write it like: Qassim Region, Unaizah"))
+        is_other = (region == "other" or city == "other")
 
-        if not (region == "other" or city == "other"):
+        # ✅ لو مو other: فضّي الحقل وخلاص
+        if not is_other:
             cleaned["project_location_other"] = ""
+            return cleaned
+
+        # ✅ لو other: لازم Specify Location
+        if not other:
+            self.add_error("project_location_other", _("Please specify the location."))
+            return cleaned
+
+        # ✅ parsing: "qassim, unaizah" أو "Qassim Region, Unaizah"
+        txt = other.replace("،", ",").lower()
+        parts = [p.strip() for p in txt.split(",") if p.strip()]
+
+        def norm(s: str) -> str:
+            return (s or "").replace(" region", "").replace("منطقة", "").strip()
+
+        part1 = norm(parts[0]) if len(parts) >= 1 else norm(txt)
+        part2 = norm(parts[1]) if len(parts) >= 2 else ""
+
+        # ✅ 1) region مباشر
+        region_key = part1 if (part1 in REGION_TO_CITIES and part1 != "other") else None
+
+        # ✅ 2) city داخل كل المناطق
+        city_key = None
+
+        if part2:
+            for r, cities in REGION_TO_CITIES.items():
+                if part2 in cities and part2 != "other":
+                    region_key = r
+                    city_key = part2
+                    break
+        else:
+            for r, cities in REGION_TO_CITIES.items():
+                if part1 in cities and part1 != "other":
+                    region_key = r
+                    city_key = part1
+                    break
+
+        # ✅ إذا لقينا مكان صحيح نحوله
+        if region_key:
+            cleaned["project_region"] = region_key
+            cleaned["project_city"] = city_key or next((c for c in REGION_TO_CITIES.get(region_key, []) if c != "other"), "other")
+        else:
+            self.add_error("project_location_other", _("Write it like: qassim, unaizah"))
 
         return cleaned
+
+
+
 
 
 # =========================================
