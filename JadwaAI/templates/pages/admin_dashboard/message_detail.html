@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<h2> message details</h2>
+<p><b>name:</b>{{message.name}}</p>
+<p><b>Email:</b>{{message.email}}</p>
+<p><b>date: </b>{{message.created_at}}</p>
+<hr>
+<p>{{message.message}}</p>
+<a href ="{% url 'Admin_Dashboard' %}">return</a>
+{% endblock %}

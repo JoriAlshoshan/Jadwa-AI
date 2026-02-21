@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/user_projects.css' %}">
+{% csrf_token %}
+<h2> {{projects.user}} projects</h2>
+<ul>
+<table>
+    <tr>
+        <th>project_name</th>
+        <th>Project_type</th>
+        <th>project_region</th>
+        <th>project_city</th>
+        <th>project_location_other</th>
+        <th>project_location</th>
+        <th>project_location_type</th>
+        <th>project_budget</th>
+        <th>project_duration</th>
+        <th>number_of_employees</th>
+        <th>description</th>
+    </tr>
+    {% for project in projects%}
+    <tr>
+        <td>{{project.project_name}}</td>
+        <td>{{project.Project_type}}</td>
+        <td>{{project.project_region}}</td>
+        <td>{{project.project_city}}</td>
+        <td>{{project.project_location_other}}</td>
+        <td>{{project.project_location}}</td>
+        <td>{{project.project_location_type }}</td>
+        <td>{{project.project_budget}}</td>
+        <td>{{project.project_duration}}</td>
+        <td>{{project.number_of_employees}}</td>
+        <td>{{project.description}}</td>
+        {% empty %}
+        <tr>
+            <td colspan="11" style="text-align:center;"> There is no projects</td>
+        </tr>
+    {% endfor%}
+    </tr>
+</table>
+</ul>
+{% endblock %}
