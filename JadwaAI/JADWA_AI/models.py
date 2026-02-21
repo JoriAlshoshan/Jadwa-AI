@@ -252,3 +252,10 @@ class PasswordResetOTP(models.Model):
         now = timezone.now()
         expiry_time = self.created_at + timezone.timedelta(minutes=10)
         return now <= expiry_time
+
+class SiteContent(models.Model):
+    key = models.CharField()
+    content = models.TextField()
+
+    def str(self):
+        return f"{self.key} - {self.content}"
