@@ -44,9 +44,11 @@ from django.contrib import messages
 from django.utils.translation import gettext as _
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 
-from .models import Projects
+from .models import Projects, SiteContent
 from analysis.models import AnalysisResult
+from JADWA_AI.forms import UserEditForm
 
 
 @login_required
@@ -509,3 +511,68 @@ def user_dashboard(request):
         "city_label": city_label,
         "profile_image_url": profile_image_url,  # ✅ مهم للتمبلت
     })
+
+@login_required
+@staff_member_required
+def Admin_Dashboard(request):
+    users = User.objects.all()
+    messages = ContactMessage.objects.all().order_by('-created_at')
+    users_count = User.objects.count()
+    projects_count = Projects.objects.count() 
+    contents = SiteContent.objects.all()
+    context = {
+        'users' : users,
+        'messages': messages,
+        'users_count':users_count,
+        'projects_count': projects_count,
+        'contents': contents
+    }
+    return render(request, "pages/admin_dashboard/admin.html", context)
+
+def user_detail(request , id):
+    user = get_object_or_404(User, id =id)
+    if request.method =='POST':
+        form =  UserEditForm(request.POST, instance = user)
+        if form.is_valid():
+            form.save()
+            return redirect ('Admin_Dashboard')
+    else:
+        form = UserEditForm(instance=user)
+    return render(request, "pages/admin_dashboard/users_details.html", {"form":form,"user" : user})
+    
+
+def edit_user(request , id):
+    user = User.objects.get(id = id)
+    if request.method == 'POST':
+        user.username = request.POST.get("username")
+        user.email = request.POST.get("email")
+        is_staff = request.POST.get("is_staff")
+        user.is_staff = True if is_staff == "on" else False
+        user.save()
+        return redirect("edit_user", id=user.id)
+    return render (request, "edit_user.html",{"user":user})
+
+def delete_user(request,id):
+    user =get_object_or_404(User,id =id)
+    if request.method == 'POST':
+        if request.user == user:
+            messages.error(request,("you can not delete your self."))
+            return redirect('Admin_Dashboard')
+    user.delete()
+    messages.success(request,("user deleted successfully."))
+    return redirect('Admin_Dashboard')
+    return render (request, "pages/admin_dashboard/delete_user.html",{"user":user})
+
+def user_projects(request , id):
+    user = get_object_or_404(User , id = id)
+    projects = Projects.objects.filter(user=user)
+    return render (request, "pages/admin_dashboard/user_projects.html",{"projects":projects})
+    
+def messages_list(request):
+    messages = ContactMessage.objects.all()
+    return render(request, "pages/admin_dashboard/messages.html", {"users" : users})
+
+def message_detail(request, id):
+    message = ContactMessage.objects.get(id = id)
+    return render (request,"pages/admin_dashboard/message_detail.html", {"message":message})
+
