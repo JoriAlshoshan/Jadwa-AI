@@ -48,8 +48,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from .models import Projects, SiteContent
 from analysis.models import AnalysisResult
-# from JADWA_AI.forms import UserEditForm
-from JADWA_AI.forms import EditProfileForm
+from JADWA_AI.forms import UserEditForm
+
 
 
 @login_required
