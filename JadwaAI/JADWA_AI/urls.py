@@ -39,6 +39,5 @@ urlpatterns = [
     path("user_projects/<int:id>/", views.user_projects, name="user_projects"),
     path("admin/messages/list/", views.messages_list, name="messages_list"),
     path("message/<int:id>/", views.message_detail, name="message_detail"),
-    # path("edit/<str : key>/", views.edit_content, name="edit_content"),
 
 ]
