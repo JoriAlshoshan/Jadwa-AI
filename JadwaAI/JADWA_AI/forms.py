@@ -388,7 +388,6 @@ class OTPForm(forms.Form):
 class ResetPasswordForm(SetPasswordForm):
     pass
 
-
 class UserEditForm(forms.ModelForm):
     class Meta:
         model = User
