@@ -31,4 +31,14 @@ urlpatterns = [
     path("projects/<int:pk>/", views.project_detail, name="project_detail"),   # لاحقًا
     path("projects/<int:pk>/edit/", views.project_edit, name="project_edit"), # لاحقًا
 
+
+    path("admin-dashboard/", views.Admin_Dashboard, name="Admin_Dashboard"),
+    path("users-details/<int:id>/", views.user_detail, name="user_detail"),
+    path("edit-user/<int:id>/", views.edit_user, name="edit_user"),
+    path("delete-user/<int:id>/", views.delete_user, name="delete_user"),
+    path("user_projects/<int:id>/", views.user_projects, name="user_projects"),
+    path("admin/messages/list/", views.messages_list, name="messages_list"),
+    path("message/<int:id>/", views.message_detail, name="message_detail"),
+    # path("edit/<str : key>/", views.edit_content, name="edit_content"),
+
 ]
