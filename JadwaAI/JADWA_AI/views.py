@@ -209,22 +209,35 @@ def activate_account(request, uid, token):
         return redirect("login")
     
 # =======================
+# =======================
 # Login
 # =======================
 def jadwa_login(request):
+    # لو مسجل دخول مسبقًا
     if request.user.is_authenticated:
         messages.info(request, _("You are already logged in."))
+
+        # ✅ الأدمن الحقيقي فقط (superuser)
+        if request.user.is_superuser:
+            return redirect("Admin_Dashboard")
+
         return redirect("dashboard")
 
+    # لو POST (محاولة تسجيل دخول)
     if request.method == "POST":
         form = JadwaAuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
             messages.success(request, _("You have logged in successfully!"))
+
+            # ✅ الأدمن الحقيقي فقط (superuser)
+            if user.is_superuser:
+                return redirect("Admin_Dashboard")
+
             return redirect("dashboard")
-        else:
-            messages.error(request, _("Invalid username or password."))
+
+        messages.error(request, _("Invalid username or password."))
     else:
         form = JadwaAuthenticationForm()
 
@@ -446,8 +459,15 @@ def contact_submit(request):
 # =======================
 # Dashboard
 # =======================
+# =======================
+# Dashboard
+# =======================
 @login_required
 def user_dashboard(request):
+    # ✅ لو أدمن (superuser) ودّيه لوحة الأدمن
+    if request.user.is_superuser:
+        return redirect("Admin_Dashboard")
+
     lang = translation.get_language() or getattr(request, "LANGUAGE_CODE", "en") or "en"
     is_ar = str(lang).startswith("ar")
 
@@ -472,32 +492,27 @@ def user_dashboard(request):
         recs_en=Subquery(last_result.values("recommendations_en")[:1]),
     )
 
-    # ======= FIX: Region/City labels (support OTHER + custom text) =======
+    # ======= Region/City labels (support OTHER + custom text) =======
     u = request.user
-
     REGION_LABELS = dict(Projects.REGION_CHOICES)
     CITY_LABELS = dict(Projects.CITY_CHOICES)
 
-    # region_label
     if (u.region or "") == "other":
         region_label = (getattr(u, "region_custom", "") or "").strip()
     else:
         region_label = (REGION_LABELS.get(u.region, u.region or "") or "").strip()
 
-    # city_label
     if (u.city or "") == "other":
         city_label = (getattr(u, "city_custom", "") or "").strip()
     else:
         city_label = (CITY_LABELS.get(u.city, u.city or "") or "").strip()
 
-    # remove placeholders / fake values
     bad_vals = {"Other", "other", "Select region", "Select city", "---------", ""}
     if region_label in bad_vals:
         region_label = ""
     if city_label in bad_vals:
         city_label = ""
 
-    # profile image url
     profile_image_url = None
     if getattr(u, "profile_image", None) and u.profile_image.name:
         if default_storage.exists(u.profile_image.name):
@@ -510,7 +525,7 @@ def user_dashboard(request):
         "is_ar": is_ar,
         "region_label": region_label,
         "city_label": city_label,
-        "profile_image_url": profile_image_url,  # ✅ مهم للتمبلت
+        "profile_image_url": profile_image_url,
     })
 
 @login_required
