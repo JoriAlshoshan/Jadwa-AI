@@ -16,6 +16,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from .forms import JadwaUserCreationForm, account_activation_token
 from django.contrib.auth import get_user_model
+from .utils import format_location  
 
 from analysis.models import AnalysisResult
 from .num_similar_enterprises import get_similar_enterprises
@@ -71,8 +72,28 @@ def project_delete(request, pk):
 @login_required
 def project_detail(request, pk):
     project = get_object_or_404(Projects, pk=pk, user=request.user)
-    return render(request, "pages/project_detail.html", {"project": project})
 
+    # City label (choice label) OR custom text if "other"
+    if (project.project_city or "") == "other":
+        city_label = (project.project_location_other or "").strip()
+    elif project.project_city:
+        city_label = project.get_project_city_display()
+    else:
+        city_label = ""
+
+    # Region label (choice label)
+    region_label = project.get_project_region_display() if project.project_region else ""
+
+    location = format_location(
+        city=city_label,
+        region=region_label,
+        country="Saudi Arabia"
+    )
+
+    return render(request, "pages/project_detail.html", {
+        "project": project,
+        "location": location
+    })
 
 @login_required
 def project_edit(request, pk):

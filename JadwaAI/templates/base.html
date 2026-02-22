@@ -14,17 +14,20 @@
 
 <body>
 
-  {% include "partials/navbar.html" %}
+  {% block navbar %}
+    {% include "partials/navbar.html" %}
+  {% endblock navbar %}
 
   <main class="app-bg">
     {% block content %}{% endblock %}
   </main>
 
-  {% include "partials/footer.html" %}
+  {% block footer %}
+    {% include "partials/footer.html" %}
+  {% endblock footer %}
 
   {% block extra_js %}{% endblock %}
 
-  <!-- Dropdown Script -->
   <script>
     document.addEventListener("click", function (e) {
       const dropdown = document.querySelector("[data-dropdown]");
