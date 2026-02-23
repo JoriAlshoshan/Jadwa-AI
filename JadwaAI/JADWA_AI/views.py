@@ -264,7 +264,11 @@ def jadwa_login(request):
 
     return render(request, "registration/login.html", {"form": form})
 
-
+@login_required
+def start_feasibility_gateway(request):
+    if request.user.is_superuser:
+        return redirect("Admin_Dashboard")
+    return redirect("project_new")
 # =======================
 # Forgot Password
 # =======================

@@ -18,16 +18,23 @@
     <h1 class="hero-title">{% trans "Business Feasibility Powered by AI" %}</h1>
     <p class="hero-subtitle">{% trans "Jadwa AI helps entrepreneurs evaluate business ideas using AI-powered feasibility insights." %}</p>
 
-    <div class="hero-actions">
-      {% if user.is_authenticated %}
-        <!-- Start Analysis -> /projects/new/ -->
-<a href="/projects/new/" class="btn">{% trans "Start Feasibility Analysis" %}</a>
-      {% else %}
-        <!-- Start Analysis -> login then back to /projects/new/ -->
-        <a href="/accounts/login/?next=/projects/new/" class="btn">{% trans "Start Feasibility Analysis" %}</a>
-      {% endif %}
-    </div>
-  </div>
+<div class="hero-actions">
+  {% if user.is_authenticated and user.is_superuser %}
+    <a href="{% url 'Admin_Dashboard' %}" class="btn">
+  {% trans "Go to Admin Dashboard" %}
+</a>
+  {% elif user.is_authenticated %}
+    <a href="{% url 'start_analysis' %}" class="btn">
+      {% trans "Start Feasibility Analysis" %}
+    </a>
+  {% else %}
+    <a href="{% url 'login' %}?next={% url 'start_analysis' %}" class="btn">
+      {% trans "Start Feasibility Analysis" %}
+    </a>
+  {% endif %}
+</div>
+  </div> 
+
 </section>
 
 
