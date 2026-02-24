@@ -10,12 +10,12 @@
 <div class="container analysis-page">
 
   <!-- ===================== HERO ===================== -->
-  <section class="analysis-hero">
+  <!-- <section class="analysis-hero">
     <h1 class="analysis-title">{% trans "Analysis Result" %}</h1>
     <p class="analysis-subtitle">
       {% trans "AI-powered feasibility insights for your project" %}
     </p>
-  </section>
+  </section> -->
 
   <section class="analysis-grid">
 
@@ -188,17 +188,11 @@
   </section>
 
   <!-- ===================== Actions ===================== -->
-  <div class="analysis-actions">
-    <a href="{% url 'analysis_pdf' result.id %}"
-       class="btn secondary-btn pdf-btn"
-       id="pdfBtn">
-      <span class="pdf-text">{% trans "Download PDF" %}</span>
-    </a>
-
-    <a href="{% url 'dashboard' %}" class="btn secondary-btn">
-      {% trans "Back to Dashboard" %}
-    </a>
-  </div>
+<div class="analysis-actions">
+  <a href="{% url 'analysis_pdf' result.id %}" class="btn secondary-btn pdf-btn" id="pdfBtn">
+    <span class="pdf-text">{% trans "Download PDF" %}</span>
+  </a>
+</div>
 
   <script>
     const btn = document.getElementById("pdfBtn");

@@ -1086,3 +1086,5 @@ msgstr "هذا الحقل مطلوب."
 msgid "This email is already registered."
 msgstr "هذا البريد الإلكتروني مستخدم بالفعل."
 
+msgid "Go to Admin Dashboard"
+msgstr "الانتقال إلى لوحة التحكم"

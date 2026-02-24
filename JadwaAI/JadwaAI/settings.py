@@ -49,6 +49,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'JADWA_AI.context_processors.global_page_meta',
+
             ],
         },
     },

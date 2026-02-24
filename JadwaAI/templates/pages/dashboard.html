@@ -269,7 +269,165 @@ html[dir="rtl"] .menu-item{ text-align:right; }
   transition:all .15s ease;
 }
 .btn-danger:hover{ filter:brightness(.98); transform:translateY(-1px); }
+.back-home-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
 
+  min-width: 420px;        /* نفس الإحساس بالصورة */
+  padding: 18px 28px;
+  border-radius: 18px;
+
+  background:#fff;
+  color:#0a2fbf;
+  border:3px solid #0a2fbf;
+
+  font-weight:900;
+  font-size:18px;
+  text-decoration:none;
+
+  transition: all .15s ease;
+}
+
+.back-home-btn:hover{
+  background: rgba(10,47,191,.06);
+  transform: translateY(-1px);
+}
+.back-home-btn:active{
+  transform: translateY(0);
+}
+
+/* موبايل */
+@media (max-width: 520px){
+  .back-home-btn{
+    min-width: 100%;
+  }
+}
+/* نفس زر AddProject */
+.dash-home-btn{
+  flex: 1;
+  max-width: 200px;   /* نفس اللي عندك في AddProject */
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+/* نفس ستايل btn-outline (مثل صفحة Add Project) */
+.btn-outline{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:12px 18px;
+  border-radius:999px;
+
+  background:#fff;
+  border:1px solid rgba(10,47,191,.35);
+  color:#0a2fbf;
+
+  font-weight:900;
+  font-size:14px;
+  text-decoration:none;   /* يشيل الخط */
+  cursor:pointer;
+
+  transition:all .15s ease;
+}
+
+.btn-outline:hover{
+  background:rgba(10,47,191,.06);
+  transform:translateY(-1px);
+}
+
+/* عشان حجم الزر يكون نفس اللي تبغاه */
+.dash-home-btn{
+  min-width:200px; /* أو 180 حسب ذوقك */
+}
+/* ===== Breadcrumb (Pro) ===== */
+.crumbs{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:13px;
+  color:#94a3b8;
+  margin:0 0 6px;
+}
+
+.crumbs a{
+  color:#0a2fbf;
+  text-decoration:none;
+  font-weight:900;
+}
+
+.crumbs a:hover{
+  text-decoration:underline;
+}
+
+.crumbs .sep{
+  color:#cbd5e1;
+}
+
+.crumbs .current{
+  color:#64748b;
+  font-weight:900;
+}
+
+/* RTL support */
+html[dir="rtl"] .crumbs .sep{
+  transform: scaleX(-1);
+}
+/* ===== Formal Breadcrumb (Pro) ===== */
+.breadcrumb-pro{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  margin-top:18px;     /* يبعده عن الناف */
+  margin-bottom:10px;  /* مسافة قبل العنوان */
+
+  padding:10px 0;      /* رسمي بدون صندوق */
+  border-bottom:1px solid rgba(15,23,42,.06);  /* خط خفيف يعطي فصل */
+}
+
+.breadcrumb-link{
+  font-size:13px;
+  font-weight:800;
+  color:#0a2fbf;
+  text-decoration:none;
+  transition:opacity .15s ease;
+}
+
+.breadcrumb-link:hover{
+  opacity:.75;
+}
+
+.breadcrumb-sep{
+  color:#cbd5e1;
+  font-size:12px;
+}
+
+.breadcrumb-current{
+  font-size:13px;
+  font-weight:800;
+  color:#64748b;
+}
+
+/* RTL */
+html[dir="rtl"] .breadcrumb-pro{
+  direction:rtl;
+}
+html[dir="rtl"] .breadcrumb-sep{
+  transform:scaleX(-1);
+}
+.breadcrumb-pro{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  margin-top:18px;
+  margin-bottom:18px;  
+
+  padding:10px 0;
+  border-bottom:1px solid rgba(15,23,42,.06);
+}
 </style>
 
 {% if messages %}
@@ -306,21 +464,30 @@ html[dir="rtl"] .menu-item{ text-align:right; }
 
 <div class="page-container" style="padding:26px; max-width:1100px; margin:0 auto;">
 
-  <!-- Top row: Title + Add Project -->
-  <div style="display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; align-items:center; margin-bottom:14px; padding-right:10px;">
-    <div style="min-width:320px;">
-      <h1 style="margin:0; font-size:26px;">{% trans "Dashboard" %}</h1>
-      <p style="margin:6px 0 0; color:#64748b; font-size:14px;">
-        {% trans "Manage your projects and run feasibility analysis." %}
-      </p>
-    </div>
+<!-- Top row: Title + Add Project -->
+<div style="display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; align-items:center; margin-bottom:14px; padding-right:10px;">
 
-    <a href="{% url 'project_new' %}"
-       class="btn"
-       style="padding:10px 16px; font-size:14px; border-radius:999px; min-width:180px; text-align:center; margin-right:8px;">
-      {% trans "Add Project" %}
-    </a>
+  <div style="min-width:320px;">
+
+   <!-- <nav class="breadcrumb-pro" aria-label="Breadcrumb">
+  <a href="{% url 'landing' %}" class="breadcrumb-link">{% trans "Home" %}</a>
+  <span class="breadcrumb-sep">/</span>
+  <span class="breadcrumb-current">{% trans "Dashboard" %}</span>
+</nav>
+
+    <h1 style="margin:0; font-size:26px;">{% trans "Dashboard" %}</h1>
+    <p style="margin:6px 0 0; color:#64748b; font-size:14px;">
+      {% trans "Manage your projects and run feasibility analysis." %}
+    </p> -->
   </div>
+
+  <a href="{% url 'project_new' %}"
+     class="btn"
+     style="padding:10px 16px; font-size:14px; border-radius:999px; min-width:180px; text-align:center; margin-right:8px;">
+    {% trans "Add Project" %}
+  </a>
+
+</div>
 
   <!-- Profile summary -->
   <div style="background:#fff; border:1px solid rgba(15,23,42,.10); border-radius:16px; padding:16px 18px; margin-bottom:14px;">

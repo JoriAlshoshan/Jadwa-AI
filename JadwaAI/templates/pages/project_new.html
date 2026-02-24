@@ -3,73 +3,258 @@
 {% load i18n %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/AddProjectPage.css' %}">
+<style>
+/* ===== Page Container (match dashboard) ===== */
+.page-shell{
+  padding:26px;
+  max-width:1100px;
+  margin:0 auto;
+}
 
-<div class="page-container" style="min-height:90vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px;">
+/* ===== Header row (title + primary action) ===== */
+.top-row{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+  align-items:flex-start;
+  margin-bottom:14px;
+  padding-right:10px;
+}
 
-  <div style="max-width:850px; width:100%;">
-    <h1 class="form-title">{% trans "Add Project" %}</h1>
+/* ===== Breadcrumb (formal, no icons) ===== */
+.breadcrumb-pro{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:18px;
+  margin-bottom:18px;
+  padding:10px 0;
+  border-bottom:1px solid rgba(15,23,42,.06);
+  font-size:13px;
+}
+.breadcrumb-pro a{
+  color:#0a2fbf;
+  text-decoration:none;
+  font-weight:800;
+}
+.breadcrumb-pro a:hover{ text-decoration:underline; }
+.breadcrumb-pro .sep{ color:#cbd5e1; font-weight:800; }
+.breadcrumb-pro .current{ color:#64748b; font-weight:800; }
 
-<div class="form-box {% if request.LANGUAGE_CODE == 'ar' %}lang-ar{% else %}lang-en{% endif %}">
+/* ===== Card (match dashboard blocks) ===== */
+.card{
+  background:#fff;
+  border:1px solid rgba(15,23,42,.10);
+  border-radius:16px;
+  overflow:hidden;
+}
+.card-head{
+  padding:12px 16px;
+  border-bottom:1px solid rgba(15,23,42,.08);
+  font-weight:800;
+  font-size:14px;
+}
+.card-body{
+  padding:18px 18px 20px;
+}
+
+/* ===== Form layout ===== */
+.form-grid{
+  display:grid;
+  gap:14px;
+}
+.form-row{
+  display:grid;
+  grid-template-columns: 260px 1fr;
+  gap:14px;
+  align-items:center;
+}
+@media (max-width: 860px){
+  .form-row{ grid-template-columns: 1fr; }
+  .form-row label{ margin-bottom:6px; display:block; }
+}
+
+label{
+  font-weight:800;
+  color:#0f172a;
+  font-size:14px;
+}
+
+.field-wrap{
+  width:100%;
+}
+.field-wrap input,
+.field-wrap select,
+.field-wrap textarea{
+  width:100%;
+  padding:12px 12px;
+  border-radius:12px;
+  border:1px solid rgba(15,23,42,.14);
+  background:#fff;
+  outline:none;
+  font-size:14px;
+}
+.field-wrap textarea{ min-height:110px; resize:vertical; }
+
+.field-wrap input:focus,
+.field-wrap select:focus,
+.field-wrap textarea:focus{
+  border-color: rgba(10,47,191,.55);
+  box-shadow:0 0 0 4px rgba(10,47,191,.10);
+}
+
+.help-row{
+  display:flex;
+  justify-content:space-between;
+  margin-top:6px;
+  color:#64748b;
+  font-size:12px;
+}
+
+.error-text{
+  margin-top:8px;
+  color:#b42318;
+  font-size:13px;
+  font-weight:700;
+}
+.field-error-wrap input,
+.field-error-wrap select,
+.field-error-wrap textarea{
+  border-color: rgba(180,35,24,.55);
+  box-shadow:0 0 0 4px rgba(180,35,24,.10);
+}
+
+/* ===== Buttons (match dashboard vibe) ===== */
+.btn-primary{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px 18px;
+  border-radius:999px;
+  border:none;
+  cursor:pointer;
+  font-weight:900;
+  font-size:14px;
+  color:#fff;
+  background:linear-gradient(180deg,#0a2fbf,#0830a8);
+  box-shadow:0 14px 30px rgba(10,47,191,.18);
+  text-decoration:none;
+  min-width:180px;
+}
+.btn-primary:hover{ filter:brightness(.98); transform:translateY(-1px); }
+.btn-primary:active{ transform:translateY(0); }
+
+.btn-outline{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px 18px;
+  border-radius:999px;
+  background:#fff;
+  border:1px solid rgba(10,47,191,.35);
+  color:#0a2fbf;
+  font-weight:900;
+  font-size:14px;
+  text-decoration:none;
+  transition:all .15s ease;
+}
+.btn-outline:hover{
+  background:rgba(10,47,191,.06);
+  transform:translateY(-1px);
+}
+
+/* Footer actions row */
+.form-actions{
+  display:flex;
+  gap:12px;
+  justify-content:flex-end;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+@media (max-width: 520px){
+  .btn-primary, .btn-outline{ width:100%; }
+  .form-actions{ justify-content:stretch; }
+}
+</style>
+
+<div class="page-shell">
+
+  <!-- Header -->
+  <div class="top-row">
+    <div style="min-width:320px;">
+      <!-- <div class="breadcrumb-pro">
+        <a href="{% url 'landing' %}">{% trans "Home" %}</a>
+        <span class="sep">/</span>
+        <a href="{% url 'dashboard' %}">{% trans "Dashboard" %}</a>
+        <span class="sep">/</span>
+        <span class="current">{% trans "Add Project" %}</span>
+      </div>
+
+      <h1 style="margin:0; font-size:26px;">{% trans "Add Project" %}</h1>
+      <p style="margin:6px 0 0; color:#64748b; font-size:14px;">
+        {% trans "Fill the project details to run feasibility analysis." %}
+      </p> -->
+    </div>
+
+    <!-- optional quick back (formal) -->
+    <!-- <a class="btn-outline" href="{% url 'dashboard' %}" style="min-width:180px; text-align:center;">
+      {% trans "Back to Dashboard" %}
+    </a> -->
+  </div>
+
+  <!-- Form card -->
+  <div class="card">
+    <div class="card-head">{% trans "Project Information" %}</div>
+    <div class="card-body">
+
       <form action="{% url 'project_new' %}" method="post" id="projectForm" novalidate>
         {% csrf_token %}
 
-        <table>
+        <div class="form-grid">
           {% for field in form %}
+            <div class="form-row"
+                 {% if field.name == "project_location_other" %} id="row_location_other" style="display:none;" {% endif %}>
 
-            <tr {% if field.name == "project_location_other" %} id="row_location_other" style="display:none;" {% endif %}>
-<td style="width: 260px; vertical-align: middle;">
-                <label for="{{ field.id_for_label }}">
-{{ field.label }}
-</label>
+              <div>
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              </div>
 
-              </td>
+              <div class="field-wrap {% if field.errors %}field-error-wrap{% endif %}" id="wrap_{{ field.name }}">
+                {{ field }}
 
-              <td style="vertical-align: middle;">
-                <div class="field-wrap {% if field.errors %}field-error-wrap{% endif %}" id="wrap_{{ field.name }}" style="width: 100%;">
+                {% if field.name == "project_name" %}
+                  <div class="help-row">
+                    <small>{% trans "Keep it short (max 80 characters)." %}</small>
+                    <small><span id="nameCount">0</span>/80</small>
+                  </div>
+                {% endif %}
 
-                  {{ field }}
+                <div class="error-text" id="err_{{ field.name }}" style="display:none;"></div>
 
-                  {% if field.name == "project_name" %}
-                    <div style="display:flex; justify-content:space-between; margin-top:6px;">
-                      <small style="color:#6b7280;">{% trans "Keep it short (max 80 characters)." %}</small>
-                      <small style="color:#6b7280;"><span id="nameCount">0</span>/80</small>
-                    </div>
-                  {% endif %}
+                {% if field.errors %}
+                  <div class="error-text" id="djerr_{{ field.name }}">
+                    {{ field.errors.0 }}
+                  </div>
+                {% endif %}
+              </div>
 
-                  <div class="error-text" id="err_{{ field.name }}" style="display:none;"></div>
-
-                  {% if field.errors %}
-                    <div class="error-text" id="djerr_{{ field.name }}">
-                      {{ field.errors.0 }}
-                    </div>
-                  {% endif %}
-
-                </div>
-              </td>
-            </tr>
-
+            </div>
           {% endfor %}
-        </table>
+        </div>
 
-        <div style="margin-top: 40px; text-align: center;">
-          <button type="submit" class="btn-full" style="width: 100%; max-width: 300px;">
+        <div class="form-actions">
+          <a href="{% url 'dashboard' %}" class="btn-outline">{% trans "Cancel" %}</a>
+          <button type="submit" class="btn-primary">
             {% trans "Show result" %}
           </button>
         </div>
+
       </form>
-    </div>
 
-    <div style="margin-top: 30px; display: flex; gap: 20px; justify-content: center;">
-      <a href="{% url 'dashboard' %}" class="btn-outline" style="flex: 1; max-width: 200px;">
-        {% trans "Back to Dashboard" %}
-      </a>
-      <a href="/" class="btn-outline" style="flex: 1; max-width: 200px;">
-        {% trans "Back to Home" %}
-      </a>
     </div>
-
   </div>
+
 </div>
 
 <!-- =========================
