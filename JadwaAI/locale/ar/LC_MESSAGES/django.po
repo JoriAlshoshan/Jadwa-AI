@@ -1086,3 +1086,8 @@ msgstr "هذا الحقل مطلوب."
 msgid "This email is already registered."
 msgstr "هذا البريد الإلكتروني مستخدم بالفعل."
 
+msgid "Go to Admin Dashboard"
+msgstr "الانتقال إلى لوحة التحكم"
+
+msgid "Fill the project details to run feasibility analysis."
+msgstr "قم بإدخال تفاصيل المشروع لبدء تحليل الجدوى"

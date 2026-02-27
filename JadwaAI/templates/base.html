@@ -10,21 +10,65 @@
 
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   {% block extra_css %}{% endblock %}
+  <link rel="icon" type="image/png" href="{% static 'img/jadwa-icon.png' %}">
 </head>
 
 <body>
 
-  {% include "partials/navbar.html" %}
+  {% block navbar %}
+    {% include "partials/navbar.html" %}
+  {% endblock navbar %}
 
-  <main class="app-bg">
-    {% block content %}{% endblock %}
-  </main>
+<main class="app-bg">
 
-  {% include "partials/footer.html" %}
+  {# ===== Global Page Header / Breadcrumb ===== #}
+  {% block page_header %}
+{% if show_page_header and page_title or show_page_header and breadcrumbs %}
+     <div class="page-container" style="max-width:1100px; margin:0 auto; padding:26px 26px 0;">
+        
+        {% if breadcrumbs %}
+<div style="font-size:14px; color:#64748b; margin-bottom:20px;">            {% for bc in breadcrumbs %}
+              {% if not forloop.first %}
+                <span style="margin:0 10px; color:#cbd5e1;">/</span>
+              {% endif %}
+
+              {% if bc.url %}
+                <a href="{{ bc.url }}" style="color:#0a2fbf; text-decoration:none; font-weight:700;">
+                  {{ bc.label }}
+                </a>
+              {% else %}
+                <span style="color:#64748b; font-weight:700;">{{ bc.label }}</span>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if page_title %}
+          <h1 style="margin:0; font-size:34px; line-height:1.15; letter-spacing:-.02em; color:#0f172a;">
+            {{ page_title }}
+          </h1>
+        {% endif %}
+
+        {% if page_subtitle %}
+          <p style="margin:8px 0 0; color:#64748b; font-size:16px;">
+            {{ page_subtitle }}
+          </p>
+        {% endif %}
+
+<div style="height:22px;"></div>      </div>
+    {% endif %}
+  {% endblock page_header %}
+
+  {% block content %}{% endblock %}
+
+</main>
+
+  {% block footer %}
+    {% include "partials/footer.html" %}
+  {% endblock footer %}
 
   {% block extra_js %}{% endblock %}
 
-  <!-- Dropdown Script -->
   <script>
     document.addEventListener("click", function (e) {
       const dropdown = document.querySelector("[data-dropdown]");

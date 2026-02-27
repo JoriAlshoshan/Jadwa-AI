@@ -1,0 +1,45 @@
+.username{
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.form-container{
+    width: 350px;
+    margin: auto;
+}
+.field{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+.field label{
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+.field input{
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+.checkbox-field{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+.checkbox-field input{
+    width: auto;
+}
+button{
+    padding: 10px;
+    background: #0a2fbf;
+    color: white;
+    border: none;
+    border-radius: 6px;
+}
+.button-container{
+    display: flex;
+    justify-content: center;
+    gap:10px;
+}

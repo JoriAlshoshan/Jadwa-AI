@@ -27,7 +27,12 @@
   .pd-row:last-child{ border-bottom:none; }
 
   .pd-label{ font-weight:900; color:#0f172a; font-size:14px; }
-  .pd-val{ color:#0f172a; font-size:14px; line-height:1.85; }
+  .pd-val{
+    color:#0f172a;
+    font-size:14px;
+    line-height:1.9;
+    letter-spacing:0.2px;
+  }
   .pd-muted{ color:#94a3b8; font-weight:700; }
 
   .pd-pill{
@@ -60,15 +65,6 @@
     html[dir="rtl"] .pd-grid{ grid-template-columns: 1fr; }
     .pd-title{ font-size:30px; }
   }
-  .pd-val{
-  color:#0f172a;
-  font-size:14px;
-  line-height:1.9;
-}
-.pd-val{
-  letter-spacing:0.2px;
-}
-
 </style>
 
 <div class="pd-wrap">
@@ -80,7 +76,6 @@
   <div class="pd-card" style="direction:{% if request.LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %};">
     <div class="pd-grid">
 
-      <!-- Type -->
       <div class="pd-row pd-label">{% trans "Type" %}</div>
       <div class="pd-row pd-val">
         {% if project.Project_type %}
@@ -89,38 +84,10 @@
           <span class="pd-muted">—</span>
         {% endif %}
       </div>
-
-      <!-- Region -->
-      <div class="pd-row pd-label">{% trans "Region" %}</div>
+  <div class="pd-row pd-label"> {% trans "Location" %}</div>
       <div class="pd-row pd-val">
-        {% if project.project_region %}
-          {{ project.get_project_region_display|default:project.project_region }}
-        {% else %}
-          <span class="pd-muted">—</span>
-        {% endif %}
+        {{ location|default:"—" }}
       </div>
-
-      <!-- City (SHOW EXACT USER TEXT IF PROVIDED) -->
-     <!-- City -->
-<div class="pd-row pd-label">{% trans "City" %}</div>
-<div class="pd-row pd-val">
-
-  {% if project.project_city == "other" %}
-    {{ project.project_location_other|default:"—" }}
-
-  {% elif project.project_city %}
-    {{ project.get_project_city_display }}
-
-  {% else %}
-    <span class="pd-muted">—</span>
-
-  {% endif %}
-
-</div>
-
-
-
-      <!-- Budget -->
       <div class="pd-row pd-label">{% trans "Budget" %}</div>
       <div class="pd-row pd-val">
         {% if project.project_budget %}
@@ -134,7 +101,6 @@
         {% endif %}
       </div>
 
-      <!-- Duration -->
       <div class="pd-row pd-label">{% trans "Duration (days)" %}</div>
       <div class="pd-row pd-val">
         {% if project.project_duration %}
@@ -144,7 +110,6 @@
         {% endif %}
       </div>
 
-      <!-- Employees -->
       <div class="pd-row pd-label">{% trans "Employees" %}</div>
       <div class="pd-row pd-val">
         {% if project.number_of_employees %}
@@ -154,7 +119,6 @@
         {% endif %}
       </div>
 
-      <!-- Economic Indicator -->
       <div class="pd-row pd-label">{% trans "Economic Indicator (dataset)" %}</div>
       <div class="pd-row pd-val">
         {% if project.economic_indicator %}
@@ -164,7 +128,6 @@
         {% endif %}
       </div>
 
-      <!-- Similar Enterprises -->
       <div class="pd-row pd-label">{% trans "Similar enterprises (dataset)" %}</div>
       <div class="pd-row pd-val">
         {% if project.num_of_similar_enterprises %}
@@ -177,25 +140,8 @@
         {% endif %}
       </div>
 
-    <!-- Location -->
-<div class="pd-row pd-label">{% trans "Location" %}</div>
+    
 
-<div class="pd-row pd-val">
-
-  {% if project.project_location_other %}
-    {{ project.project_location_other|title }}, Saudi Arabia
-
-  {% elif project.project_location_type != "other" and project.project_location and project.project_location != "Other" and project.project_location != "other" %}
-    {{ project.project_location|title }}, Saudi Arabia
-
-  {% else %}
-    <span class="pd-muted">—</span>
-  {% endif %}
-
-</div>
-
-
-      <!-- Description -->
       <div class="pd-row pd-label">{% trans "Description" %}</div>
       <div class="pd-row pd-val">
         {% if project.description %}
@@ -210,7 +156,7 @@
 
   <div class="pd-actions">
     <a class="btn" href="{% url 'project_edit' project.id %}">{% trans "Edit Project" %}</a>
-    <a class="btn btn-outline" href="{% url 'dashboard' %}">{% trans "Back" %}</a>
+    <!-- <a class="btn btn-outline" href="{% url 'dashboard' %}">{% trans "Back" %}</a> -->
   </div>
 </div>
 {% endblock %}

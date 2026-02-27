@@ -2,10 +2,18 @@
 {% load static %}
 {% load i18n %}
 
+{% block navbar %}
+  {% include "partials/navbar_auth.html" %}
+{% endblock navbar %}
+
+{# ✅ هنا نحط الفوتر الخفيف بشكل صحيح #}
+{% block footer %}
+  {% include "partials/footer_light.html" %}
+{% endblock footer %}
+
 {% block content %}
 
 <style>
-/* ===== Soft Pink Validation (same style) ===== */
 .form-row.is-error .form-label{
   color:inherit !important;
 }
@@ -27,7 +35,6 @@
   display:block;
 }
 
-/* ===== Clean auth links ===== */
 .auth-links-clean{
   margin-top:18px;
   text-align:center;
@@ -41,20 +48,20 @@
 }
 
 .auth-link-clean{
-  color:#64748b;              /* نفس اللون اللي تبينه */
-  text-decoration:none;       /* بدون خط */
+  color:#64748b;
+  text-decoration:none;
   font-weight:500;
   transition:color .15s ease, text-decoration .15s ease;
 }
 
 .auth-link-clean:hover{
-  color:#0a2fbf;              /* أزرق عند المرور */
-  text-decoration:underline;  /* underline عند المرور */
+  color:#0a2fbf;
+  text-decoration:underline;
 }
 
 .auth-link-clean:active,
 .auth-link-clean:focus{
-  color:#0a2fbf;              /* أزرق عند الضغط */
+  color:#0a2fbf;
   text-decoration:underline;
   outline:none;
 }
@@ -74,12 +81,9 @@
         </p>
       </div>
 
-      {# ✅ حذفنا messages بالكامل عشان ما تتكرر إذا رجعتي للصفحة #}
-
       <form method="post" class="contact-form" novalidate>
         {% csrf_token %}
 
-        {# ✅ خطأ عام واحد فقط (مثلاً بيانات الدخول غير صحيحة) #}
         {% if form.non_field_errors %}
           <div class="form-error" style="margin-bottom:12px;">
             {{ form.non_field_errors|striptags }}
@@ -89,9 +93,7 @@
         {% for field in form %}
           <div class="form-row {% if field.errors %}is-error{% endif %}">
             <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-
             {{ field }}
-
             {% if field.errors %}
               <div class="form-error">{{ field.errors.0 }}</div>
             {% endif %}
@@ -133,12 +135,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const row = field.closest(".form-row");
     if(!row) return;
 
-    // إذا فيه كتابة، شيل الخطأ
     if ((field.value || "").trim() !== "") {
       row.classList.remove("is-error");
-
       const error = row.querySelector(".form-error");
-      // لا نحذف non_field_errors اللي فوق (لأنه خارج row)
       if (error) error.remove();
     }
   }
@@ -154,7 +153,6 @@ document.addEventListener("DOMContentLoaded", function () {
         setTimeout(() => clearError(field), 0);
       });
 
-      // للـ autofill
       setTimeout(() => clearError(field), 200);
     });
 

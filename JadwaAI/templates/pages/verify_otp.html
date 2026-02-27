@@ -1,12 +1,19 @@
 {% extends "base.html" %}
 {% load static i18n %}
 
+{% block navbar %}
+  {% include "partials/navbar_auth.html" %}
+{% endblock navbar %}
+
+{% block footer %}
+  {% include "partials/footer_light.html" %}
+{% endblock footer %}
+
 {% block content %}
 <div class="page">
   <section class="legal-page">
     <div class="legal-container" style="max-width:420px; margin:0 auto;">
 
-      <!-- Heading -->
       <div style="text-align:center; margin-bottom:34px;">
         <h2 style="margin-bottom:12px; color:#0b0f1a;">
           {% trans "Verify OTP" %}
@@ -16,28 +23,16 @@
         </p>
       </div>
 
-      <!-- Django messages -->
-      <!-- {% if messages %}
-        {% for message in messages %}
-          <div class="inline-msg {% if 'error' in message.tags %}inline-msg--error-light{% else %}inline-msg--soft{% endif %}" style="margin-bottom:12px;">
-            {{ message }}
-          </div>
-        {% endfor %}
-      {% endif %} -->
-
-      <!-- Custom error (مثل Forgot Password) -->
-       {# ✅ Server-side errors (OTP wrong/expired) #}
-{% if otp_invalid %}
-  <div class="inline-msg inline-msg--error-light" style="margin-bottom:12px;">
-    {% trans "Invalid or expired OTP." %}
-  </div>
-{% endif %}
+      {% if otp_invalid %}
+        <div class="inline-msg inline-msg--error-light" style="margin-bottom:12px;">
+          {% trans "Invalid or expired OTP." %}
+        </div>
+      {% endif %}
 
       <div id="otpError" class="inline-msg inline-msg--error-light" style="display:none; margin-bottom:12px;">
         {% trans "This field is required." %}
       </div>
 
-      <!-- OTP Form -->
       <form method="post" class="contact-form" id="otpForm" novalidate>
         {% csrf_token %}
 
@@ -51,7 +46,6 @@
               maxlength="1"
               autocomplete="one-time-code"
               class="otp-input"
-              aria-label="OTP digit {{ forloop.counter }}"
               style="
                 width:48px;
                 height:52px;
@@ -67,7 +61,6 @@
           {% endfor %}
         </div>
 
-        <!-- hidden يجمع الكود كامل (مهم للباك اند) -->
         <input type="hidden" name="otp" id="otpHidden">
 
         <button type="submit" class="btn btn-full">
@@ -75,7 +68,6 @@
         </button>
       </form>
 
-      <!-- Resend -->
       <p style="margin-top:18px; text-align:center; color:#64748b;">
         {% trans "Didn’t receive the code?" %}
         <a href="{% url 'forgot_password' %}" class="contact-link">
@@ -88,61 +80,30 @@
 </div>
 
 <style>
-/* نفس الرسالة الرمادي الخفيفة */
-.inline-msg.inline-msg--soft{
-  background:#f1f5f9;
-  color:#0f172a;
-  border:1px solid #cbd5e1;
-  border-radius:16px;
-  padding:14px 16px;
-  font-size:16px;
-}
-
-/* نفس الأحمر الخفيف مثل Forgot password */
 .inline-msg.inline-msg--error-light{
-  background:#fff5f5;
-  color:#d93025;
-  border:1px solid #f3b4b4;
+  background:#fff7f7;
+  color:#c02626;
+  border:1px solid #f6c7c7;
   border-radius:16px;
   padding:14px 16px;
   font-size:16px;
 }
 
-/* مربعات OTP طبيعي */
 .otp-input:focus{
   border-color:#2563eb !important;
   box-shadow:0 0 0 2px rgba(37,99,235,.15) !important;
 }
 
-/* وقت الخطأ: بوردر أحمر خفيف فقط (بدون وردي قوي) */
-.otp-input.is-error{
-  border-color:#f3b4b4 !important;
-  box-shadow:0 0 0 6px rgba(217,48,37,.08) !important;
-}
-
-/* رسالة الخطأ: أحمر هادي جدًا */
-.inline-msg.inline-msg--error-light{
-  background:#fff7f7;          /* أفتح */
-  color:#c02626;               /* أهدى من b91c1c */
-  border:1px solid #f6c7c7;    /* بوردر أفتح */
-  border-radius:16px;
-  padding:14px 16px;
-  font-size:16px;
-}
-
-/* مربعات OTP وقت الخطأ: بوردر خفيف + ظل خفيف جدًا */
 .otp-input.is-error{
   border-color:#f6c7c7 !important;
-  box-shadow:0 0 0 3px rgba(192,38,38,.06) !important;  /* كان كبير */
-}
-
-/* (اختياري) لو تبين حتى الخلفية ما تتغير أبدًا */
-.otp-input{
+  box-shadow:0 0 0 3px rgba(192,38,38,.06) !important;
   background:#fff !important;
 }
-
 </style>
 
+{% endblock %}
+
+{% block extra_js %}
 <script>
 (function () {
   const form = document.getElementById("otpForm");
@@ -165,7 +126,6 @@
     inputs.forEach(i => i.classList.add("is-error"));
   }
 
-  // digits only + auto next + hide error while typing
   inputs.forEach((inp, idx) => {
     inp.addEventListener("input", () => {
       inp.value = inp.value.replace(/\D/g, "");
@@ -186,7 +146,6 @@
       hidden.value = getOtp();
     });
 
-    // paste كامل 6 أرقام
     inp.addEventListener("paste", (e) => {
       e.preventDefault();
       const text = (e.clipboardData || window.clipboardData).getData("text");
@@ -204,7 +163,6 @@
     });
   });
 
-  // submit validation
   form.addEventListener("submit", (e) => {
     const otp = getOtp();
     hidden.value = otp;
@@ -218,5 +176,4 @@
   });
 })();
 </script>
-
 {% endblock %}

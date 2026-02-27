@@ -1,9 +1,17 @@
 {% extends "base.html" %}
 {% load static i18n %}
+
+{% block navbar %}
+  {% include "partials/navbar_auth.html" %}
+{% endblock navbar %}
+
+{% block footer %}
+  {% include "partials/footer_light.html" %}
+{% endblock footer %}
+
 {% block content %}
 
 <style>
-/* ===== Inputs ===== */
 .contact-form input,
 .contact-form select,
 .contact-form textarea{
@@ -15,7 +23,6 @@
   transition:all .2s ease;
 }
 
-/* ===== Soft Pink Error ===== */
 .form-row.is-error input,
 .form-row.is-error select,
 .form-row.is-error textarea{
@@ -32,39 +39,34 @@
   display:block;
 }
 
-/* ===== Labels spacing ===== */
 .form-row{
   margin-bottom:16px;
 }
+
 .form-row label{
   display:block;
   font-weight:600;
   margin-bottom:8px;
 }
 
-/* ===== Clean link text like you want ===== */
-.link-text{
+.auth-links-clean{
   margin-top:18px;
   text-align:center;
   color:#64748b;
   font-size:18px;
+  line-height:1.9;
 }
 
-.link-text a{
-  color:#64748b;          /* نفس اللون الرمادي */
-  text-decoration:none;   /* بدون خط */
+.auth-link-clean{
+  color:#64748b;
+  text-decoration:none;
   font-weight:500;
   transition:color .15s ease, text-decoration .15s ease;
 }
-.link-text a:hover{
-  color:#0a2fbf;          /* أزرق عند المرور */
+
+.auth-link-clean:hover{
+  color:#0a2fbf;
   text-decoration:underline;
-}
-.link-text a:active,
-.link-text a:focus{
-  color:#0a2fbf;          /* أزرق عند الضغط */
-  text-decoration:underline;
-  outline:none;
 }
 </style>
 
@@ -76,16 +78,14 @@
         <h2 style="margin-bottom:12px; color:#0b0f1a;">
           {% trans "Create your Jadwa AI account" %}
         </h2>
+
         <p style="margin-bottom:30px; color:#64748b;">
           {% trans "Sign up to start analyzing feasibility projects instantly." %}
         </p>
       </div>
 
-      <form method="post" class="contact-form" novalidate
-            style="direction:{% if request.LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %};">
+      <form method="post" class="contact-form" novalidate>
         {% csrf_token %}
-
-        {# ✅ ما نعرض أي رسائل فوق #}
 
         {% for field in form %}
           <div class="form-row {% if field.errors %}is-error{% endif %}">
@@ -104,21 +104,25 @@
         </button>
       </form>
 
-      <p class="link-text">
-        {% trans "Already have an account?" %}
-        <a href="{% url 'login' %}">
-          {% trans "Login here" %}
-        </a>
-      </p>
+      <div class="auth-links-clean">
+        <p>
+          {% trans "Already have an account?" %}
+          <a href="{% url 'login' %}" class="auth-link-clean">
+            {% trans "Login here" %}
+          </a>
+        </p>
+      </div>
 
     </div>
   </section>
 </div>
 
+{% endblock %}
+
+{% block extra_js %}
 <script>
 document.addEventListener("DOMContentLoaded", function() {
 
-  // خزّني القيمة الأصلية لكل حقل وقت تحميل الصفحة
   document.querySelectorAll(".contact-form input, .contact-form select, .contact-form textarea")
     .forEach(function(field){
       field.dataset.initialValue = (field.value || "");
@@ -126,7 +130,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function isRequiredMessage(msg){
     msg = (msg || "").toLowerCase();
-    // English / Arabic common required messages
     return msg.includes("this field is required") ||
            msg.includes("هذا الحقل مطلوب") ||
            msg.includes("مطلوب");
@@ -143,7 +146,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const value = (field.value || "").trim();
     const initial = (field.dataset.initialValue || "").trim();
 
-    // 1) إذا الخطأ Required: نخفيه بمجرد ما فيه قيمة
     if (isRequiredMessage(msg)) {
       if (value !== "") {
         row.classList.remove("is-error");
@@ -152,8 +154,6 @@ document.addEventListener("DOMContentLoaded", function() {
       return;
     }
 
-    // 2) إذا الخطأ مو Required (مثل email already exists):
-    // نخليه موجود… وما نحذفه إلا إذا المستخدم غيّر قيمة الحقل عن القيمة الأصلية
     if (value !== "" && value !== initial) {
       row.classList.remove("is-error");
       errorEl.remove();
@@ -171,12 +171,9 @@ document.addEventListener("DOMContentLoaded", function() {
         setTimeout(() => clearError(field), 0);
       });
 
-      // Autofill
       setTimeout(() => clearError(field), 200);
     });
 
 });
 </script>
-
-
 {% endblock %}

@@ -984,3 +984,27 @@ select.form-input{
 .form-row.is-error .form-error {
   display: block;
 }
+.footer-pro-inner {
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer-col:last-child {
+  margin-left: auto;
+  text-align: right;
+}
+.footer-pro-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* هذا ينزلها لنفس مستوى النص */
+}
+
+.footer-col:last-child {
+  margin-left: auto;
+  text-align: right;
+}
+.footer-col:last-child {
+  margin-left: auto;
+  text-align: right;
+  margin-top: 40px; /* تقدرين تغيرين الرقم (30 / 50 حسب ما يعجبك) */
+}
