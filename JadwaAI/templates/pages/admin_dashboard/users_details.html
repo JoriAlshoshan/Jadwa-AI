@@ -1,11 +1,42 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load static %}
 
 {% block content %}
-<h3> username: {{ user.username }}</h3>
-<form method ="post">
+<link rel="stylesheet" href="{% static 'css/users_details.css' %}">
+
+<h3 class="username"> {{ user.username }} details</h3>
+<form method ="post" class="form-container">
     {% csrf_token %}
-    {{form.as_p}}
-    <button type submit>Save changes</button>
+    <div class="field">
+        {{form.username.label_tag}}
+        {{form.username}}
+        {{form.username.errors}}
+    </div>
+    <div class="field">
+        {{form.email.label_tag}}
+        {{form.email}}
+        {{form.email.errors}}
+    </div>
+    <div class="checkbox-field">
+        {{form.is_active}}
+        {{form.is_active.label_tag}}
+        {{form.is_active.errors}}
+    </div>
+    <div class="checkbox-field">
+        {{form.is_staff}}
+        {{form.is_staff.label_tag}}
+        {{form.is_staff_active.errors}}
+    </div>
+    <div class="checkbox-field">
+        {{form.is_superuser}}
+        {{form.is_superuser.label_tag}}
+        {{form.is_superuser.errors}}
+    </div>
+    <div class="button-container">
+        <button type submit>Save changes</button>
+        <button type="button" onclick="history.back()" >return</button>
+    </div>
+    
 </form>
 {% endblock %}
