@@ -26,8 +26,7 @@
             value="{% if request.LANGUAGE_CODE == 'ar' %}en{% else %}ar{% endif %}"
           >
           <button type="submit" class="nav-lang" style="background:none;border:0;cursor:pointer;">
-            {% if request.LANGUAGE_CODE == 'ar' %}EN{% else %}عربي{% endif %}
-          </button>
+{% if request.LANGUAGE_CODE == 'ar' %}English{% else %}عربي{% endif %}          </button>
         </form>
 
         <span class="nav-divider"></span>

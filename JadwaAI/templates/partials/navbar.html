@@ -6,8 +6,8 @@
 
     <!-- LEFT -->
     <div class="nav-left">
-      <a href="#home" class="brand" aria-label="Jadwa AI Home">
-        <img src="{% static 'img/jadwa-logo.png' %}" class="brand-logo" alt="Jadwa AI">
+          <a href="{% url 'landing' %}#home" class="brand" aria-label="Jadwa AI Home">
+          <img src="{% static 'img/jadwa-logo.png' %}" class="brand-logo" alt="Jadwa AI">
       </a>
     </div>
 
@@ -26,7 +26,7 @@
         <!-- Language -->
         <form action="{% url 'set_language' %}" method="post" style="display:inline;">
           {% csrf_token %}
-          <input type="hidden" name="next" value="#home">
+<input type="hidden" name="next" value="{% url 'landing' %}#home">
           <input
             type="hidden"
             name="language"
