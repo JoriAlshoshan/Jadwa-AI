@@ -33,11 +33,10 @@
               {% endif %}
 
               {% if bc.url %}
-                <a href="{{ bc.url }}" style="color:#0a2fbf; text-decoration:none; font-weight:700;">
-                  {{ bc.label }}
+<a href="{{ bc.url }}" style="color:#64748b; text-decoration:none; font-weight:600;">                  {{ bc.label }}
                 </a>
               {% else %}
-                <span style="color:#64748b; font-weight:700;">{{ bc.label }}</span>
+                <span style="color:#0a2fbf; font-weight:700;">{{ bc.label }}</span>
               {% endif %}
             {% endfor %}
           </div>
