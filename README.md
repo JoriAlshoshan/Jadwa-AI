@@ -119,5 +119,4 @@ Cloud deployment ensures reliability, real-world applicability, and future scala
 **Sura Alkuzaim** - sura.abdullah2003@gmail.com
 
 ---
-
 © 2026 Jadwa AI 
