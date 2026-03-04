@@ -1,26 +1,26 @@
-# from django.contrib import admin
-# from django.urls import path, include
-# from django.conf import settings
-# from django.conf.urls.static import static
-# urlpatterns = [
-#     path('admin/', admin.site.urls),
-
-#     path('', include('JADWA_AI.urls')),
-
-
-#     path('accounts/', include('django.contrib.auth.urls')),
-#     path("i18n/", include("django.conf.urls.i18n")),
-
-#     path("analysis/", include("analysis.urls")),
-# ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
-
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, reverse
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
+from django.contrib.sitemaps.views import sitemap
+from django.contrib.sitemaps import Sitemap
+
+
+class StaticViewSitemap(Sitemap):
+    priority = 0.8
+    changefreq = "weekly"
+
+    def items(self):
+        return ["landing", "success_stories", "privacy", "terms"]
+
+    def location(self, item):
+        return reverse(item)
+
+
+sitemaps = {
+    "static": StaticViewSitemap(),
+}
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,8 +33,9 @@ urlpatterns = [
         ),
     ),
 
-    path('', include('JADWA_AI.urls')),
+    path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
 
+    path('', include('JADWA_AI.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path("i18n/", include("django.conf.urls.i18n")),
     path("analysis/", include("analysis.urls")),
