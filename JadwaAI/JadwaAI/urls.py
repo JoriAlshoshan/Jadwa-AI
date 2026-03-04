@@ -2,9 +2,10 @@ from django.contrib import admin
 from django.urls import path, include, reverse
 from django.conf import settings
 from django.conf.urls.static import static
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 from django.contrib.sitemaps.views import sitemap
 from django.contrib.sitemaps import Sitemap
+from django.templatetags.static import static as static_file
 
 
 class StaticViewSitemap(Sitemap):
@@ -14,10 +15,9 @@ class StaticViewSitemap(Sitemap):
     def items(self):
         return ["landing", "success_stories", "privacy", "terms"]
 
-    # def location(self, item):
-    #     return reverse(item)
     def location(self, item):
-     return f"https://jadwa-ai.com{reverse(item)}"
+        return f"https://jadwa-ai.com{reverse(item)}"
+
 
 sitemaps = {
     "static": StaticViewSitemap(),
@@ -33,6 +33,8 @@ urlpatterns = [
             content_type="text/plain"
         ),
     ),
+
+    path("favicon.ico", RedirectView.as_view(url=static_file("img/favicon.ico"), permanent=True)),
 
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
 
