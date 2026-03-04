@@ -16,7 +16,16 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     "jadwa-ai-bkhxd2bubeeybgbr.uaenorth-01.azurewebsites.net",
+    "jadwa-ai.com",
+    "www.jadwa-ai.com",
 ]
+CSRF_TRUSTED_ORIGINS = [
+    "https://jadwa-ai-bkhxd2bubeeybgbr.uaenorth-01.azurewebsites.net",
+    "https://jadwa-ai.com",
+    "https://www.jadwa-ai.com",
+]
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -32,8 +41,9 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware', 
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -94,6 +104,7 @@ LOCALE_PATHS = [
 #  Static
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
