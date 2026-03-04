@@ -16,7 +16,16 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     "jadwa-ai-bkhxd2bubeeybgbr.uaenorth-01.azurewebsites.net",
+    "jadwa-ai.com",
+    "www.jadwa-ai.com",
 ]
+CSRF_TRUSTED_ORIGINS = [
+    "https://jadwa-ai-bkhxd2bubeeybgbr.uaenorth-01.azurewebsites.net",
+    "https://jadwa-ai.com",
+    "https://www.jadwa-ai.com",
+]
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
