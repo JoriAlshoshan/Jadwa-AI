@@ -6,11 +6,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jadwa AI</title>
+
+  <title>{% block title %}Jadwa AI | Smart Feasibility Study Platform{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}Jadwa AI is an AI-powered platform that generates professional feasibility studies using Saudi market data for entrepreneurs and startups.{% endblock %}">
+  <link rel="canonical" href="https://jadwa-ai.com{{ request.path }}">
+
+  <meta property="og:site_name" content="Jadwa AI">
+  <meta property="og:title" content="{% block og_title %}Jadwa AI{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}AI-powered feasibility studies using Saudi market data.{% endblock %}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jadwa-ai.com{{ request.path }}">
+  <meta property="og:image" content="https://jadwa-ai.com{% static 'img/jadwa-icon-512.png' %}">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{% block tw_title %}Jadwa AI{% endblock %}">
+  <meta name="twitter:description" content="{% block tw_description %}AI-powered feasibility studies using Saudi market data.{% endblock %}">
+  <meta name="twitter:image" content="https://jadwa-ai.com{% static 'img/jadwa-icon-512.png' %}">
+
+  <link rel="icon" type="image/png" href="{% static 'img/jadwa-icon.png' %}">
+  <link rel="apple-touch-icon" href="{% static 'img/jadwa-icon-512.png' %}">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Jadwa AI",
+    "url": "https://jadwa-ai.com",
+    "logo": "https://jadwa-ai.com/static/img/jadwa-icon-512.png"
+  }
+  </script>
 
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   {% block extra_css %}{% endblock %}
-  <link rel="icon" type="image/png" href="{% static 'img/jadwa-icon.png' %}">
 </head>
 
 <body>
@@ -21,11 +48,10 @@
 
 <main class="app-bg">
 
-  {# ===== Global Page Header / Breadcrumb ===== #}
   {% block page_header %}
 {% if show_page_header and page_title or show_page_header and breadcrumbs %}
      <div class="page-container" style="max-width:1100px; margin:0 auto; padding:26px 26px 0;">
-        
+
         {% if breadcrumbs %}
 <div style="font-size:14px; color:#64748b; margin-bottom:20px;">            {% for bc in breadcrumbs %}
               {% if not forloop.first %}
