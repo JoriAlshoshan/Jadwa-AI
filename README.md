@@ -110,13 +110,15 @@ Cloud deployment ensures reliability, real-world applicability, and future scala
 
 ---
 
+## Project Links
+- **Live Demo:** https://jadwa-ai.com
+- **Source Code:** https://github.com/JoriAlshoshan/JadwaAI
+- **Support Email:** mailto:contact@jadwa-ai.com
+
 ## Team Members
-
-**Jori Alshoshan** - jori.alshoshan@gmail.com  
-
-**Rahaf Alharbi** - r22581919@gmail.com
-  
-**Sura Alkuzaim** - sura.abdullah2003@gmail.com
+- **Jori Alshoshan** — jori.alshoshan@gmail.com  
+- **Rahaf Alharbi** — r22581919@gmail.com  
+- **Sura Alkuzaim** — sura.abdullah2003@gmail.com  
 
 ---
 © 2026 Jadwa AI 
