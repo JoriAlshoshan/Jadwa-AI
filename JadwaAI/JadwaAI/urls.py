@@ -14,9 +14,10 @@ class StaticViewSitemap(Sitemap):
     def items(self):
         return ["landing", "success_stories", "privacy", "terms"]
 
+    # def location(self, item):
+    #     return reverse(item)
     def location(self, item):
-        return reverse(item)
-
+     return f"https://jadwa-ai.com{reverse(item)}"
 
 sitemaps = {
     "static": StaticViewSitemap(),
