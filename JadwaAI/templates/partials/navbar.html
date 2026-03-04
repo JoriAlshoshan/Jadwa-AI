@@ -26,7 +26,7 @@
         <!-- Language -->
         <form action="{% url 'set_language' %}" method="post" style="display:inline;">
           {% csrf_token %}
-<input type="hidden" name="next" value="{% url 'landing' %}#home">
+<input type="hidden" name="next" value="{{ request.get_full_path }}">
           <input
             type="hidden"
             name="language"
