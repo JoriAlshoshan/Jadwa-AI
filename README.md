@@ -112,7 +112,7 @@ Cloud deployment ensures reliability, real-world applicability, and future scala
 
 ## Project Links
 - **Live Demo:** https://jadwa-ai.com
-- **Source Code:** https://github.com/JoriAlshoshan/JadwaAI
+- **Source Code:** https://github.com/JoriAlshoshan/Jadwa-AI
 - **Support Email:** mailto:contact@jadwa-ai.com
 
 ## Team Members
