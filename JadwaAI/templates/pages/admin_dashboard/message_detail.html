@@ -1,13 +1,43 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load static %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/message_details.css' %}">
+<div class="msgpage">
+    <div class="msgcontainer">
+        <h2 class="topic">Sender Information</h2>
 
-<h2> message details</h2>
-<p><b>name:</b>{{message.name}}</p>
-<p><b>Email:</b>{{message.email}}</p>
-<p><b>date: </b>{{message.created_at}}</p>
-<hr>
-<p>{{message.message}}</p>
-<a href ="{% url 'Admin_Dashboard' %}">return</a>
+        <div class="msgDetails">
+            <div class="info-row">
+                <span class="label">Name: </span>
+                <span class="msg-info">{{message.full_name}}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Email: </span>
+                <span class="msg-info">{{ message.email }}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Topic: </span>
+                <span class="msg-info">{{message.topic}}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Date: </span>
+                <span class="msg-info">{{message.created_at}}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Message: </span>
+                <span class="msg-info">{{message.message}}</span>
+            </div>
+
+            <form method="post">
+            {% csrf_token %}
+            <textarea name="reply" placeholder="Type your reply here">{{ ContactMessage.reply }}</textarea>
+            <div class="btn-send">
+                <button type="submit">Send</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
 {% endblock %}
