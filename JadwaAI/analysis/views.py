@@ -294,26 +294,26 @@ def analysis_result(request, result_id):
 @login_required
 def generate_recs(request, result_id):
     from ai.services.analyzer import analyze_project
+    from django.utils.translation import get_language_from_request
 
     result_obj = get_object_or_404(AnalysisResult, id=result_id, user=request.user)
 
     if request.method != "POST":
         return JsonResponse({"ok": False, "status": "method_not_allowed"}, status=405)
 
-    lang = current_lang(request)
+    req_lang = (request.POST.get("lang") or get_language_from_request(request) or current_lang(request) or "ar").lower()
 
     project = get_object_or_404(Projects, id=result_obj.project_id)
     project_data = build_project_data(project)
 
-    try:
-        out = analyze_project(project_data, include_recommendations=True, lang=lang)
-        raw_text = (out.get("recommendations") or "").strip()
-
-        recs_text = normalize_recommendations_text(result_obj, lang, raw_text)
-        set_recs_by_lang(result_obj, lang, recs_text, "ready")
-
-    except Exception as e:
-        set_recs_by_lang(result_obj, lang, f"Failed to generate recommendations: {e}", "failed")
+    for lang in ("ar", "en"):
+        try:
+            out = analyze_project(project_data, include_recommendations=True, lang=lang)
+            raw_text = (out.get("recommendations") or "").strip()
+            recs_text = normalize_recommendations_text(result_obj, lang, raw_text)
+            set_recs_by_lang(result_obj, lang, recs_text, "ready")
+        except Exception as e:
+            set_recs_by_lang(result_obj, lang, f"Failed to generate recommendations: {e}", "failed")
 
     result_obj.save(
         update_fields=[
@@ -324,7 +324,7 @@ def generate_recs(request, result_id):
         ]
     )
 
-    return JsonResponse({"ok": True, "status": get_status_by_lang(result_obj, lang)})
+    return JsonResponse({"ok": True, "status": get_status_by_lang(result_obj, req_lang)})
 
 
 @login_required
