@@ -60,6 +60,8 @@ class ContactMessage(models.Model):
     email = models.EmailField()
     topic = models.CharField(max_length=30, choices=TOPIC_CHOICES)
     message = models.TextField()
+    reply =models.TextField(blank=True,null=True)
+    is_replied = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
