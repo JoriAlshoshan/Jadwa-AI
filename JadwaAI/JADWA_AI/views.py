@@ -616,3 +616,21 @@ def message_detail(request, id):
     message = ContactMessage.objects.get(id = id)
     return render (request,"pages/admin_dashboard/message_detail.html", {"message":message})
 
+def send_message(request, message_id):
+    message = get_object_or_404(ContactMessage, id =message_id)
+    if request.method == 'POST':
+        reply = request.POST['reply']
+        message.reply = reply
+        if not message.is_replied:
+            message.is_replied = True
+        message.save()
+        
+        send_mail(
+            subject = "Thank you for conntect us",
+            message = reply,
+            from_email=None,
+            recipient_list=[message.email],
+            fail_silently=False,
+        )
+        return redirect('Admin_Dashboard')
+    return render (request,"pages/admin_dashboard/message_detail.html",{"message":message})
