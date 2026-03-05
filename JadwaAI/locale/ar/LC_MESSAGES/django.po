@@ -1091,3 +1091,6 @@ msgstr "الانتقال إلى لوحة التحكم"
 
 msgid "Fill the project details to run feasibility analysis."
 msgstr "قم بإدخال تفاصيل المشروع لبدء تحليل الجدوى"
+
+msgid "Project Details"
+msgstr "تفاصيل المشروع"

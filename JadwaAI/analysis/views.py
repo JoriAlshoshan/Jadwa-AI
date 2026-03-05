@@ -38,7 +38,11 @@ def rtl(txt: str) -> str:
 
 
 ARABIC_RE = re.compile(r"[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]")
+_BIDI_CTRL_RE = re.compile(r"[\u200E\u200F\u202A-\u202E\u2066-\u2069\uFEFF]")
 
+def strip_bidi_controls(text: str) -> str:
+    return _BIDI_CTRL_RE.sub("", text or "")
+    
 
 def has_arabic(text: str) -> bool:
     return bool(ARABIC_RE.search(text or ""))
@@ -151,13 +155,18 @@ def normalize_recommendations_text(result: AnalysisResult, lang: str, recs_text:
     if str(lang).startswith("ar"):
         final_word = "قابل للتنفيذ" if ok else "غير قابل للتنفيذ"
         rule = f"تنبيه: القرار النهائي حسب النموذج = ({prob:.4f}) مقارنة بحد القرار ({thr:.2f})، لذلك المشروع {final_word}."
+
         if ok:
-            text = re.sub(r"غير قابل للتنفيذ", "قابل للتنفيذ", text)
+            text = text.replace("غير قابل للتنفيذ", "قابل للتنفيذ")
         else:
-            text = re.sub(r"قابل للتنفيذ", "غير قابل للتنفيذ", text)
+            text = text.replace("غير قابل للتنفيذ", "__TMP__")
+            text = text.replace("قابل للتنفيذ", "غير قابل للتنفيذ")
+            text = text.replace("__TMP__", "غير قابل للتنفيذ")
+
     else:
         final_word = "feasible" if ok else "not feasible"
         rule = f"Note: Final decision uses probability ({prob:.4f}) vs threshold ({thr:.2f}); therefore the project is {final_word}."
+
         if ok:
             text = re.sub(r"\bnot feasible\b", "feasible", text, flags=re.IGNORECASE)
         else:
@@ -165,8 +174,14 @@ def normalize_recommendations_text(result: AnalysisResult, lang: str, recs_text:
 
     if not text:
         return rule
-    if rule.lower() not in text.lower():
-        text = f"{rule}\n\n{text}"
+
+    if str(lang).startswith("ar"):
+        if "القرار النهائي" not in text:
+            text = f"{rule}\n\n{text}"
+    else:
+        if "final decision" not in text.lower():
+            text = f"{rule}\n\n{text}"
+
     return text
 
 
@@ -403,6 +418,11 @@ def analysis_pdf(request, result_id):
     status_text = feasibility_label_by_lang(result, lang)
 
     recs = get_recs_by_lang(result, lang) or _("No recommendations generated yet.")
+
+    # تنظيف مشاكل اتجاه النص (خصوصًا بعد الترجمة)
+    if not str(lang).startswith("ar"):
+        recs = strip_bidi_controls(recs)
+
     recs_is_ar = has_arabic(recs)
 
     safe_name = (result.project_name or "Project").replace(" ", "_")

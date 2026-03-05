@@ -23,6 +23,5 @@ def analyze_project(project_dict: dict, include_recommendations: bool = True, la
 
     if include_recommendations:
         prompt = build_prompt(project_dict, ml_result, lang=lang)
-        output["recommendations"] = generate_recommendations(prompt)
-
+        output["recommendations"] = generate_recommendations(prompt, timeout=20)
     return output

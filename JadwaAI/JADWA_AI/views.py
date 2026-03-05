@@ -489,7 +489,6 @@ def contact_submit(request):
 # =======================
 @login_required
 def user_dashboard(request):
-    # ✅ لو أدمن (superuser) ودّيه لوحة الأدمن
     if request.user.is_superuser:
         return redirect("Admin_Dashboard")
 

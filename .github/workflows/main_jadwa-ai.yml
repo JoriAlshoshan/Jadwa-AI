@@ -1,0 +1,45 @@
+name: Deploy Django to Azure Web App - jadwa-ai
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r JadwaAI/requirements.txt
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_23400886B3BE4BFE84D7DCAC72EA19E9 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_01E1A1F93D6B44AA85808224DFE101BB }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_9ED32CC8390E4319BCAE81694AC96525 }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: jadwa-ai
+          slot-name: Production
+          package: JadwaAI
+
+

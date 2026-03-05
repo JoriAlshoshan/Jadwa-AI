@@ -2,30 +2,23 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 
 def global_page_meta(request):
-    """
-    يطلع page_title + page_subtitle + breadcrumbs بشكل تلقائي
-    حسب اسم الـ URL (request.resolver_match.url_name).
-    تقدر أي صفحة تسوي override إذا مرّرت قيم من الـ view.
-    """
-
     url_name = getattr(getattr(request, "resolver_match", None), "url_name", "") or ""
 
-    # Mapping (عدّلي الأسماء حسب urls عندك)
+    HOME_URL = reverse("landing") + "#home"
+
     MAP = {
         "landing": {
             "title": "",
             "subtitle": "",
-            "crumbs": [
-                {"label": _("Home"), "url": reverse("landing")},
-            ],
-            "show": False,  # لا تعرض الهيدر في اللاندنق
+            "crumbs": [{"label": _("Home"), "url": HOME_URL}],
+            "show": False,
         },
 
         "dashboard": {
             "title": _("Dashboard"),
             "subtitle": _("Manage your projects and run feasibility analysis."),
             "crumbs": [
-                {"label": _("Home"), "url": reverse("landing")},
+                {"label": _("Home"), "url": HOME_URL},
                 {"label": _("Dashboard"), "url": None},
             ],
             "show": True,
@@ -35,7 +28,7 @@ def global_page_meta(request):
             "title": _("Add Project"),
             "subtitle": _("Fill the project details to run feasibility analysis."),
             "crumbs": [
-                {"label": _("Home"), "url": reverse("landing")},
+                {"label": _("Home"), "url": HOME_URL},
                 {"label": _("Dashboard"), "url": reverse("dashboard")},
                 {"label": _("Add Project"), "url": None},
             ],
@@ -46,7 +39,7 @@ def global_page_meta(request):
             "title": _("Edit Profile"),
             "subtitle": "",
             "crumbs": [
-                {"label": _("Home"), "url": reverse("landing")},
+                {"label": _("Home"), "url": HOME_URL},
                 {"label": _("Dashboard"), "url": reverse("dashboard")},
                 {"label": _("Edit Profile"), "url": None},
             ],
@@ -57,9 +50,9 @@ def global_page_meta(request):
             "title": _("Project Details"),
             "subtitle": "",
             "crumbs": [
-                {"label": _("Home"), "url": reverse("landing")},
+                {"label": _("Home"), "url": HOME_URL},
                 {"label": _("Dashboard"), "url": reverse("dashboard")},
-                {"label": _("Project Details"), "url": None},  # اسم المشروع نضيفه بالـ view لو تبين
+                {"label": _("Project Details"), "url": None},
             ],
             "show": True,
         },
@@ -68,28 +61,38 @@ def global_page_meta(request):
             "title": _("Edit Project"),
             "subtitle": "",
             "crumbs": [
-                {"label": _("Home"), "url": reverse("landing")},
+                {"label": _("Home"), "url": HOME_URL},
                 {"label": _("Dashboard"), "url": reverse("dashboard")},
                 {"label": _("Edit Project"), "url": None},
             ],
             "show": True,
         },
-        "analysis_result": {   # 👈 هنا حطيه
-        "title": _("Analysis Result"),
-        "subtitle": _("AI-powered feasibility insights for your project"),
-        "crumbs": [
-            {"label": _("Home"), "url": reverse("landing")},
-            {"label": _("Dashboard"), "url": reverse("dashboard")},
-            {"label": _("Analysis Result"), "url": None},
-        ],
-        "show": True,
-    },
+
+        "analysis_result": {
+            "title": _("Analysis Result"),
+            "subtitle": _("AI-powered feasibility insights for your project"),
+            "crumbs": [
+                {"label": _("Home"), "url": HOME_URL},
+                {"label": _("Dashboard"), "url": reverse("dashboard")},
+                {"label": _("Analysis Result"), "url": None},
+            ],
+            "show": True,
+        },
+
+            "success_stories": {
+            "title": "",  
+            "subtitle": "", 
+            "crumbs": [
+                {"label": _("Home"), "url": HOME_URL},
+                {"label": _("Success Stories"), "url": None},
+            ],
+            "show": True,  
+        },
     }
 
-    meta = MAP.get(url_name, None)
+    meta = MAP.get(url_name)
 
     if not meta:
-        # افتراضي لأي صفحة ما عرفناها
         return {
             "page_title": "",
             "page_subtitle": "",

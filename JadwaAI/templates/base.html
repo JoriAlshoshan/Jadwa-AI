@@ -6,11 +6,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jadwa AI</title>
+
+  <title>{% block title %}Jadwa AI | Smart Feasibility Study Platform{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}Jadwa AI is an AI-powered platform that generates professional feasibility studies using Saudi market data for entrepreneurs and startups.{% endblock %}">
+  <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+  <meta property="og:site_name" content="Jadwa AI">
+  <meta property="og:title" content="{% block og_title %}Jadwa AI{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}AI-powered feasibility studies using Saudi market data.{% endblock %}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:image" content="https://jadwa-ai.com{% static 'img/jadwa-icon-512.png' %}">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{% block tw_title %}Jadwa AI{% endblock %}">
+  <meta name="twitter:description" content="{% block tw_description %}AI-powered feasibility studies using Saudi market data.{% endblock %}">
+  <meta name="twitter:image" content="https://jadwa-ai.com{% static 'img/jadwa-icon-512.png' %}">
+
+  <link rel="icon" href="{% static 'img/favicon.ico' %}" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32.png' %}">
+  <link rel="icon" type="image/png" sizes="48x48" href="{% static 'img/favicon-48.png' %}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon-180.png' %}">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Jadwa AI",
+    "url": "https://jadwa-ai.com",
+    "logo": "https://jadwa-ai.com/static/img/jadwa-icon-512.png"
+  }
+  </script>
 
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   {% block extra_css %}{% endblock %}
-  <link rel="icon" type="image/png" href="{% static 'img/jadwa-icon.png' %}">
 </head>
 
 <body>
@@ -19,49 +48,50 @@
     {% include "partials/navbar.html" %}
   {% endblock navbar %}
 
-<main class="app-bg">
+  <main class="app-bg">
 
-  {# ===== Global Page Header / Breadcrumb ===== #}
-  {% block page_header %}
-{% if show_page_header and page_title or show_page_header and breadcrumbs %}
-     <div class="page-container" style="max-width:1100px; margin:0 auto; padding:26px 26px 0;">
-        
-        {% if breadcrumbs %}
-<div style="font-size:14px; color:#64748b; margin-bottom:20px;">            {% for bc in breadcrumbs %}
-              {% if not forloop.first %}
-                <span style="margin:0 10px; color:#cbd5e1;">/</span>
-              {% endif %}
+    {% block page_header %}
+      {% if show_page_header and page_title or show_page_header and breadcrumbs %}
+        <div class="page-container" style="max-width:1100px; margin:0 auto; padding:26px 26px 0;">
 
-              {% if bc.url %}
-                <a href="{{ bc.url }}" style="color:#0a2fbf; text-decoration:none; font-weight:700;">
-                  {{ bc.label }}
-                </a>
-              {% else %}
-                <span style="color:#64748b; font-weight:700;">{{ bc.label }}</span>
-              {% endif %}
-            {% endfor %}
-          </div>
-        {% endif %}
+          {% if breadcrumbs %}
+            <div style="font-size:14px; color:#64748b; margin-bottom:20px;">
+              {% for bc in breadcrumbs %}
+                {% if not forloop.first %}
+                  <span style="margin:0 10px; color:#cbd5e1;">/</span>
+                {% endif %}
 
-        {% if page_title %}
-          <h1 style="margin:0; font-size:34px; line-height:1.15; letter-spacing:-.02em; color:#0f172a;">
-            {{ page_title }}
-          </h1>
-        {% endif %}
+                {% if bc.url %}
+                  <a href="{{ bc.url }}" style="color:#64748b; text-decoration:none; font-weight:600;">
+                    {{ bc.label }}
+                  </a>
+                {% else %}
+                  <span style="color:#0a2fbf; font-weight:700;">{{ bc.label }}</span>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
 
-        {% if page_subtitle %}
-          <p style="margin:8px 0 0; color:#64748b; font-size:16px;">
-            {{ page_subtitle }}
-          </p>
-        {% endif %}
+          {% if page_title %}
+            <h1 style="margin:0; font-size:34px; line-height:1.15; letter-spacing:-.02em; color:#0f172a;">
+              {{ page_title }}
+            </h1>
+          {% endif %}
 
-<div style="height:22px;"></div>      </div>
-    {% endif %}
-  {% endblock page_header %}
+          {% if page_subtitle %}
+            <p style="margin:8px 0 0; color:#64748b; font-size:16px;">
+              {{ page_subtitle }}
+            </p>
+          {% endif %}
 
-  {% block content %}{% endblock %}
+          <div style="height:22px;"></div>
+        </div>
+      {% endif %}
+    {% endblock page_header %}
 
-</main>
+    {% block content %}{% endblock %}
+
+  </main>
 
   {% block footer %}
     {% include "partials/footer.html" %}

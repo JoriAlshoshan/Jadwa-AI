@@ -324,11 +324,77 @@ class ProjectInformationForm(forms.ModelForm):
             return cleaned
 
         # ✅ parsing: "qassim, unaizah" أو "Qassim Region, Unaizah"
-        txt = other.replace("،", ",").lower()
+        txt = other.replace("،", ",").strip()
         parts = [p.strip() for p in txt.split(",") if p.strip()]
+        
+        AR_REGION_MAP = {
+        "القصيم": "qassim",
+        "منطقة القصيم": "qassim",
+
+        "الرياض": "riyadh",
+        "منطقة الرياض": "riyadh",
+
+        "الشرقية": "eastern",
+        "المنطقة الشرقية": "eastern",
+
+        "مكة": "makkah",
+        "منطقة مكة": "makkah",
+        "مكة المكرمة": "makkah",
+
+        "المدينة": "madinah",
+        "المدينة المنورة": "madinah",
+        "منطقة المدينة": "madinah",
+
+        "عسير": "asir",
+        "تبوك": "tabuk",
+        "جازان": "jazan",
+        "حائل": "hail",
+        "الجوف": "jouf",
+        "نجران": "najran",
+        "الباحة": "bahah",
+        "الحدود الشمالية": "northern",
+        }
+
+        AR_CITY_MAP = {
+            "عنيزة": "unaizah",
+            "بريدة": "buraidah",
+            "الرس": "ras",
+            "الدمام": "dammam",
+            "الخبر": "khobar",
+            "الظهران": "dhahran",
+            "الجبيل": "jubail",
+            "جدة": "jeddah",
+            "الطائف": "taif",
+            "أبها": "abha",
+            "خميس مشيط": "khamees",
+            "سكاكا": "sakaka",
+            "عرعر": "arar",
+        }
 
         def norm(s: str) -> str:
-            return (s or "").replace(" region", "").replace("منطقة", "").strip()
+            s = (s or "").strip()
+            s = s.replace("،", ",")
+            # شيل Region / منطقة
+            s_low = s.lower().replace(" region", "").strip()
+            s_ar = s.replace("منطقة", "").strip()  # يبقى ممكن "القصيم"
+            s_ar = s_ar.strip()
+
+            # ✅ إذا عربي معروف حوّله
+            if s in AR_REGION_MAP: 
+                return AR_REGION_MAP[s]
+            if s_ar in AR_REGION_MAP:
+                return AR_REGION_MAP[s_ar]
+
+            if s in AR_CITY_MAP:
+                return AR_CITY_MAP[s]
+            if s_ar in AR_CITY_MAP:
+                return AR_CITY_MAP[s_ar]
+
+            # ✅ وإلا خله إنجليزي normalized
+            return s_low
+            
+
+        
 
         part1 = norm(parts[0]) if len(parts) >= 1 else norm(txt)
         part2 = norm(parts[1]) if len(parts) >= 2 else ""
