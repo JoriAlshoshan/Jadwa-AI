@@ -144,26 +144,51 @@
         async function post(url) {
           const res = await fetch(url, {
             method: "POST",
-            headers: { "X-CSRFToken": getCSRF() }
+            credentials: "same-origin",
+            headers: {
+              "X-CSRFToken": getCSRF(),
+              "X-Requested-With": "XMLHttpRequest"
+            }
           });
+
+          const ct = res.headers.get("content-type") || "";
+          if (res.redirected || ct.includes("text/html")) {
+            window.location.href = "/login/?next=" + encodeURIComponent(window.location.pathname);
+            throw new Error("auth_required");
+          }
+
           const data = await res.json().catch(() => ({}));
           if (!res.ok) throw data;
           return data;
         }
 
-        async function pollStatus() {
-          const cfg = window.JADWA;
-          const timer = setInterval(async () => {
-            try {
-              const res = await fetch(cfg.urlStatus);
-              const data = await res.json();
-              if (data.status === "ready" || data.status === "failed") {
-                clearInterval(timer);
-                window.location.href = cfg.reloadUrl;
-              }
-            } catch (e) {}
-          }, 1200);
-        }
+      async function pollStatus() {
+        const cfg = window.JADWA;
+        const timer = setInterval(async () => {
+          try {
+            const res = await fetch(cfg.urlStatus, {
+              method: "GET",
+              credentials: "same-origin",
+              headers: { "X-Requested-With": "XMLHttpRequest" }
+            });
+
+            const ct = res.headers.get("content-type") || "";
+            if (res.redirected || ct.includes("text/html")) {
+              clearInterval(timer);
+              window.location.href = "/login/?next=" + encodeURIComponent(window.location.pathname);
+              return;
+            }
+
+            const data = await res.json();
+            if (data.status === "ready" || data.status === "failed") {
+              clearInterval(timer);
+              window.location.href = cfg.reloadUrl;
+            }
+          } catch (e) {}
+        }, 1200);
+          return timer;
+
+      }
 
         async function ensureRecommendationsAuto() {
           const cfg = window.JADWA;
