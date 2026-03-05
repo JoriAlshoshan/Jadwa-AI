@@ -73,12 +73,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'JadwaAI.wsgi.application'
 
-SQLITE_PATH = os.environ.get("SQLITE_PATH", "/home/site/wwwroot/db.sqlite3")
+SQLITE_PATH = os.environ.get("SQLITE_PATH")
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": SQLITE_PATH,
+        "NAME": SQLITE_PATH or (BASE_DIR / "db.sqlite3"),
     }
 }
 
