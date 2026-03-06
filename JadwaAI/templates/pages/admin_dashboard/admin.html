@@ -69,7 +69,7 @@
                 <div class="menu-wrapper">
                     <button type="button" class="menu-btn" aria-label="More">⋯</button>
                     <div class="menu-dropdown">
-                        <a href= "{% url 'message_detail' msg.id %}" class="btn">Open message</a>
+                        <a href= "{% url 'send_message' msg.id %}" class="btn">Open message</a>
                     </div>
             </li>
         {% endfor %}
