@@ -38,6 +38,7 @@ urlpatterns = [
     path("delete-user/<int:id>/", views.delete_user, name="delete_user"),
     path("user_projects/<int:id>/", views.user_projects, name="user_projects"),
     path("admin/messages/list/", views.messages_list, name="messages_list"),
-    path("message/<int:id>/", views.message_detail, name="message_detail"),
+    # path("message/<int:id>/", views.message_detail, name="message_detail"),
+    path("message/<int:message_id>/", views.send_message, name="send_message"),
     path("start-analysis/", views.start_feasibility_gateway, name="start_analysis"),
 ]
