@@ -301,19 +301,30 @@ def generate_recs(request, result_id):
     if request.method != "POST":
         return JsonResponse({"ok": False, "status": "method_not_allowed"}, status=405)
 
-    req_lang = (request.POST.get("lang") or get_language_from_request(request) or current_lang(request) or "ar").lower()
+    # اللغة اللي يختارها المستخدم (من UI) أو من Django
+    req_lang = (request.POST.get("lang") or get_language_from_request(request) or current_lang(request) or "en").lower()
+    lang = "ar" if req_lang.startswith("ar") else "en"
+
+    # إذا نفس اللغة جاهزة قبل، رجّعيها بسرعة بدون توليد جديد
+    if get_status_by_lang(result_obj, lang) == "ready" and get_recs_by_lang(result_obj, lang):
+        return JsonResponse({"ok": True, "status": "ready"})
 
     project = get_object_or_404(Projects, id=result_obj.project_id)
     project_data = build_project_data(project)
 
-    for lang in ("ar", "en"):
-        try:
-            out = analyze_project(project_data, include_recommendations=True, lang=lang)
-            raw_text = (out.get("recommendations") or "").strip()
-            recs_text = normalize_recommendations_text(result_obj, lang, raw_text)
-            set_recs_by_lang(result_obj, lang, recs_text, "ready")
-        except Exception as e:
-            set_recs_by_lang(result_obj, lang, f"Failed to generate recommendations: {e}", "failed")
+    try:
+        # (اختياري) نحط الحالة "generating" عشان اللودينق
+        set_recs_by_lang(result_obj, lang, "", "generating")
+        result_obj.save(update_fields=["recommendations_status_ar", "recommendations_status_en"])
+
+        out = analyze_project(project_data, include_recommendations=True, lang=lang)
+        raw_text = (out.get("recommendations") or "").strip()
+
+        recs_text = normalize_recommendations_text(result_obj, lang, raw_text)
+        set_recs_by_lang(result_obj, lang, recs_text, "ready")
+
+    except Exception as e:
+        set_recs_by_lang(result_obj, lang, f"Failed to generate recommendations: {e}", "failed")
 
     result_obj.save(
         update_fields=[
@@ -324,7 +335,7 @@ def generate_recs(request, result_id):
         ]
     )
 
-    return JsonResponse({"ok": True, "status": get_status_by_lang(result_obj, req_lang)})
+    return JsonResponse({"ok": True, "status": get_status_by_lang(result_obj, lang)})
 
 
 @login_required

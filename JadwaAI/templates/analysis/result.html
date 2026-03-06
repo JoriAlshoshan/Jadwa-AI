@@ -5,45 +5,21 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/analysis.css' %}">
 {% endblock %}
+
 <style>
-.primary-btn{
-  padding:10px 18px !important;
-  font-size:14px !important;
-  border-radius:10px !important;
-}
-
-.secondary-btn{
-  padding:10px 18px !important;
-  font-size:14px !important;
-  border-radius:10px !important;
-}
-
-.analysis-card{
-  padding:18px !important;
-}
-
-.analysis-grid{
-  gap:16px !important;
-}
-
-.analysis-actions{
-  justify-content:flex-end !important;
-}
+.primary-btn{ padding:10px 18px !important; font-size:14px !important; border-radius:10px !important; }
+.secondary-btn{ padding:10px 18px !important; font-size:14px !important; border-radius:10px !important; }
+.analysis-card{ padding:18px !important; }
+.analysis-grid{ gap:16px !important; }
+.analysis-actions{ justify-content:flex-end !important; }
 </style>
+
 {% block content %}
 <div class="container analysis-page">
 
-  <!-- ===================== HERO ===================== -->
-  <!-- <section class="analysis-hero">
-    <h1 class="analysis-title">{% trans "Analysis Result" %}</h1>
-    <p class="analysis-subtitle">
-      {% trans "AI-powered feasibility insights for your project" %}
-    </p>
-  </section> -->
-
   <section class="analysis-grid">
 
-    <!-- ===================== Project Overview ===================== -->
+    <!-- Project Overview -->
     <div class="analysis-card">
       <h3 class="card-title">{% trans "Project Overview" %}</h3>
 
@@ -54,25 +30,19 @@
         <span class="probability">{{ feasibility_percent|floatformat:2 }}%</span>
       </p>
 
-      {# ✅ (اختياري) عرض الثريشولد عشان يكون واضح للمستخدم #}
-<p class="muted threshold-note">        <small>
-          {% trans "Decision Threshold" %}: {{ result.threshold|floatformat:2 }}
-        </small>
+      <p class="muted threshold-note">
+        <small>{% trans "Decision Threshold" %}: {{ result.threshold|floatformat:2 }}</small>
       </p>
 
       <p class="status-row">
         <strong>{% trans "Status" %}:</strong>
-
-        {# ✅ الحالة الآن من الـ views: status_text + is_feasible #}
         {% if status_text %}
-          {# نلوّن البادج حسب النتيجة الفعلية #}
           {% if result.probability >= result.threshold %}
             <span class="status-badge success">{{ status_text }}</span>
           {% else %}
             <span class="status-badge danger">{{ status_text }}</span>
           {% endif %}
         {% else %}
-          {# fallback لو نسيتِ تمرير status_text من views #}
           {% if result.probability >= result.threshold %}
             <span class="status-badge success">{% trans "Feasible" %}</span>
           {% else %}
@@ -82,31 +52,26 @@
       </p>
     </div>
 
-    <!-- ===================== AI Recommendations ===================== -->
+    <!-- AI Recommendations -->
     <div class="analysis-card">
       <h3 class="card-title">{% trans "AI Recommendations" %}</h3>
 
-      <!-- ✅ زر التشغيل (يظهر فقط إذا التوصيات غير جاهزة) -->
       {% if not recs_text %}
         <button id="startRecsBtn" type="button" class="primary-btn">
           {% trans "Generate Recommendations" %}
         </button>
       {% endif %}
 
-      <!-- صندوق التوصيات -->
       <div id="recsBox"
            style="{% if recs_status == 'ready' and recs_text %}display:block;{% else %}display:none;{% endif %}"
            class="{% if recs_status == 'ready' and recs_text %}recommendations-box{% else %}recs-loading-wrap{% endif %}">
 
         {% if recs_status == "ready" and recs_text %}
           {{ recs_text|linebreaks }}
-
         {% elif recs_status == "failed" %}
           <p class="muted">{% trans "Failed to generate recommendations." %}</p>
-
         {% else %}
           <p class="muted">{% trans "Generating AI recommendations…" %}</p>
-
           <div class="skeleton-box">
             <div class="skeleton-line w-80"></div>
             <div class="skeleton-line w-100"></div>
@@ -122,48 +87,45 @@
       <!-- CSRF -->
       <form id="csrfForm">{% csrf_token %}</form>
 
-      <!-- Config from Django -->
       <script>
-        window.JADWA = {
-          recsStatus: "{{ recs_status }}",
-          hasOtherReady: "{{ has_other_ready|yesno:'true,false' }}",
-          urlGenerate: "{% url 'generate_recs' result.id %}",
-          urlTranslate: "{% url 'translate_recs' result.id %}",
-          urlStatus: "{% url 'recs_status' result.id %}",
-          reloadUrl: "{% url 'analysis_result' result.id %}"
-        };
-      </script>
+      window.JADWA = {
+        recsStatus: "{{ recs_status }}",
+        urlGenerate: "{% url 'generate_recs' result.id %}",
+        urlStatus: "{% url 'recs_status' result.id %}",
+        reloadUrl: "{% url 'analysis_result' result.id %}"
+      };
 
-      <script>
-        function getCSRF() {
-          return document.querySelector(
-            "#csrfForm input[name=csrfmiddlewaretoken]"
-          )?.value || "";
-        }
+      function getCSRF(){
+        return document.querySelector("#csrfForm input[name=csrfmiddlewaretoken]")?.value || "";
+      }
 
-        async function post(url) {
-          const res = await fetch(url, {
-            method: "POST",
-            credentials: "same-origin",
-            headers: {
-              "X-CSRFToken": getCSRF(),
-              "X-Requested-With": "XMLHttpRequest"
-            }
-          });
+      function getUILang(){
+        const l = (document.documentElement.lang || "").toLowerCase();
+        return l.startsWith("ar") ? "ar" : "en";
+      }
 
-          const ct = res.headers.get("content-type") || "";
-          if (res.redirected || ct.includes("text/html")) {
-            window.location.href = "/login/?next=" + encodeURIComponent(window.location.pathname);
-            throw new Error("auth_required");
-          }
+      async function postGenerate(){
+        const payload = new URLSearchParams({ lang: getUILang() });
 
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) throw data;
-          return data;
-        }
+        const res = await fetch(window.JADWA.urlGenerate, {
+          method: "POST",
+          credentials: "same-origin",
+          headers: {
+            "X-CSRFToken": getCSRF(),
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+          },
+          body: payload.toString()
+        });
 
-      async function pollStatus() {
+        const data = await res.json().catch(()=>({}));
+        if(!res.ok) throw data;
+        return data;
+      }
+
+      async function pollStatus(){
         const cfg = window.JADWA;
+
         const timer = setInterval(async () => {
           try {
             const res = await fetch(cfg.urlStatus, {
@@ -172,84 +134,65 @@
               headers: { "X-Requested-With": "XMLHttpRequest" }
             });
 
-            const ct = res.headers.get("content-type") || "";
-            if (res.redirected || ct.includes("text/html")) {
-              clearInterval(timer);
-              window.location.href = "/login/?next=" + encodeURIComponent(window.location.pathname);
-              return;
-            }
-
-            const data = await res.json();
+            const data = await res.json().catch(()=>({}));
             if (data.status === "ready" || data.status === "failed") {
               clearInterval(timer);
               window.location.href = cfg.reloadUrl;
             }
-          } catch (e) {}
+          } catch(e) {}
         }, 1200);
-          return timer;
-
       }
 
-        async function ensureRecommendationsAuto() {
-          const cfg = window.JADWA;
+      async function ensureRecommendations(){
+        const cfg = window.JADWA;
+        if(cfg.recsStatus === "ready") return;
 
-          if (cfg.recsStatus === "ready") return;
+        try{
+          await postGenerate();   // ✅ يولّد حسب لغة الصفحة فقط
+          await pollStatus();
+        }catch(e){
+          window.location.href = cfg.reloadUrl;
+        }
+      }
 
-          try {
-            if (cfg.hasOtherReady === "true") {
-              await post(cfg.urlTranslate);
-              window.location.href = cfg.reloadUrl;
-              return;
-            }
+      document.addEventListener("DOMContentLoaded", () => {
+        const btn = document.getElementById("startRecsBtn");
+        const box = document.getElementById("recsBox");
 
-            await post(cfg.urlGenerate);
-            await pollStatus();
-
-          } catch (e) {
-            window.location.href = cfg.reloadUrl;
-          }
+        if (window.JADWA.recsStatus === "ready") {
+          if(btn) btn.style.display = "none";
+          if(box) box.style.display = "block";
+          return;
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
-          const cfg = window.JADWA;
-          const btn = document.getElementById("startRecsBtn");
-          const box = document.getElementById("recsBox");
-
-          if (cfg.recsStatus === "ready") {
-            if (btn) btn.style.display = "none";
-            if (box) box.style.display = "block";
-            return;
-          }
-
-          if (btn) {
-            btn.addEventListener("click", async () => {
-              btn.disabled = true;
-              btn.style.display = "none";
-              if (box) box.style.display = "block";
-              await ensureRecommendationsAuto();
-            });
-          }
-        });
+        if (btn) {
+          btn.addEventListener("click", async () => {
+            btn.disabled = true;
+            btn.style.display = "none";
+            if(box) box.style.display = "block";
+            await ensureRecommendations();
+          });
+        }
+      });
       </script>
     </div>
 
   </section>
 
-  <!-- ===================== Actions ===================== -->
-<div class="analysis-actions">
-  <a href="{% url 'analysis_pdf' result.id %}" class="btn secondary-btn pdf-btn" id="pdfBtn">
-    <span class="pdf-text">{% trans "Download PDF" %}</span>
-  </a>
-</div>
+  <div class="analysis-actions">
+    <a href="{% url 'analysis_pdf' result.id %}" class="btn secondary-btn pdf-btn" id="pdfBtn">
+      <span class="pdf-text">{% trans "Download PDF" %}</span>
+    </a>
+  </div>
 
   <script>
-    const btn = document.getElementById("pdfBtn");
-    if (btn) {
-      btn.addEventListener("click", () => {
-        btn.classList.add("is-loading");
-        btn.setAttribute("aria-busy", "true");
-      });
-    }
+  const btn = document.getElementById("pdfBtn");
+  if (btn) {
+    btn.addEventListener("click", () => {
+      btn.classList.add("is-loading");
+      btn.setAttribute("aria-busy", "true");
+    });
+  }
   </script>
 
 </div>
