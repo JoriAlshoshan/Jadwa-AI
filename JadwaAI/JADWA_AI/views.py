@@ -49,7 +49,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from .models import Projects, SiteContent
 from analysis.models import AnalysisResult
-from JADWA_AI.forms import UserEditForm
+# from JADWA_AI.forms import UserEditForm
+from JADWA_AI.forms import EditProfileForm
 
 
 
@@ -611,10 +612,6 @@ def user_projects(request , id):
 def messages_list(request):
     messages = ContactMessage.objects.all()
     return render(request, "pages/admin_dashboard/messages.html", {"users" : users})
-
-def message_detail(request, id):
-    message = ContactMessage.objects.get(id = id)
-    return render (request,"pages/admin_dashboard/message_detail.html", {"message":message})
 
 def send_message(request, message_id):
     message = get_object_or_404(ContactMessage, id =message_id)
