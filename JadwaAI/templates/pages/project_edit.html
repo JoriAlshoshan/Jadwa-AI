@@ -1,7 +1,539 @@
 {% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Edit Project" %}{% endblock %}
+
 {% block content %}
-<div style="padding:60px;text-align:center">
-  <h1>Edit Project</h1>
-  <p>Coming soon.</p>
+<style>
+.page-shell{
+  padding:26px;
+  max-width:1100px;
+  margin:0 auto;
+}
+
+.top-row{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+  align-items:flex-start;
+  margin-bottom:14px;
+  padding-right:10px;
+}
+
+.breadcrumb-pro{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:18px;
+  margin-bottom:18px;
+  padding:10px 0;
+  border-bottom:1px solid rgba(15,23,42,.06);
+  font-size:13px;
+}
+.breadcrumb-pro a{
+  color:#0a2fbf;
+  text-decoration:none;
+  font-weight:800;
+}
+.breadcrumb-pro a:hover{ text-decoration:underline; }
+.breadcrumb-pro .sep{ color:#cbd5e1; font-weight:800; }
+.breadcrumb-pro .current{ color:#64748b; font-weight:800; }
+
+.card{
+  background:#fff;
+  border:1px solid rgba(15,23,42,.10);
+  border-radius:16px;
+  overflow:hidden;
+}
+.card-head{
+  padding:12px 16px;
+  border-bottom:1px solid rgba(15,23,42,.08);
+  font-weight:800;
+  font-size:14px;
+}
+.card-body{
+  padding:18px 18px 20px;
+}
+
+.form-grid{
+  display:grid;
+  gap:14px;
+}
+.form-row{
+  display:grid;
+  grid-template-columns: 260px 1fr;
+  gap:14px;
+  align-items:center;
+}
+@media (max-width: 860px){
+  .form-row{ grid-template-columns: 1fr; }
+  .form-row label{ margin-bottom:6px; display:block; }
+}
+
+label{
+  font-weight:800;
+  color:#0f172a;
+  font-size:14px;
+}
+
+.field-wrap{
+  width:100%;
+}
+.field-wrap input,
+.field-wrap select,
+.field-wrap textarea{
+  width:100%;
+  padding:12px 12px;
+  border-radius:12px;
+  border:1px solid rgba(15,23,42,.14);
+  background:#fff;
+  outline:none;
+  font-size:14px;
+}
+.field-wrap textarea{ min-height:110px; resize:vertical; }
+
+.field-wrap input:focus,
+.field-wrap select:focus,
+.field-wrap textarea:focus{
+  border-color: rgba(10,47,191,.55);
+  box-shadow:0 0 0 4px rgba(10,47,191,.10);
+}
+
+.help-row{
+  display:flex;
+  justify-content:space-between;
+  margin-top:6px;
+  color:#64748b;
+  font-size:12px;
+}
+
+.error-text{
+  margin-top:8px;
+  color:#b42318;
+  font-size:13px;
+  font-weight:700;
+}
+.field-error-wrap input,
+.field-error-wrap select,
+.field-error-wrap textarea{
+  border-color: rgba(180,35,24,.55);
+  box-shadow:0 0 0 4px rgba(180,35,24,.10);
+}
+
+.btn-primary{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px 18px;
+  border-radius:999px;
+  border:none;
+  cursor:pointer;
+  font-weight:900;
+  font-size:14px;
+  color:#fff;
+  background:linear-gradient(180deg,#0a2fbf,#0830a8);
+  box-shadow:0 14px 30px rgba(10,47,191,.18);
+  text-decoration:none;
+  min-width:180px;
+}
+.btn-primary:hover{ filter:brightness(.98); transform:translateY(-1px); }
+.btn-primary:active{ transform:translateY(0); }
+
+.btn-outline{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px 18px;
+  border-radius:999px;
+  background:#fff;
+  border:1px solid rgba(10,47,191,.35);
+  color:#0a2fbf;
+  font-weight:900;
+  font-size:14px;
+  text-decoration:none;
+  transition:all .15s ease;
+}
+.btn-outline:hover{
+  background:rgba(10,47,191,.06);
+  transform:translateY(-1px);
+}
+
+.form-actions{
+  display:flex;
+  gap:12px;
+  justify-content:flex-end;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+@media (max-width: 520px){
+  .btn-primary, .btn-outline{ width:100%; }
+  .form-actions{ justify-content:stretch; }
+}
+
+label .required-star {
+  color: #0a2fbf;
+  margin-left: 4px;
+  font-weight: bold;
+}
+</style>
+
+<div class="page-shell">
+  <div class="top-row">
+    <div style="min-width:320px;">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">{% trans "Edit Project Details" %}</div>
+    <div class="card-body">
+
+      <form action="{% url 'project_edit' project.id %}" method="post" id="projectForm" novalidate>
+        {% csrf_token %}
+
+        <div class="form-grid">
+          {% for field in form %}
+            <div class="form-row"
+                 {% if field.name == "project_location_other" %} id="row_location_other" style="display:none;" {% endif %}>
+
+              <div>
+                <label for="{{ field.id_for_label }}">
+                  {{ field.label }}
+                  {% if field.field.required %}
+                    <span class="required-star">*</span>
+                  {% endif %}
+                </label>
+              </div>
+
+              <div class="field-wrap {% if field.errors %}field-error-wrap{% endif %}" id="wrap_{{ field.name }}">
+                {{ field }}
+
+                {% if field.name == "project_name" %}
+                  <div class="help-row">
+                    <small>{% trans "Keep it short (max 80 characters)." %}</small>
+                    <small><span id="nameCount">0</span>/80</small>
+                  </div>
+                {% endif %}
+
+                <div class="error-text" id="err_{{ field.name }}" style="display:none;"></div>
+
+                {% if field.errors %}
+                  <div class="error-text" id="djerr_{{ field.name }}">
+                    {{ field.errors.0 }}
+                  </div>
+                {% endif %}
+              </div>
+
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="form-actions">
+          <a href="{% url 'dashboard' %}" class="btn-outline">{% trans "Cancel" %}</a>
+          <button type="submit" class="btn-primary">
+            {% trans "Save Changes" %}
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
 </div>
+
+<script>
+window.REGION_TO_CITIES = {
+  riyadh:   ["riyadh", "diriyah", "kharj", "other"],
+  qassim:   ["buraidah", "unaizah", "ras", "other"],
+  eastern:  ["dammam", "khobar", "dhahran", "jubail", "other"],
+  makkah:   ["jeddah", "taif", "other"],
+  madinah:  ["madinah", "other"],
+  asir:     ["abha", "khamees", "other"],
+  tabuk:    ["tabuk", "other"],
+  jazan:    ["jazan", "other"],
+  hail:     ["hail", "other"],
+  jouf:     ["sakaka", "other"],
+  northern: ["arar", "other"],
+  najran:   ["najran", "other"],
+  bahah:    ["bahah", "other"],
+  other:    ["other"]
+};
+</script>
+
+<script>
+const MSG_REQUIRED_NAME = "{% trans 'Project name is required.' %}";
+const MSG_SHORT_NAME = "{% trans 'Project name is too short.' %}";
+const MSG_SELECT_TYPE = "{% trans 'Please select a project type.' %}";
+const MSG_SELECT_REGION = "{% trans 'Please select a region.' %}";
+const MSG_SELECT_CITY = "{% trans 'Please select a city.' %}";
+const MSG_SPECIFY_LOCATION = "{% trans 'Please specify the location.' %}";
+const MSG_LOCATION_FORMAT = "{% trans 'Write it like: منطقة القصيم, عنيزة' %}";
+const MSG_SELECT_LOCATION_TYPE = "{% trans 'Please select a project location type.' %}";
+const MSG_BUDGET_REQUIRED = "{% trans 'Project budget is required.' %}";
+const MSG_DURATION_REQUIRED = "{% trans 'Project duration is required.' %}";
+const MSG_EMP_REQUIRED = "{% trans 'Number of employees is required.' %}";
+const MSG_POSITIVE = "{% trans 'Enter a valid positive number.' %}";
+const TXT_OTHER = "{% trans 'Other' %}";
+</script>
+
+<script>
+(function () {
+  const form = document.getElementById("projectForm");
+  if (!form) return;
+
+  const nameInput = document.getElementById("id_project_name");
+  const nameCount = document.getElementById("nameCount");
+
+  const typeSelect = document.getElementById("id_Project_type");
+  const regionSelect = document.getElementById("id_project_region");
+  const citySelect   = document.getElementById("id_project_city");
+  const otherInput   = document.getElementById("id_project_location_other");
+
+  const locTypeSelect = document.getElementById("id_project_location_type");
+  const budgetInput = document.getElementById("id_project_budget");
+  const durationInput = document.getElementById("id_project_duration");
+  const employeesInput = document.getElementById("id_number_of_employees");
+
+  if (nameInput) nameInput.setAttribute("maxlength", "80");
+
+  function setErr(fieldName, msg) {
+    const errEl = document.getElementById("err_" + fieldName);
+    const wrap = document.getElementById("wrap_" + fieldName);
+
+    if (msg) {
+      if (errEl) {
+        errEl.style.display = "block";
+        errEl.textContent = msg;
+      }
+      if (wrap) wrap.classList.add("field-error-wrap");
+
+      const dj = document.getElementById("djerr_" + fieldName);
+      if (dj) dj.style.display = "none";
+    } else {
+      if (errEl) {
+        errEl.style.display = "none";
+        errEl.textContent = "";
+      }
+      if (wrap) wrap.classList.remove("field-error-wrap");
+    }
+  }
+
+  function updateCounter(input, out) {
+    if (!input || !out) return;
+    out.textContent = (input.value || "").length;
+  }
+
+  updateCounter(nameInput, nameCount);
+
+  nameInput?.addEventListener("input", () => {
+    updateCounter(nameInput, nameCount);
+    setErr("project_name", "");
+  });
+
+  form.addEventListener("input", function(e){
+    const el = e.target;
+    const name = el?.getAttribute("name");
+    if (!name) return;
+    setErr(name, "");
+  });
+
+  function isOtherSelected() {
+    return (regionSelect?.value === "other") || (citySelect?.value === "other");
+  }
+
+  function isEmpty(el) {
+    if (!el) return true;
+    return ((el.value ?? "").toString().trim() === "");
+  }
+
+  function isPositiveNumber(el) {
+    if (!el) return false;
+    const v = (el.value ?? "").toString().trim();
+    if (!v) return false;
+    const n = Number(v);
+    return Number.isFinite(n) && n > 0;
+  }
+
+  form.addEventListener("submit", function (e) {
+    let ok = true;
+
+    const nameVal = (nameInput?.value || "").trim();
+    if (!nameVal) {
+      setErr("project_name", MSG_REQUIRED_NAME);
+      ok = false;
+    } else if (nameVal.length < 3) {
+      setErr("project_name", MSG_SHORT_NAME);
+      ok = false;
+    } else {
+      setErr("project_name", "");
+    }
+
+    if (isEmpty(typeSelect)) {
+      setErr("Project_type", MSG_SELECT_TYPE);
+      ok = false;
+    } else {
+      setErr("Project_type", "");
+    }
+
+    if (isEmpty(regionSelect)) {
+      setErr("project_region", MSG_SELECT_REGION);
+      ok = false;
+    } else {
+      setErr("project_region", "");
+    }
+
+    if (isEmpty(citySelect)) {
+      setErr("project_city", MSG_SELECT_CITY);
+      ok = false;
+    } else {
+      setErr("project_city", "");
+    }
+
+    if (isOtherSelected()) {
+      const otherVal = (otherInput?.value || "").trim();
+      if (!otherVal) {
+        setErr("project_location_other", MSG_SPECIFY_LOCATION);
+        ok = false;
+      } else {
+        const low = otherVal.toLowerCase().trim();
+        const allowedEnglish = new Set([
+          "qassim","riyadh","makkah","madinah","eastern","asir","tabuk","jazan","hail","jouf","najran","bahah","northern"
+        ]);
+        if (!allowedEnglish.has(low) && !otherVal.includes("منطقة") && !otherVal.includes(",") && !otherVal.includes("،")) {
+          setErr("project_location_other", MSG_LOCATION_FORMAT);
+          ok = false;
+        } else {
+          setErr("project_location_other", "");
+        }
+      }
+    } else {
+      setErr("project_location_other", "");
+    }
+
+    if (isEmpty(locTypeSelect)) {
+      setErr("project_location_type", MSG_SELECT_LOCATION_TYPE);
+      ok = false;
+    } else {
+      setErr("project_location_type", "");
+    }
+
+    if (isEmpty(budgetInput)) {
+      setErr("project_budget", MSG_BUDGET_REQUIRED);
+      ok = false;
+    } else if (!isPositiveNumber(budgetInput)) {
+      setErr("project_budget", MSG_POSITIVE);
+      ok = false;
+    } else {
+      setErr("project_budget", "");
+    }
+
+    if (isEmpty(durationInput)) {
+      setErr("project_duration", MSG_DURATION_REQUIRED);
+      ok = false;
+    } else if (!isPositiveNumber(durationInput)) {
+      setErr("project_duration", MSG_POSITIVE);
+      ok = false;
+    } else {
+      setErr("project_duration", "");
+    }
+
+    if (isEmpty(employeesInput)) {
+      setErr("number_of_employees", MSG_EMP_REQUIRED);
+      ok = false;
+    } else if (!isPositiveNumber(employeesInput)) {
+      setErr("number_of_employees", MSG_POSITIVE);
+      ok = false;
+    } else {
+      setErr("number_of_employees", "");
+    }
+
+    if (!ok) e.preventDefault();
+  });
+})();
+</script>
+
+<script>
+document.getElementById("projectForm")?.addEventListener("change", function(e){
+  const name = e.target?.name;
+  if (!name) return;
+
+  const dj = document.getElementById("djerr_" + name);
+  if (dj) dj.style.display = "none";
+
+  const wrap = document.getElementById("wrap_" + name);
+  if (wrap) wrap.classList.remove("field-error-wrap");
+});
+</script>
+
+<script>
+(function () {
+  const regionSelect = document.getElementById("id_project_region");
+  const citySelect   = document.getElementById("id_project_city");
+  const otherRow     = document.getElementById("row_location_other");
+  if (!regionSelect || !citySelect) return;
+
+  const allCityOptions = Array.from(citySelect.options).map(opt => ({
+    value: opt.value,
+    label: opt.text
+  }));
+
+  function norm(v){
+    return (v || "")
+      .toString()
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "")
+      .replace(/[-_]/g, "");
+  }
+
+  const REGION_TO_CITIES_NORM = {};
+  Object.keys(window.REGION_TO_CITIES || {}).forEach(k => {
+    REGION_TO_CITIES_NORM[norm(k)] = window.REGION_TO_CITIES[k];
+  });
+
+  function updateCities(resetCity = false) {
+    const currentCity = citySelect.value;
+    const regionKey = norm(regionSelect.value);
+    const allowed = REGION_TO_CITIES_NORM[regionKey] || [];
+
+    citySelect.innerHTML = "";
+
+    const source = allCityOptions.length
+      ? allCityOptions
+      : [{value:"", label:"----"}, {value:"other", label: TXT_OTHER}];
+
+    source.forEach(opt => {
+      const v = opt.value;
+      if (v === "" || !allowed.length || allowed.includes(v)) {
+        const o = document.createElement("option");
+        o.value = opt.value;
+        o.textContent = opt.label;
+        citySelect.appendChild(o);
+      }
+    });
+
+    if (!resetCity && currentCity) {
+      citySelect.value = currentCity;
+    } else if (resetCity) {
+      citySelect.value = "";
+    }
+  }
+
+  function toggleOther() {
+    const show = norm(regionSelect.value) === "other" || norm(citySelect.value) === "other";
+    if (otherRow) otherRow.style.display = show ? "" : "none";
+  }
+
+  regionSelect.addEventListener("change", () => {
+    updateCities(true);
+    toggleOther();
+  });
+
+  citySelect.addEventListener("change", toggleOther);
+
+  updateCities(false);
+  toggleOther();
+})();
+</script>
 {% endblock %}
