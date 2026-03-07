@@ -102,22 +102,29 @@ def project_edit(request, pk):
 
     if request.method == "POST":
         form = ProjectInformationForm(request.POST, instance=project)
+
         if form.is_valid():
             project = form.save(commit=False)
 
-            # ✅ خذيها من الفورم
             sector = form.cleaned_data.get("Project_type") or form.cleaned_data.get("project_type")
             region_loc = form.cleaned_data.get("project_region")
-
             project.num_of_similar_enterprises = get_similar_enterprises(sector, region_loc)
 
             project.save()
-            messages.success(request, _("Project updated successfully."))
+
+            action = request.POST.get("action")
+
+            if action == "rerun":
+                return redirect("run_analysis", project_id=project.pk)
+
             return redirect("dashboard")
     else:
         form = ProjectInformationForm(instance=project)
 
-    return render(request, "pages/project_edit.html", {"form": form, "project": project})
+    return render(request, "pages/project_edit.html", {
+        "form": form,
+        "project": project,
+    })
 
 
 User = get_user_model()

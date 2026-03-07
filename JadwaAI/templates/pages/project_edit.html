@@ -230,11 +230,16 @@ label .required-star {
         </div>
 
         <div class="form-actions">
-          <a href="{% url 'dashboard' %}" class="btn-outline">{% trans "Cancel" %}</a>
-          <button type="submit" class="btn-primary">
-            {% trans "Save Changes" %}
-          </button>
-        </div>
+        <a href="{% url 'dashboard' %}" class="btn-outline">{% trans "Cancel" %}</a>
+
+        <button type="submit" name="action" value="save" class="btn-outline">
+          {% trans "Save Changes" %}
+        </button>
+
+        <button type="submit" name="action" value="rerun" class="btn-primary">
+          {% trans "Save & Re-run Analysis" %}
+        </button>
+      </div>
 
       </form>
 
