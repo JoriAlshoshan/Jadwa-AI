@@ -4,306 +4,422 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/analysis.css' %}">
+
 <style>
-.primary-btn{
-  padding:10px 18px !important;
-  font-size:14px !important;
-  border-radius:12px !important;
+
+:root{
+  --primary:#183a9e;
+  --primary-dark:#142f80;
+  --text:#0f172a;
+  --muted:#667085;
+  --border:#e6ebf2;
+  --success:#166534;
+  --success-bg:#ecfdf3;
+  --danger:#b42318;
+  --danger-bg:#fef3f2;
 }
 
-.secondary-btn{
-  padding:10px 18px !important;
-  font-size:14px !important;
-  border-radius:12px !important;
-}
-
-.analysis-card{
-  padding:20px !important;
+.analysis-page{
+  max-width:1180px;
+  margin:0 auto;
+  padding:28px 20px 48px;
 }
 
 .analysis-grid{
-  gap:16px !important;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  align-items:start;
 }
 
-.analysis-actions{
-  justify-content:flex-end !important;
+.analysis-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:24px;
+}
+
+.card-title{
+  margin:0 0 18px;
+  font-size:22px;
+  font-weight:900;
+}
+
+.project-line{
+  margin:0 0 14px;
+  font-size:15px;
+}
+
+.probability-line{
+  margin:0 0 18px;
+  font-size:17px;
+  font-weight:700;
+}
+
+.probability{
+  color:#183a9e;
+  font-weight:900;
 }
 
 .metric-inline{
-  margin-top:10px;
-  padding:12px 14px;
-  border-radius:14px;
-  background:#f8fafc;
-  border:1px solid rgba(15,23,42,.08);
+  padding:16px 18px;
+  border:1px solid var(--border);
+  border-radius:18px;
 }
 
 .metric-row{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
 }
 
 .metric-label{
-  color:#64748b;
-  font-size:13px;
+  color:var(--muted);
   font-weight:700;
 }
 
 .metric-value{
-  color:#0f172a;
-  font-size:14px;
   font-weight:900;
 }
 
-.improvement-line{
-  margin-top:10px;
+.comparison-line{
+  margin-top:14px;
+  padding-top:14px;
+  border-top:1px solid var(--border);
   display:flex;
-  align-items:center;
   gap:8px;
-  flex-wrap:wrap;
   font-size:14px;
   font-weight:800;
 }
 
-.improvement-line.up{ color:#166534; }
-.improvement-line.down{ color:#b42318; }
-.improvement-line.same{ color:#475569; }
+.comparison-line.up{ color:var(--success); }
+.comparison-line.down{ color:var(--danger); }
+
+.meta-row{
+  display:flex;
+  justify-content:space-between;
+  margin-top:18px;
+}
+
+.threshold-note{
+  font-size:13px;
+  color:var(--muted);
+}
+
+.status-badge{
+  padding:7px 14px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:800;
+}
+
+.status-badge.success{
+  background:var(--success-bg);
+  color:var(--success);
+}
+
+.status-badge.danger{
+  background:var(--danger-bg);
+  color:var(--danger);
+}
+
+.primary-btn{
+  border:none;
+  background:#0a2fbf;
+  color:#fff;
+  padding:10px 20px;
+  min-height:42px;
+  font-size:13.5px;
+  border-radius:14px;
+}
+
+.primary-btn:hover{
+  background:#0827a0;
+}
 
 .recs-intro{
-  color:#64748b;
+  margin-bottom:18px;
+  color:var(--muted);
   font-size:14px;
-  line-height:1.7;
-  margin:4px 0 16px;
 }
 
-.recs-empty-state{
-  margin-top:10px;
-  padding:14px;
-  border-radius:14px;
-  background:#f8fafc;
-  border:1px dashed rgba(15,23,42,.14);
+.recommendations-box,
+.recs-loading-wrap{
+  margin-top:14px;
+  padding:18px;
+  border-radius:18px;
+  border:1px solid var(--border);
 }
 
-@media (max-width: 768px){
-  .metric-row{
-    align-items:flex-start;
-  }
+.pdf-area{
+  margin-top:14px;
+  display:flex;
+  justify-content:flex-end;
 }
+
+.pdf-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:8px 16px;
+  font-size:13px;
+  font-weight:700;
+  border-radius:12px;
+  border:2px solid #0a2fbf;
+  background:transparent;
+  color:#0a2fbf;
+  text-decoration:none;
+  transition:all .2s ease;
+}
+
+.pdf-btn:hover{
+  background:#0a2fbf;
+  color:#fff;
+}
+
+/* skeleton loading */
+
+.skeleton-line{
+  height:10px;
+  background:#e8edf7;
+  border-radius:999px;
+  margin-bottom:10px;
+  animation:pulse 1.4s infinite ease-in-out;
+}
+
+.w-100{width:100%}
+.w-90{width:90%}
+.w-80{width:80%}
+.w-70{width:70%}
+
+@keyframes pulse{
+0%{opacity:.5}
+50%{opacity:1}
+100%{opacity:.5}
+}
+
+@media (max-width:992px){
+.analysis-grid{
+grid-template-columns:1fr;
+}
+}
+
 </style>
 {% endblock %}
 
+
+
 {% block content %}
+
 <div class="container analysis-page">
 
-  <section class="analysis-grid">
+<section class="analysis-grid">
 
-    <div class="analysis-card">
-      <h3 class="card-title">{% trans "Project Overview" %}</h3>
+<!-- LEFT -->
 
-      <p><strong>{% trans "Project" %}:</strong> {{ result.project_name }}</p>
+<div>
 
-      <p>
-        <strong>{% trans "Feasibility Probability" %}:</strong>
-        <span class="probability">{{ feasibility_percent|floatformat:2 }}%</span>
-      </p>
+<div class="analysis-card">
 
-      {% if previous_result %}
-        <div class="metric-inline">
-          <div class="metric-row">
-            <span class="metric-label">{% trans "Previous Feasibility" %}</span>
-            <span class="metric-value">{{ previous_feasibility_percent|floatformat:2 }}%</span>
-          </div>
+<h3 class="card-title">{% trans "Project Overview" %}</h3>
 
-          {% if improvement_direction == "up" %}
-            <div class="improvement-line up">
-              <span>▲</span>
-              <span>+{{ improvement_value|floatformat:2 }}%</span>
-              <span>{% trans "improvement from previous analysis" %}</span>
-            </div>
-          {% elif improvement_direction == "down" %}
-            <div class="improvement-line down">
-              <span>▼</span>
-              <span>{{ improvement_value|floatformat:2 }}%</span>
-              <span>{% trans "change from previous analysis" %}</span>
-            </div>
-          {% else %}
-            <div class="improvement-line same">
-              <span>{% trans "No change from previous analysis" %}</span>
-            </div>
-          {% endif %}
-        </div>
-      {% endif %}
+<p class="project-line">
+<strong>{% trans "Project" %}:</strong>
+{{ result.project_name }}
+</p>
 
-      <p class="muted threshold-note" style="margin-top:14px;">
-        <small>{% trans "Decision Threshold" %}: {{ result.threshold|floatformat:2 }}</small>
-      </p>
+<p class="probability-line">
+<strong>{% trans "Feasibility Probability" %}:</strong>
+<span class="probability">{{ feasibility_percent|floatformat:2 }}%</span>
+</p>
 
-      <p class="status-row">
-        <strong>{% trans "Status" %}:</strong>
-        {% if status_text %}
-          {% if result.probability >= result.threshold %}
-            <span class="status-badge success">{{ status_text }}</span>
-          {% else %}
-            <span class="status-badge danger">{{ status_text }}</span>
-          {% endif %}
-        {% else %}
-          {% if result.probability >= result.threshold %}
-            <span class="status-badge success">{% trans "Feasible" %}</span>
-          {% else %}
-            <span class="status-badge danger">{% trans "Not Feasible" %}</span>
-          {% endif %}
-        {% endif %}
-      </p>
-    </div>
+{% if previous_result %}
 
-    <div class="analysis-card">
-      <h3 class="card-title">{% trans "AI Recommendations" %}</h3>
+<div class="metric-inline">
 
-      <p class="recs-intro">
-        {% trans "Generate tailored recommendations to improve your project feasibility and support stronger decision-making." %}
-      </p>
+<div class="metric-row">
+<span class="metric-label">{% trans "Previous Feasibility" %}</span>
+<span class="metric-value">{{ previous_feasibility_percent|floatformat:2 }}%</span>
+</div>
 
-      {% if not recs_text %}
-        <div class="recs-empty-state">
-          <button id="startRecsBtn" type="button" class="primary-btn">
-            {% trans "Generate Recommendations" %}
-          </button>
-        </div>
-      {% endif %}
+{% if improvement_direction == "up" %}
 
-      <div id="recsBox"
-           style="{% if recs_status == 'ready' and recs_text %}display:block;{% else %}display:none;{% endif %}"
-           class="{% if recs_status == 'ready' and recs_text %}recommendations-box{% else %}recs-loading-wrap{% endif %}">
+<div class="comparison-line up">
+<span>▲</span>
+<span>+{{ improvement_value|floatformat:2 }}%</span>
+<span>{% trans "Improvement from previous analysis" %}</span>
+</div>
 
-        {% if recs_status == "ready" and recs_text %}
-          {{ recs_text|linebreaks }}
-        {% elif recs_status == "failed" %}
-          <p class="muted">{% trans "Failed to generate recommendations." %}</p>
-        {% else %}
-          <p class="muted">{% trans "Generating AI recommendations…" %}</p>
-          <div class="skeleton-box">
-            <div class="skeleton-line w-80"></div>
-            <div class="skeleton-line w-100"></div>
-            <div class="skeleton-line w-90"></div>
-            <div class="skeleton-line w-95"></div>
-            <div class="skeleton-line w-70"></div>
-            <div class="skeleton-line w-100"></div>
-            <div class="skeleton-line w-85"></div>
-          </div>
-        {% endif %}
-      </div>
+{% elif improvement_direction == "down" %}
 
-      <form id="csrfForm">{% csrf_token %}</form>
+<div class="comparison-line down">
+<span>▼</span>
+<span>{{ improvement_value|floatformat:2 }}%</span>
+<span>{% trans "Change from previous analysis" %}</span>
+</div>
 
-      <script>
-      window.JADWA = {
-        recsStatus: "{{ recs_status }}",
-        urlGenerate: "{% url 'generate_recs' result.id %}",
-        urlStatus: "{% url 'recs_status' result.id %}",
-        reloadUrl: "{% url 'analysis_result' result.id %}"
-      };
-
-      function getCSRF() {
-        return document.querySelector("#csrfForm input[name=csrfmiddlewaretoken]")?.value || "";
-      }
-
-      function getUILang() {
-        const l = (document.documentElement.lang || "").toLowerCase();
-        return l.startsWith("ar") ? "ar" : "en";
-      }
-
-      async function postGenerate() {
-        const payload = new URLSearchParams({ lang: getUILang() });
-
-        const res = await fetch(window.JADWA.urlGenerate, {
-          method: "POST",
-          credentials: "same-origin",
-          headers: {
-            "X-CSRFToken": getCSRF(),
-            "X-Requested-With": "XMLHttpRequest",
-            "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-          },
-          body: payload.toString()
-        });
-
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw data;
-        return data;
-      }
-
-      async function pollStatus() {
-        const cfg = window.JADWA;
-
-        const timer = setInterval(async () => {
-          try {
-            const res = await fetch(cfg.urlStatus, {
-              method: "GET",
-              credentials: "same-origin",
-              headers: { "X-Requested-With": "XMLHttpRequest" }
-            });
-
-            const data = await res.json().catch(() => ({}));
-            if (data.status === "ready" || data.status === "failed") {
-              clearInterval(timer);
-              window.location.href = cfg.reloadUrl;
-            }
-          } catch (e) {}
-        }, 1200);
-      }
-
-      async function ensureRecommendations() {
-        const cfg = window.JADWA;
-        if (cfg.recsStatus === "ready") return;
-
-        try {
-          await postGenerate();
-          await pollStatus();
-        } catch (e) {
-          window.location.href = cfg.reloadUrl;
-        }
-      }
-
-      document.addEventListener("DOMContentLoaded", () => {
-        const btn = document.getElementById("startRecsBtn");
-        const box = document.getElementById("recsBox");
-
-        if (window.JADWA.recsStatus === "ready") {
-          if (btn) btn.style.display = "none";
-          if (box) box.style.display = "block";
-          return;
-        }
-
-        if (btn) {
-          btn.addEventListener("click", async () => {
-            btn.disabled = true;
-            btn.style.display = "none";
-            if (box) box.style.display = "block";
-            await ensureRecommendations();
-          });
-        }
-      });
-      </script>
-    </div>
-
-  </section>
-
-  <div class="analysis-actions">
-    <a href="{% url 'analysis_pdf' result.id %}" class="btn secondary-btn pdf-btn" id="pdfBtn">
-      <span class="pdf-text">{% trans "Download PDF" %}</span>
-    </a>
-  </div>
-
-  <script>
-  const btn = document.getElementById("pdfBtn");
-  if (btn) {
-    btn.addEventListener("click", () => {
-      btn.classList.add("is-loading");
-      btn.setAttribute("aria-busy", "true");
-    });
-  }
-  </script>
+{% endif %}
 
 </div>
+
+{% endif %}
+
+<div class="meta-row">
+
+<p class="threshold-note">
+{% trans "Decision Threshold" %}: {{ result.threshold|floatformat:2 }}
+</p>
+
+<p>
+<strong>{% trans "Status" %}:</strong>
+
+{% if result.probability >= result.threshold %}
+<span class="status-badge success">{% trans "Feasible" %}</span>
+{% else %}
+<span class="status-badge danger">{% trans "Not Feasible" %}</span>
+{% endif %}
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- RIGHT -->
+
+<div>
+
+<div class="analysis-card">
+
+<h3 class="card-title">{% trans "AI Recommendations" %}</h3>
+
+<p class="recs-intro">
+{% trans "Generate tailored recommendations to improve your project feasibility and support stronger decision-making." %}
+</p>
+
+{% if not recs_text %}
+<button id="startRecsBtn" class="primary-btn">
+{% trans "Generate Recommendations" %}
+</button>
+{% endif %}
+
+<div id="recsBox"
+style="{% if recs_status == 'ready' and recs_text %}display:block{% else %}display:none{% endif %}"
+class="{% if recs_status == 'ready' %}recommendations-box{% else %}recs-loading-wrap{% endif %}">
+
+{% if recs_status == "ready" and recs_text %}
+
+{{ recs_text|linebreaks }}
+
+{% elif recs_status == "failed" %}
+
+<p class="muted">{% trans "Failed to generate recommendations." %}</p>
+
+{% else %}
+
+<p class="muted">{% trans "Generating AI recommendations…" %}</p>
+
+<div class="skeleton-box">
+<div class="skeleton-line w-80"></div>
+<div class="skeleton-line w-100"></div>
+<div class="skeleton-line w-90"></div>
+<div class="skeleton-line w-70"></div>
+<div class="skeleton-line w-100"></div>
+</div>
+
+{% endif %}
+
+</div>
+
+<form id="csrfForm">{% csrf_token %}</form>
+
+</div>
+
+<div class="pdf-area">
+<a href="{% url 'analysis_pdf' result.id %}" class="pdf-btn" id="pdfBtn">
+Download PDF
+</a>
+</div>
+
+</div>
+
+</section>
+
+
+
+<script>
+
+window.JADWA = {
+recsStatus: "{{ recs_status }}",
+urlGenerate: "{% url 'generate_recs' result.id %}",
+urlStatus: "{% url 'recs_status' result.id %}",
+reloadUrl: "{% url 'analysis_result' result.id %}"
+};
+
+function getCSRF(){
+return document.querySelector("#csrfForm input[name=csrfmiddlewaretoken]").value;
+}
+
+async function postGenerate(){
+
+const res = await fetch(window.JADWA.urlGenerate,{
+method:"POST",
+credentials:"same-origin",
+headers:{
+"X-CSRFToken":getCSRF(),
+"X-Requested-With":"XMLHttpRequest"
+}
+});
+
+if(!res.ok) throw res;
+
+}
+
+async function pollStatus(){
+
+const timer=setInterval(async()=>{
+
+const res=await fetch(window.JADWA.urlStatus);
+const data=await res.json();
+
+if(data.status==="ready" || data.status==="failed"){
+clearInterval(timer);
+location.reload();
+}
+
+},1200);
+
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+const btn=document.getElementById("startRecsBtn");
+const box=document.getElementById("recsBox");
+
+if(btn){
+
+btn.addEventListener("click",async()=>{
+
+btn.disabled=true;
+btn.style.display="none";
+
+box.style.display="block";
+
+await postGenerate();
+await pollStatus();
+
+});
+
+}
+
+});
+
+</script>
+
+</div>
+
 {% endblock %}

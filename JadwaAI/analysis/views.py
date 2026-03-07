@@ -299,6 +299,14 @@ def analysis_result(request, result_id):
         else:
             improvement_direction = "same"
 
+    print("CURRENT RESULT:", result.id, result.probability, result.threshold)
+    print(
+        "PREVIOUS RESULT:",
+        previous_result.id if previous_result else None,
+        previous_result.probability if previous_result else None,
+        previous_result.threshold if previous_result else None
+    )
+
     return render(
         request,
         "analysis/result.html",
@@ -315,7 +323,6 @@ def analysis_result(request, result_id):
             "improvement_direction": improvement_direction,
         },
     )
-
 
 @login_required
 def generate_recs(request, result_id):
@@ -622,6 +629,7 @@ def analysis_pdf(request, result_id):
         size=10.5,
         color=PRIMARY,
     )
+    
 
     # ✅ الإضافة الوحيدة: سطر الثريشولد في الـ PDF
     draw_line(
