@@ -176,6 +176,12 @@ label{
   .btn-primary, .btn-outline{ width:100%; }
   .form-actions{ justify-content:stretch; }
 }
+
+label .required-star {
+  color: #0a2fbf; 
+  margin-left: 4px;
+  font-weight: bold;
+}
 </style>
 
 <div class="page-shell">
@@ -217,7 +223,14 @@ label{
                  {% if field.name == "project_location_other" %} id="row_location_other" style="display:none;" {% endif %}>
 
               <div>
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                <label for="{{ field.id_for_label }}">
+                  {{ field.label }}
+                  {% if field.name in "project_region project_city" %}
+                    <span class="required-star">*</span>
+                  {% elif field.field.required %}
+                    <span class="required-star">*</span>
+                  {% endif %}
+                </label>
               </div>
 
               <div class="field-wrap {% if field.errors %}field-error-wrap{% endif %}" id="wrap_{{ field.name }}">
