@@ -17,6 +17,7 @@ urlpatterns = [
 
     path("login/", views.jadwa_login, name="login"),
     path("signup/", views.jadwa_signup, name="signup"),
+    path("check-email/", views.check_email, name="check_email"),
     path('activate/<int:uid>/<str:token>/', views.activate_account, name='activate_account'),
     path("logout/", auth_views.LogoutView.as_view(next_page="landing"), name="logout"),
 

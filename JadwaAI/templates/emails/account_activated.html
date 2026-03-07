@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block navbar %}
+  {% include "partials/navbar_auth.html" %}
+{% endblock navbar %}
+
+{% block footer %}
+  {% include "partials/footer_light.html" %}
+{% endblock footer %}
+
+{% block content %}
+
+<style>
+.success-icon{
+  width:80px;
+  height:80px;
+  margin:0 auto 20px;
+  border-radius:50%;
+  background:#e8f7ee;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:40px;
+}
+
+.success-title{
+  font-size:28px;
+  font-weight:600;
+  margin-bottom:12px;
+  color:#0b0f1a;
+}
+
+.success-text{
+  color:#64748b;
+  font-size:16px;
+  line-height:1.7;
+}
+</style>
+
+<div class="page">
+  <section class="legal-page">
+    <div class="legal-container" style="max-width:500px; margin:0 auto; text-align:center;">
+
+      <div class="success-icon">
+        ✔
+      </div>
+
+      <div class="success-title">
+        {% trans "Welcome to Jadwa AI" %}
+      </div>
+
+      <p class="success-text">
+        {% blocktrans with username=user.username %}
+        Welcome {{ username }} to Jadwa AI.
+        Your account has been successfully activated.
+        {% endblocktrans %}
+      </p>
+
+      <p class="success-text" style="margin-top:10px;">
+        {% trans "You can now log in and start using the platform." %}
+      </p>
+
+      <div style="margin-top:30px;">
+        <a href="{% url 'login' %}" class="btn btn-full">
+          {% trans "Login to your account" %}
+        </a>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+{% endblock %}

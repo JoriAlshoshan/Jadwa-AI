@@ -203,7 +203,7 @@ def jadwa_signup(request):
             )
   
             messages.success(request, _("Your account was created. Check your email to activate it."))
-            return redirect("login")
+            return redirect("check_email")
         else:
             for field, errors in form.errors.items():
                 for error in errors:
@@ -213,6 +213,9 @@ def jadwa_signup(request):
 
     return render(request, "pages/register.html", {"form": form})
 
+def check_email(request):
+    return render(request, "emails/check_email.html")
+
 def activate_account(request, uid, token):
     user = get_object_or_404(User, pk=uid)
 
@@ -220,12 +223,9 @@ def activate_account(request, uid, token):
         if not user.is_active:
             user.is_active = True
             user.save()
-            login(request, user)
-            messages.success(request, _(f"Welcome {user.username}, Your account has been activated successfully."))
-        else:
-            messages.info(request, _("Your account is already active."))
 
-        return redirect("dashboard")  
+        return render(request, "emails/account_activated.html", {"user": user})
+
     else:
         messages.error(request, _("Activation link is invalid or expired."))
         return redirect("login")

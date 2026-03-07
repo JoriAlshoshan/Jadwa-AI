@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block navbar %}
+  {% include "partials/navbar_auth.html" %}
+{% endblock navbar %}
+
+{% block footer %}
+  {% include "partials/footer_light.html" %}
+{% endblock footer %}
+
+{% block content %}
+
+<div class="page">
+  <section class="legal-page">
+    <div class="legal-container" style="max-width:500px; margin:0 auto; text-align:center;">
+
+      <div style="margin-bottom:34px;">
+
+        <div style="font-size:60px; margin-bottom:20px;">
+          📧
+        </div>
+
+        <h2 style="margin-bottom:12px; color:#0b0f1a;">
+          {% trans "Activate your account" %}
+        </h2>
+
+        <p style="margin-bottom:16px; color:#64748b;">
+          {% trans "To activate your account please open the link that was sent to your email." %}
+        </p>
+
+        <p style="color:#64748b;">
+          {% trans "If you don't see the email, check your spam folder." %}
+        </p>
+
+      </div>
+
+      <div class="auth-links-clean">
+        <p>
+          {% trans "Already activated your account?" %}
+          <a href="{% url 'login' %}" class="auth-link-clean">
+            {% trans "Login here" %}
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+{% endblock %}
