@@ -251,7 +251,7 @@ def jadwa_login(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            messages.success(request, _("You have logged in successfully!"))
+            # messages.success(request, _("You have logged in successfully!"))
 
             # ✅ الأدمن الحقيقي فقط (superuser)
             if user.is_superuser:

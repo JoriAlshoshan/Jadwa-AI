@@ -429,7 +429,36 @@ html[dir="rtl"] .breadcrumb-sep{
   border-bottom:1px solid rgba(15,23,42,.06);
 }
 </style>
+{% if messages %}
+  <div class="toast-wrap" id="toastWrap">
+    {% for message in messages %}
+      {% with m=message|stringformat:"s"|lower %}
+        {% if "delete" in m or "deleted" in m or "حذف" in m %}
+          <div class="toast {{ message.tags|default:'info' }}" role="status" aria-live="polite">
+            <div class="toast-icon">
+              {% if 'success' in message.tags %}✓
+              {% elif 'error' in message.tags %}! 
+              {% elif 'warning' in message.tags %}! 
+              {% else %}i{% endif %}
+            </div>
 
+            <div class="toast-body">
+              <p class="toast-title">
+                {% if 'success' in message.tags %}{% trans "Success" %}
+                {% elif 'error' in message.tags %}{% trans "Error" %}
+                {% elif 'warning' in message.tags %}{% trans "Warning" %}
+                {% else %}{% trans "Info" %}{% endif %}
+              </p>
+              <p class="toast-text">{{ message }}</p>
+            </div>
+
+            <button type="button" class="toast-close" aria-label="Close">✕</button>
+          </div>
+        {% endif %}
+      {% endwith %}
+    {% endfor %}
+  </div>
+{% endif %}
 
 
 <div class="page-container" style="padding:26px; max-width:1100px; margin:0 auto;">
@@ -687,7 +716,15 @@ html[dir="rtl"] .breadcrumb-sep{
 document.addEventListener("DOMContentLoaded", function () {
 
   // ===== Toast close + auto hide =====
-
+const toastWrap = document.getElementById("toastWrap");
+if (toastWrap){
+  toastWrap.querySelectorAll(".toast-close").forEach(btn=>{
+    btn.addEventListener("click", ()=> btn.closest(".toast").remove());
+  });
+  setTimeout(()=>{
+    toastWrap.querySelectorAll(".toast").forEach(t=> t.remove());
+  }, 3500);
+}
 
   // ===== Dropdown menu (⋯) =====
   document.querySelectorAll(".menu-btn").forEach(btn => {
