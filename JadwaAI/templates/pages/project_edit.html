@@ -204,11 +204,13 @@ label .required-star {
 
               <div>
                 <label for="{{ field.id_for_label }}">
-                  {{ field.label }}
-                  {% if field.field.required %}
-                    <span class="required-star">*</span>
-                  {% endif %}
-                </label>
+  {{ field.label }}
+  {% if field.name == "project_region" or field.name == "project_city" %}
+    <span class="required-star">*</span>
+  {% elif field.field.required %}
+    <span class="required-star">*</span>
+  {% endif %}
+</label>
               </div>
 
               <div class="field-wrap {% if field.errors %}field-error-wrap{% endif %}" id="wrap_{{ field.name }}">
