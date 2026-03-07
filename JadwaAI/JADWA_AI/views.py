@@ -122,9 +122,16 @@ def project_edit(request, pk):
         form = ProjectInformationForm(instance=project)
 
     return render(request, "pages/project_edit.html", {
-        "form": form,
-        "project": project,
-    })
+    "form": form,
+    "project": project,
+    "show_page_header": True,
+    "page_title": _("Improve Project"),
+    "breadcrumbs": [
+        {"label": _("Home"), "url": "/"},
+        {"label": _("Dashboard"), "url": "/dashboard/"},
+        {"label": _("Improve Project")},
+    ],
+})
 
 
 User = get_user_model()
