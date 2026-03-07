@@ -277,6 +277,28 @@ def analysis_result(request, result_id):
     other_text = get_recs_by_lang(result, other_lang)
     other_status = get_status_by_lang(result, other_lang)
 
+    previous_result = (
+        AnalysisResult.objects
+        .filter(user=request.user, project_id=result.project_id, id__lt=result.id)
+        .order_by("-id")
+        .first()
+    )
+
+    previous_feasibility_percent = None
+    improvement_value = None
+    improvement_direction = None
+
+    if previous_result:
+        previous_feasibility_percent = round(previous_result.probability * 100, 2)
+        improvement_value = round(feasibility_percent - previous_feasibility_percent, 2)
+
+        if improvement_value > 0:
+            improvement_direction = "up"
+        elif improvement_value < 0:
+            improvement_direction = "down"
+        else:
+            improvement_direction = "same"
+
     return render(
         request,
         "analysis/result.html",
@@ -287,6 +309,10 @@ def analysis_result(request, result_id):
             "recs_text": recs_text,
             "recs_status": recs_status,
             "has_other_ready": bool(other_text and other_status == "ready"),
+            "previous_result": previous_result,
+            "previous_feasibility_percent": previous_feasibility_percent,
+            "improvement_value": improvement_value,
+            "improvement_direction": improvement_direction,
         },
     )
 

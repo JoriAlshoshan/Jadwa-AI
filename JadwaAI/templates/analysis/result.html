@@ -4,8 +4,6 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/analysis.css' %}">
-{% endblock %}
-
 <style>
 .primary-btn{ padding:10px 18px !important; font-size:14px !important; border-radius:10px !important; }
 .secondary-btn{ padding:10px 18px !important; font-size:14px !important; border-radius:10px !important; }
@@ -13,13 +11,13 @@
 .analysis-grid{ gap:16px !important; }
 .analysis-actions{ justify-content:flex-end !important; }
 </style>
+{% endblock %}
 
 {% block content %}
 <div class="container analysis-page">
 
   <section class="analysis-grid">
 
-    <!-- Project Overview -->
     <div class="analysis-card">
       <h3 class="card-title">{% trans "Project Overview" %}</h3>
 
@@ -50,9 +48,40 @@
           {% endif %}
         {% endif %}
       </p>
+
+      {% if previous_result %}
+        <div style="margin-top:18px; padding:16px; border:1px solid rgba(15,23,42,.08); border-radius:16px; background:#f8fafc;">
+          <h3 style="margin:0 0 12px; font-size:18px; color:#0f172a;">
+            {% trans "Before vs After" %}
+          </h3>
+
+          <div style="display:grid; gap:10px;">
+            <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+              <span style="color:#64748b;">{% trans "Previous Feasibility" %}</span>
+              <strong style="color:#0f172a;">{{ previous_feasibility_percent|floatformat:2 }}%</strong>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+              <span style="color:#64748b;">{% trans "Current Feasibility" %}</span>
+              <strong style="color:#0f172a;">{{ feasibility_percent|floatformat:2 }}%</strong>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+              <span style="color:#64748b;">{% trans "Change" %}</span>
+
+              {% if improvement_direction == "up" %}
+                <strong style="color:#166534;">▲ +{{ improvement_value|floatformat:2 }}%</strong>
+              {% elif improvement_direction == "down" %}
+                <strong style="color:#b42318;">▼ {{ improvement_value|floatformat:2 }}%</strong>
+              {% else %}
+                <strong style="color:#475569;">0.00%</strong>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
     </div>
 
-    <!-- AI Recommendations -->
     <div class="analysis-card">
       <h3 class="card-title">{% trans "AI Recommendations" %}</h3>
 
@@ -84,7 +113,6 @@
         {% endif %}
       </div>
 
-      <!-- CSRF -->
       <form id="csrfForm">{% csrf_token %}</form>
 
       <script>
@@ -148,7 +176,7 @@
         if(cfg.recsStatus === "ready") return;
 
         try{
-          await postGenerate();   // ✅ يولّد حسب لغة الصفحة فقط
+          await postGenerate();
           await pollStatus();
         }catch(e){
           window.location.href = cfg.reloadUrl;
