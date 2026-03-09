@@ -349,9 +349,7 @@ msgstr "الحالة"
 msgid "AI Recommendations"
 msgstr "توصيات الذكاء الاصطناعي"
 
-#: .\analysis\views.py:639
-msgid "AI Recommendations (continued)"
-msgstr "توصيات الذكاء الاصطناعي (متابعة)"
+
 
 #: .\templates\analysis\pdf_report.html:49
 msgid "Jadwa AI - Analysis Report"
@@ -373,9 +371,6 @@ msgstr "قابل للتنفيذ"
 msgid "Not Feasible"
 msgstr "غير قابل للتنفيذ"
 
-#: .\templates\analysis\recs_loading.html:59
-msgid "Generating AI recommendations..."
-msgstr "جارٍ توليد توصيات الذكاء الاصطناعي..."
 
 #: .\templates\analysis\recs_loading.html:69
 msgid "Back"
@@ -386,13 +381,18 @@ msgid "Generate Recommendations"
 msgstr "توليد التوصيات"
 
 #: .\templates\analysis\result.html:82
-#| msgid "Generate Recommendations"
 msgid "Failed to generate recommendations."
-msgstr "توليد التوصيات"
+msgstr "فشل في توليد التوصيات."
 
-#: .\templates\analysis\result.html:85
-msgid "Generating AI recommendations…"
-msgstr "توليد التوصيات…"
+msgid "Recommendations have not been generated yet."
+msgstr "لم يتم توليد التوصيات بعد."
+
+msgid "Previous Feasibility"
+msgstr "نسبة الجدوى السابقة"
+
+msgid "Change from previous analysis"
+msgstr "التغير مقارنة بالتحليل السابق"
+
 
 #: .\templates\analysis\result.html:195
 msgid "Download PDF"
@@ -1023,8 +1023,6 @@ msgstr "إنشاء حساب"
 #~ msgid "Generating recommendations, please wait..."
 #~ msgstr "جارٍ توليد التوصيات، فضلاً انتظر..."
 
-#~ msgid "Recommendations have not been generated yet."
-#~ msgstr "لم يتم توليد التوصيات بعد."
 
 
 
@@ -1094,3 +1092,15 @@ msgstr "قم بإدخال تفاصيل المشروع لبدء تحليل الج
 
 msgid "Project Details"
 msgstr "تفاصيل المشروع"
+
+msgid "Generating AI recommendations…"
+msgstr "جارٍ توليد توصيات الذكاء الاصطناعي..."
+
+msgid "Improvement from previous analysis"
+msgstr "تحسن مقارنة بالتحليل السابق"
+
+msgid "Continued on next page..."
+msgstr "يتبع في الصفحة التالية..."
+
+msgid "AI Recommendations (continued)"
+msgstr "توصيات الذكاء الاصطناعي (متابعة)"

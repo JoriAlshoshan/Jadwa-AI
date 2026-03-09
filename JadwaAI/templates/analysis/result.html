@@ -6,7 +6,6 @@
 <link rel="stylesheet" href="{% static 'css/analysis.css' %}">
 
 <style>
-
 :root{
   --primary:#183a9e;
   --primary-dark:#142f80;
@@ -22,91 +21,124 @@
 .analysis-page{
   max-width:1180px;
   margin:0 auto;
-  padding:28px 20px 48px;
+  padding:28px 20px 56px;
 }
 
 .analysis-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:20px;
+  gap:18px;
   align-items:start;
 }
 
 .analysis-card{
   background:#fff;
   border:1px solid var(--border);
-  border-radius:24px;
+  border-radius:22px;
   padding:24px;
+  box-shadow:0 10px 30px rgba(15,23,42,.04);
+  min-height:230px;
 }
 
 .card-title{
   margin:0 0 18px;
-  font-size:22px;
+  font-size:18px;
   font-weight:900;
+  color:var(--text);
 }
 
 .project-line{
-  margin:0 0 14px;
-  font-size:15px;
+  margin:0 0 12px;
+  font-size:14px;
+  color:#344054;
 }
 
 .probability-line{
-  margin:0 0 18px;
-  font-size:17px;
-  font-weight:700;
+  margin:0 0 14px;
+  font-size:14px;
+  font-weight:800;
+  color:#344054;
 }
 
 .probability{
-  color:#183a9e;
+  color:#123fbe;
   font-weight:900;
 }
 
 .metric-inline{
-  padding:16px 18px;
+  padding:14px 16px;
   border:1px solid var(--border);
-  border-radius:18px;
+  border-radius:16px;
+  background:#fcfdff;
+  margin-bottom:16px;
 }
 
 .metric-row{
   display:flex;
   justify-content:space-between;
+  align-items:center;
+  gap:12px;
 }
 
 .metric-label{
   color:var(--muted);
   font-weight:700;
+  font-size:14px;
 }
 
 .metric-value{
   font-weight:900;
+  font-size:14px;
+  color:var(--text);
 }
 
 .comparison-line{
-  margin-top:14px;
-  padding-top:14px;
+  margin-top:12px;
+  padding-top:12px;
   border-top:1px solid var(--border);
   display:flex;
+  align-items:center;
   gap:8px;
-  font-size:14px;
+  font-size:13px;
   font-weight:800;
+  flex-wrap:wrap;
 }
 
 .comparison-line.up{ color:var(--success); }
 .comparison-line.down{ color:var(--danger); }
 
-.meta-row{
+.meta-stack{
+  margin-top:8px;
   display:flex;
-  justify-content:space-between;
-  margin-top:18px;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:10px;
 }
 
-.threshold-note{
-  font-size:13px;
+.meta-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.meta-title{
+  font-size:14px;
+  font-weight:800;
+  color:#344054;
+}
+
+.meta-text{
+  font-size:14px;
   color:var(--muted);
+  font-weight:500;
 }
 
 .status-badge{
-  padding:7px 14px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:6px 14px;
   border-radius:999px;
   font-size:13px;
   font-weight:800;
@@ -122,65 +154,58 @@
   color:var(--danger);
 }
 
+.recs-intro{
+  margin:0 0 14px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.7;
+}
+
 .primary-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  width:260px;        /* طول الزر */
+  height:38px;        /* ارتفاع الزر */
+
   border:none;
+  border-radius:999px;  /* هذا أهم شيء */
+
   background:#0a2fbf;
   color:#fff;
-  padding:10px 20px;
-  min-height:42px;
-  font-size:13.5px;
-  border-radius:14px;
+
+  font-size:13px;
+  font-weight:700;
+
+  box-shadow:0 6px 14px rgba(29,78,216,.35);
+
+  cursor:pointer;
+  transition:all .2s ease;
 }
 
 .primary-btn:hover{
-  background:#0827a0;
-}
-
-.recs-intro{
-  margin-bottom:18px;
-  color:var(--muted);
-  font-size:14px;
+  background:#0a2fbf;
+  transform:translateY(-1px);
 }
 
 .recommendations-box,
 .recs-loading-wrap{
   margin-top:14px;
-  padding:18px;
-  border-radius:18px;
+  padding:16px;
+  border-radius:16px;
   border:1px solid var(--border);
+  background:#fff;
 }
 
-.pdf-area{
-  margin-top:14px;
-  display:flex;
-  justify-content:flex-end;
+.muted{
+  color:var(--muted);
+  margin:0 0 12px;
+  font-size:14px;
 }
-
-.pdf-btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-  padding:8px 16px;
-  font-size:13px;
-  font-weight:700;
-  border-radius:12px;
-  border:2px solid #0a2fbf;
-  background:transparent;
-  color:#0a2fbf;
-  text-decoration:none;
-  transition:all .2s ease;
-}
-
-.pdf-btn:hover{
-  background:#0a2fbf;
-  color:#fff;
-}
-
-/* skeleton loading */
 
 .skeleton-line{
-  height:10px;
+  height:9px;
   background:#e8edf7;
   border-radius:999px;
   margin-bottom:10px;
@@ -193,233 +218,221 @@
 .w-70{width:70%}
 
 @keyframes pulse{
-0%{opacity:.5}
-50%{opacity:1}
-100%{opacity:.5}
+  0%{opacity:.5}
+  50%{opacity:1}
+  100%{opacity:.5}
 }
 
-@media (max-width:992px){
-.analysis-grid{
-grid-template-columns:1fr;
-}
+.bottom-actions{
+  margin-top:24px;
+  display:flex;
+  justify-content:center;
 }
 
+.secondary-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:150px;
+  height:36px;
+  padding:0 18px;
+  border-radius:999px;
+  border:1px solid #e6eaf2;
+  background:#ffffff;
+  color:#0a2fbf;
+  font-size:12px;
+  font-weight:800;
+  text-decoration:none;
+  box-shadow:0 4px 10px rgba(15, 23, 42, 0.08);
+  transition:all .2s ease;
+}
+
+.secondary-btn:hover{
+  background:#f8fafc;
+  color:#0a2fbf;
+  transform:translateY(-1px);
+}
+
+@media (max-width: 900px){
+  .analysis-grid{
+    grid-template-columns:1fr;
+  }
+
+  .analysis-card{
+    min-height:auto;
+  }
+}
 </style>
 {% endblock %}
 
-
-
 {% block content %}
-
 <div class="container analysis-page">
 
-<section class="analysis-grid">
+  <section class="analysis-grid">
 
-<!-- LEFT -->
+    <div class="analysis-card">
+      <h3 class="card-title">{% trans "Project Overview" %}</h3>
 
-<div>
+      <p class="project-line">
+        <strong>{% trans "Project" %}:</strong>
+        {{ result.project_name }}
+      </p>
 
-<div class="analysis-card">
+      <p class="probability-line">
+        <strong>{% trans "Feasibility Probability" %}:</strong>
+        <span class="probability">{{ feasibility_percent|floatformat:2 }}%</span>
+      </p>
 
-<h3 class="card-title">{% trans "Project Overview" %}</h3>
+      {% if previous_result %}
+      <div class="metric-inline">
+        <div class="metric-row">
+          <span class="metric-label">{% trans "Previous Feasibility" %}</span>
+          <span class="metric-value">{{ previous_feasibility_percent|floatformat:2 }}%</span>
+        </div>
 
-<p class="project-line">
-<strong>{% trans "Project" %}:</strong>
-{{ result.project_name }}
-</p>
+        {% if improvement_direction == "up" %}
+        <div class="comparison-line up">
+          <span>▲</span>
+          <span>+{{ improvement_value|floatformat:2 }}%</span>
+          <span>{% trans "Improvement from previous analysis" %}</span>
+        </div>
+        {% elif improvement_direction == "down" %}
+        <div class="comparison-line down">
+          <span>▼</span>
+          <span>{{ improvement_value|floatformat:2 }}%</span>
+          <span>{% trans "Change from previous analysis" %}</span>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
 
-<p class="probability-line">
-<strong>{% trans "Feasibility Probability" %}:</strong>
-<span class="probability">{{ feasibility_percent|floatformat:2 }}%</span>
-</p>
+      <div class="meta-stack">
+        {% if result.threshold %}
+        <div class="meta-item">
+          <span class="meta-title">{% trans "Decision Threshold" %}:</span>
+          <span class="meta-text">{{ result.threshold|floatformat:2 }}</span>
+        </div>
+        {% endif %}
 
-{% if previous_result %}
+        <div class="meta-item">
+          <span class="meta-title">{% trans "Status" %}:</span>
+          {% if result.probability >= result.threshold %}
+            <span class="status-badge success">{% trans "Feasible" %}</span>
+          {% else %}
+            <span class="status-badge danger">{% trans "Not Feasible" %}</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
 
-<div class="metric-inline">
+    <div class="analysis-card">
+      <h3 class="card-title">{% trans "AI Recommendations" %}</h3>
 
-<div class="metric-row">
-<span class="metric-label">{% trans "Previous Feasibility" %}</span>
-<span class="metric-value">{{ previous_feasibility_percent|floatformat:2 }}%</span>
+      {% if recs_status == "ready" and recs_text %}
+        <div id="recsBox" class="recommendations-box">
+          {{ recs_text|linebreaks }}
+        </div>
+      {% elif recs_status == "failed" %}
+        <p class="recs-intro">{% trans "Recommendations have not been generated yet." %}</p>
+
+        <button id="startRecsBtn" class="primary-btn">
+          {% trans "Generate Recommendations" %}
+        </button>
+
+        <div id="recsBox" class="recommendations-box" style="display:none;"></div>
+      {% elif recs_status == "generating" %}
+        <p class="recs-intro">{% trans "Generating AI recommendations…" %}</p>
+
+        <div id="recsBox" class="recs-loading-wrap" style="display:block;">
+          <div class="skeleton-line w-80"></div>
+          <div class="skeleton-line w-100"></div>
+          <div class="skeleton-line w-90"></div>
+          <div class="skeleton-line w-70"></div>
+        </div>
+      {% else %}
+        <p class="recs-intro">{% trans "Recommendations have not been generated yet." %}</p>
+
+        <button id="startRecsBtn" class="primary-btn">
+          {% trans "Generate Recommendations" %}
+        </button>
+
+        <div id="recsBox" class="recs-loading-wrap" style="display:none;">
+          <p class="muted">{% trans "Generating AI recommendations…" %}</p>
+          <div class="skeleton-line w-80"></div>
+          <div class="skeleton-line w-100"></div>
+          <div class="skeleton-line w-90"></div>
+          <div class="skeleton-line w-70"></div>
+        </div>
+      {% endif %}
+
+      <form id="csrfForm">{% csrf_token %}</form>
+    </div>
+
+  </section>
+
+<div class="bottom-actions">
+  <a href="{% url 'analysis_pdf' result.id %}" class="secondary-btn">
+    {% trans "Download PDF" %}
+  </a>
 </div>
-
-{% if improvement_direction == "up" %}
-
-<div class="comparison-line up">
-<span>▲</span>
-<span>+{{ improvement_value|floatformat:2 }}%</span>
-<span>{% trans "Improvement from previous analysis" %}</span>
-</div>
-
-{% elif improvement_direction == "down" %}
-
-<div class="comparison-line down">
-<span>▼</span>
-<span>{{ improvement_value|floatformat:2 }}%</span>
-<span>{% trans "Change from previous analysis" %}</span>
-</div>
-
-{% endif %}
-
-</div>
-
-{% endif %}
-
-<div class="meta-row">
-
-<p class="threshold-note">
-{% trans "Decision Threshold" %}: {{ result.threshold|floatformat:2 }}
-</p>
-
-<p>
-<strong>{% trans "Status" %}:</strong>
-
-{% if result.probability >= result.threshold %}
-<span class="status-badge success">{% trans "Feasible" %}</span>
-{% else %}
-<span class="status-badge danger">{% trans "Not Feasible" %}</span>
-{% endif %}
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-
-
-<!-- RIGHT -->
-
-<div>
-
-<div class="analysis-card">
-
-<h3 class="card-title">{% trans "AI Recommendations" %}</h3>
-
-<p class="recs-intro">
-{% trans "Generate tailored recommendations to improve your project feasibility and support stronger decision-making." %}
-</p>
-
-{% if not recs_text %}
-<button id="startRecsBtn" class="primary-btn">
-{% trans "Generate Recommendations" %}
-</button>
-{% endif %}
-
-<div id="recsBox"
-style="{% if recs_status == 'ready' and recs_text %}display:block{% else %}display:none{% endif %}"
-class="{% if recs_status == 'ready' %}recommendations-box{% else %}recs-loading-wrap{% endif %}">
-
-{% if recs_status == "ready" and recs_text %}
-
-{{ recs_text|linebreaks }}
-
-{% elif recs_status == "failed" %}
-
-<p class="muted">{% trans "Failed to generate recommendations." %}</p>
-
-{% else %}
-
-<p class="muted">{% trans "Generating AI recommendations…" %}</p>
-
-<div class="skeleton-box">
-<div class="skeleton-line w-80"></div>
-<div class="skeleton-line w-100"></div>
-<div class="skeleton-line w-90"></div>
-<div class="skeleton-line w-70"></div>
-<div class="skeleton-line w-100"></div>
-</div>
-
-{% endif %}
-
-</div>
-
-<form id="csrfForm">{% csrf_token %}</form>
-
-</div>
-
-<div class="pdf-area">
-<a href="{% url 'analysis_pdf' result.id %}" class="pdf-btn" id="pdfBtn">
-Download PDF
-</a>
-</div>
-
-</div>
-
-</section>
-
-
 
 <script>
-
 window.JADWA = {
-recsStatus: "{{ recs_status }}",
-urlGenerate: "{% url 'generate_recs' result.id %}",
-urlStatus: "{% url 'recs_status' result.id %}",
-reloadUrl: "{% url 'analysis_result' result.id %}"
+  recsStatus: "{{ recs_status }}",
+  urlGenerate: "{% url 'generate_recs' result.id %}",
+  urlStatus: "{% url 'recs_status' result.id %}",
+  reloadUrl: "{% url 'analysis_result' result.id %}"
 };
 
 function getCSRF(){
-return document.querySelector("#csrfForm input[name=csrfmiddlewaretoken]").value;
+  return document.querySelector("#csrfForm input[name=csrfmiddlewaretoken]").value;
 }
 
 async function postGenerate(){
+  const res = await fetch(window.JADWA.urlGenerate,{
+    method:"POST",
+    credentials:"same-origin",
+    headers:{
+      "X-CSRFToken":getCSRF(),
+      "X-Requested-With":"XMLHttpRequest"
+    }
+  });
 
-const res = await fetch(window.JADWA.urlGenerate,{
-method:"POST",
-credentials:"same-origin",
-headers:{
-"X-CSRFToken":getCSRF(),
-"X-Requested-With":"XMLHttpRequest"
-}
-});
-
-if(!res.ok) throw res;
-
+  if(!res.ok) throw res;
 }
 
 async function pollStatus(){
+  const timer = setInterval(async()=>{
+    const res = await fetch(window.JADWA.urlStatus);
+    const data = await res.json();
 
-const timer=setInterval(async()=>{
-
-const res=await fetch(window.JADWA.urlStatus);
-const data=await res.json();
-
-if(data.status==="ready" || data.status==="failed"){
-clearInterval(timer);
-location.reload();
-}
-
-},1200);
-
+    if(data.status === "ready" || data.status === "failed"){
+      clearInterval(timer);
+      location.reload();
+    }
+  },1200);
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
+  const btn = document.getElementById("startRecsBtn");
+  const box = document.getElementById("recsBox");
 
-const btn=document.getElementById("startRecsBtn");
-const box=document.getElementById("recsBox");
+  if(btn){
+    btn.addEventListener("click", async()=>{
+      btn.disabled = true;
+      btn.style.display = "none";
+      box.style.display = "block";
 
-if(btn){
-
-btn.addEventListener("click",async()=>{
-
-btn.disabled=true;
-btn.style.display="none";
-
-box.style.display="block";
-
-await postGenerate();
-await pollStatus();
-
+      try{
+        await postGenerate();
+        await pollStatus();
+      }catch(e){
+        location.reload();
+      }
+    });
+  }
 });
-
-}
-
-});
-
 </script>
 
 </div>
-
 {% endblock %}
