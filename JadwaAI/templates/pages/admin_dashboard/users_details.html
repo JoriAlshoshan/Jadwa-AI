@@ -5,38 +5,63 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/users_details.css' %}">
 
-<h3 class="username"> {{ user.username }} details</h3>
-<form method ="post" class="form-container">
-    {% csrf_token %}
-    <div class="field">
-        {{form.username.label_tag}}
-        {{form.username}}
-        {{form.username.errors}}
+<div class="user-details-page">
+    <div class="details-container">
+        <h3> User Details</h3>
+        <form method ="post" class="form-container">
+            {% csrf_token %}
+            <div class="field">
+                {{form.username.label_tag}}
+                {{form.username}}
+            </div>
+            <div class="field">
+                {{form.email.label_tag}}
+                {{form.email}}
+            </div>
+            <div class="field">
+                {{form.region.label_tag}}
+                {{form.region}}
+            </div>
+            <div class="field">
+                {{form.city.label_tag}}
+                {{form.city}}
+            </div>
+            <div class="field">
+                {{form.bio.label_tag}}
+                {{form.bio}}
+            </div>
+            <div class="field">
+                {{form.linkedin.label_tag}}
+                {{form.linkedin}}
+            </div>
+            <div class="checkbox-container">
+                <div>
+                    <label class="checkbox-field">
+                        {{form.is_active}}
+                        <span class="checkmark"></span>
+                        Active Account
+                    </label>
+                </div>
+                <div>
+                    <label class="checkbox-field">
+                        {{form.is_staff}}
+                        <span class="checkmark"></span>
+                        Staff Member
+                    </label>
+                </div>
+                <div>
+                    <label class="checkbox-field">
+                        {{form.is_superuser}}
+                        <span class="checkmark"></span>
+                        Administrator
+                    </label>
+                </div>
+            </div>
+            <div class="button-container">
+                <button type submit >Save changes</button>
+                <button type="button" onclick="history.back()" >return</button>
+            </div>
+        </form>
     </div>
-    <div class="field">
-        {{form.email.label_tag}}
-        {{form.email}}
-        {{form.email.errors}}
-    </div>
-    <div class="checkbox-field">
-        {{form.is_active}}
-        {{form.is_active.label_tag}}
-        {{form.is_active.errors}}
-    </div>
-    <div class="checkbox-field">
-        {{form.is_staff}}
-        {{form.is_staff.label_tag}}
-        {{form.is_staff_active.errors}}
-    </div>
-    <div class="checkbox-field">
-        {{form.is_superuser}}
-        {{form.is_superuser.label_tag}}
-        {{form.is_superuser.errors}}
-    </div>
-    <div class="button-container">
-        <button type submit>Save changes</button>
-        <button type="button" onclick="history.back()" >return</button>
-    </div>
-    
-</form>
+</div>
 {% endblock %}
