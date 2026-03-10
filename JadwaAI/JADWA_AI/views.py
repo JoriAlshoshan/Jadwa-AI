@@ -49,7 +49,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from .models import Projects, SiteContent
 from analysis.models import AnalysisResult
-from JADWA_AI.forms import EditUserForm
+# from JADWA_AI.forms import EditUserForm
 from JADWA_AI.forms import EditProfileForm
 
 
