@@ -1,11 +1,28 @@
-.username{
+.user-details-page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url("../img/hero-bg.png");
+    background-repeat: no-repeat;
+    background-size: 800px auto;
+    background-position: -200px center;
+}
+.details-container{
+    background: #ffffff;
+    width: 500px;
+    margin: 50px auto;
+    border-radius: 10px;
+    border: 1px solid rgba(10, 47, 191, 0.15);
+    box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.05);
+}
+h3{
+    font-size: 24px;
+    font-weight: 600;
     text-align: center;
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 20px;
+    padding: 15px;
 }
 .form-container{
-    width: 350px;
+    width: 400px;
     margin: auto;
 }
 .field{
@@ -14,22 +31,59 @@
     margin-bottom: 15px;
 }
 .field label{
-    margin-bottom: 5px;
+    font-size: 16px;
     font-weight: bold;
+    margin-bottom: 3px;
 }
 .field input{
     padding: 10px;
     border-radius: 6px;
     border: 1px solid #ccc;
+    /* color: #888; */
 }
 .checkbox-field{
     display: flex;
-    align-items: center;
-    gap: 8px;
+    align-items: center; 
+    position: relative;
+    padding-left: 30px;  
+    cursor: pointer;
+    font-size: 16px;
     margin-bottom: 15px;
 }
 .checkbox-field input{
-    width: auto;
+    position:absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+.checkmark{
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 18px;
+    width: 18px;
+    background: #eee;
+    border-radius: 4px;
+}
+.checkbox-field input:checked ~ .checkmark{
+    background: #0a2fbf;
+}
+.checkmark:after{
+    content: "";
+    position: absolute;
+    display: none;
+}
+.checkbox-field input:checked ~ .checkmark{
+    display: block;
+}
+.checkbox-field input:checked ~ .checkmark:after{
+    display: block;
+    left:6px;
+    top:2px;
+    width:4px;
+    height: 9px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
 }
 button{
     padding: 10px;
@@ -37,9 +91,20 @@ button{
     color: white;
     border: none;
     border-radius: 6px;
+    margin: 10px ;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    gap:10px;
 }
 .button-container{
     display: flex;
     justify-content: center;
-    gap:10px;
+    gap:5px;
+}
+.button-container button:hover{
+    background: #2f56e0;
 }
