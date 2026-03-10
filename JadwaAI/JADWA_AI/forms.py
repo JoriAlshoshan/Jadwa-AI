@@ -454,7 +454,15 @@ class OTPForm(forms.Form):
 class ResetPasswordForm(SetPasswordForm):
     pass
 
-class UserEditForm(forms.ModelForm):
+class EditUserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ["username", "email","is_active","is_staff","is_superuser"]
+        fields = ['username', 'email', 'bio', 'region', 'city', 'linkedin', 'is_active', 'is_staff', 'is_superuser']
+        widgets = {
+            'username': forms.TextInput(attrs={'readonly' : 'readonly'}),
+            'email': forms.TextInput(attrs={'readonly' : 'readonly'}),
+            'bio': forms.TextInput(attrs={'readonly' : 'readonly'}),
+            'region': forms.TextInput(attrs={'readonly' : 'readonly'}),
+            'city': forms.TextInput(attrs={'readonly' : 'readonly'}),
+            'linkedin': forms.TextInput(attrs={'readonly' : 'readonly'}),
+        }
