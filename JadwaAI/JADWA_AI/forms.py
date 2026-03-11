@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, SetPasswordForm
 from django.utils.translation import gettext_lazy as _
 from .models import Projects
-
+from django.utils import translation
 User = get_user_model()
 
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -17,10 +17,15 @@ class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
 
 account_activation_token = AccountActivationTokenGenerator()
 
+from django import forms
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, SetPasswordForm
+from django.utils.translation import gettext_lazy as _
+from django.utils import translation
+from .models import Projects
 
-# =========================================
-# Edit Profile Form (Dropdown Region/City)
-# =========================================
+User = get_user_model()
+
 
 REGION_TO_CITIES = {
     "riyadh": ["riyadh", "diriyah", "kharj", "other"],
@@ -39,26 +44,106 @@ REGION_TO_CITIES = {
     "other": ["other"],
 }
 
-REGION_CHOICES = [("", _("Select region"))] + [
-    (k, k.replace("_", " ").title()) for k in REGION_TO_CITIES.keys()
-]
+REGION_LABELS_AR = {
+    "riyadh": "منطقة الرياض",
+    "qassim": "منطقة القصيم",
+    "eastern": "المنطقة الشرقية",
+    "makkah": "منطقة مكة المكرمة",
+    "madinah": "منطقة المدينة المنورة",
+    "asir": "منطقة عسير",
+    "tabuk": "منطقة تبوك",
+    "jazan": "منطقة جازان",
+    "hail": "منطقة حائل",
+    "jouf": "منطقة الجوف",
+    "northern": "منطقة الحدود الشمالية",
+    "najran": "منطقة نجران",
+    "bahah": "منطقة الباحة",
+    "other": "أخرى",
+}
+
+REGION_LABELS_EN = {
+    "riyadh": "Riyadh Region",
+    "qassim": "Qassim Region",
+    "eastern": "Eastern Region",
+    "makkah": "Makkah Region",
+    "madinah": "Madinah Region",
+    "asir": "Asir Region",
+    "tabuk": "Tabuk Region",
+    "jazan": "Jazan Region",
+    "hail": "Hail Region",
+    "jouf": "Al Jouf Region",
+    "northern": "Northern Borders",
+    "najran": "Najran Region",
+    "bahah": "Al Bahah Region",
+    "other": "Other",
+}
+
+CITY_LABELS_AR = {
+    "riyadh": "الرياض",
+    "diriyah": "الدرعية",
+    "kharj": "الخرج",
+    "buraidah": "بريدة",
+    "unaizah": "عنيزة",
+    "ras": "الرس",
+    "dammam": "الدمام",
+    "khobar": "الخبر",
+    "dhahran": "الظهران",
+    "jubail": "الجبيل",
+    "jeddah": "جدة",
+    "taif": "الطائف",
+    "madinah": "المدينة المنورة",
+    "abha": "أبها",
+    "khamees": "خميس مشيط",
+    "tabuk": "تبوك",
+    "jazan": "جازان",
+    "hail": "حائل",
+    "sakaka": "سكاكا",
+    "arar": "عرعر",
+    "najran": "نجران",
+    "bahah": "الباحة",
+    "other": "أخرى",
+}
+
+CITY_LABELS_EN = {
+    "riyadh": "Riyadh",
+    "diriyah": "Diriyah",
+    "kharj": "Al Kharj",
+    "buraidah": "Buraidah",
+    "unaizah": "Unaizah",
+    "ras": "Ar Rass",
+    "dammam": "Dammam",
+    "khobar": "Khobar",
+    "dhahran": "Dhahran",
+    "jubail": "Jubail",
+    "jeddah": "Jeddah",
+    "taif": "Taif",
+    "madinah": "Madinah",
+    "abha": "Abha",
+    "khamees": "Khamis Mushait",
+    "tabuk": "Tabuk",
+    "jazan": "Jazan",
+    "hail": "Hail",
+    "sakaka": "Sakaka",
+    "arar": "Arar",
+    "najran": "Najran",
+    "bahah": "Al Bahah",
+    "other": "Other",
+}
 
 
 class EditProfileForm(forms.ModelForm):
-    # dropdowns
     region = forms.ChoiceField(
-        choices=REGION_CHOICES,
         required=False,
+        choices=[],
         widget=forms.Select(attrs={"class": "form-input", "id": "id_region"})
     )
 
     city = forms.ChoiceField(
-        choices=[("", _("Select city")), ("other", _("Other"))],  # other always exists
         required=False,
+        choices=[],
         widget=forms.Select(attrs={"class": "form-input", "id": "id_city"})
     )
 
-    # custom text when other
     region_custom = forms.CharField(
         required=False,
         widget=forms.TextInput(attrs={
@@ -77,7 +162,6 @@ class EditProfileForm(forms.ModelForm):
 
     class Meta:
         model = User
-        # ✅ لازم region_custom/city_custom موجودة في User model
         fields = [
             "first_name", "last_name", "profile_image", "bio",
             "region", "city", "linkedin",
@@ -103,9 +187,17 @@ class EditProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # 1) determine selected region:
-        #    - if POST -> use POST
-        #    - else -> use instance.region (only if it's one of the keys)
+        lang = translation.get_language() or "en"
+        is_ar = str(lang).startswith("ar")
+
+        region_labels = REGION_LABELS_AR if is_ar else REGION_LABELS_EN
+        city_labels = CITY_LABELS_AR if is_ar else CITY_LABELS_EN
+
+        self.fields["region"].choices = [("", _("Select region"))] + [
+            (key, region_labels.get(key, key))
+            for key in REGION_TO_CITIES.keys()
+        ]
+
         posted_region = (self.data.get("region") or "").strip()
         inst_region = (getattr(self.instance, "region", "") or "").strip()
 
@@ -114,36 +206,30 @@ class EditProfileForm(forms.ModelForm):
         else:
             region_val = inst_region if inst_region in REGION_TO_CITIES else ""
 
-        # 2) rebuild city choices based on region
         cities = REGION_TO_CITIES.get(region_val, [])
-        base = [("", _("Select city"))]
-        base += [(c, c.replace("_", " ").title()) for c in cities if c != "other"]
-        base += [("other", _("Other"))]
-        self.fields["city"].choices = base
+        self.fields["city"].choices = [("", _("Select city"))] + [
+            (key, city_labels.get(key, key))
+            for key in cities
+        ]
 
-        # 3) preserve values when saved as OTHER:
-        # if instance stored region == "other", show custom text
         if self.instance and self.instance.pk:
-            if (getattr(self.instance, "region", "") == "other"):
-                self.initial["region_custom"] = (getattr(self.instance, "region_custom", "") or "")
-                # keep dropdown value as "other"
+            if getattr(self.instance, "region", "") == "other":
                 self.initial["region"] = "other"
+                self.initial["region_custom"] = getattr(self.instance, "region_custom", "") or ""
 
-            if (getattr(self.instance, "city", "") == "other"):
-                self.initial["city_custom"] = (getattr(self.instance, "city_custom", "") or "")
+            if getattr(self.instance, "city", "") == "other":
                 self.initial["city"] = "other"
+                self.initial["city_custom"] = getattr(self.instance, "city_custom", "") or ""
 
-            # ✅ لو المنطقة/المدينة مخزنة كنص مخصص (مو من القائمة)
-            # نخلي الدروب داون على other ونعبي النص
             if inst_region and inst_region not in REGION_TO_CITIES and inst_region != "other":
                 self.initial["region"] = "other"
                 self.initial["region_custom"] = inst_region
 
             inst_city = (getattr(self.instance, "city", "") or "").strip()
-            # إذا المدينة نص مخصص
             all_known_cities = set()
             for arr in REGION_TO_CITIES.values():
                 all_known_cities.update(arr)
+
             if inst_city and inst_city not in all_known_cities and inst_city != "other":
                 self.initial["city"] = "other"
                 self.initial["city_custom"] = inst_city
@@ -156,7 +242,6 @@ class EditProfileForm(forms.ModelForm):
         region_custom = (cleaned.get("region_custom") or "").strip()
         city_custom = (cleaned.get("city_custom") or "").strip()
 
-        # ✅ Validation
         if region == "other":
             if not region_custom:
                 self.add_error("region_custom", _("Please type your region."))
@@ -165,11 +250,9 @@ class EditProfileForm(forms.ModelForm):
             if not city_custom:
                 self.add_error("city_custom", _("Please type your city."))
 
-        if region and region != "other" and city == "other":
-            if not city_custom:
-                self.add_error("city_custom", _("Please type your city."))
+        if region and region != "other" and city == "other" and not city_custom:
+            self.add_error("city_custom", _("Please type your city."))
 
-        # ✅ Store: keep dropdown as "other" and save actual text in custom fields
         if region == "other":
             cleaned["region"] = "other"
             cleaned["region_custom"] = region_custom
@@ -182,13 +265,11 @@ class EditProfileForm(forms.ModelForm):
         else:
             cleaned["city_custom"] = ""
 
-        # ✅ If no region selected => clear city + city_custom
         if not region:
             cleaned["city"] = ""
             cleaned["city_custom"] = ""
 
         return cleaned
-
 
 # =========================================
 # Auth Forms
@@ -454,15 +535,7 @@ class OTPForm(forms.Form):
 class ResetPasswordForm(SetPasswordForm):
     pass
 
-class EditUserForm(forms.ModelForm):
+class UserEditForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'email', 'bio', 'region', 'city', 'linkedin', 'is_active', 'is_staff', 'is_superuser']
-        widgets = {
-            'username': forms.TextInput(attrs={'readonly' : 'readonly'}),
-            'email': forms.TextInput(attrs={'readonly' : 'readonly'}),
-            'bio': forms.TextInput(attrs={'readonly' : 'readonly'}),
-            'region': forms.TextInput(attrs={'readonly' : 'readonly'}),
-            'city': forms.TextInput(attrs={'readonly' : 'readonly'}),
-            'linkedin': forms.TextInput(attrs={'readonly' : 'readonly'}),
-        }
+        fields = ["username", "email","is_active","is_staff","is_superuser"]

@@ -1,6 +1,6 @@
 import json
 import random
-
+from django.db.models import OuterRef, Subquery, FloatField, ExpressionWrapper, Avg
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -49,7 +49,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from .models import Projects, SiteContent
 from analysis.models import AnalysisResult
-from JADWA_AI.forms import EditUserForm
+from JADWA_AI.forms import UserEditForm
 from JADWA_AI.forms import EditProfileForm
 
 
@@ -65,7 +65,11 @@ def project_delete(request, pk):
 
     project.delete()
 
-    messages.success(request, _("Project deleted successfully."))
+    messages.success(
+        request,
+        _("Project deleted successfully."),
+        extra_tags="dashboard_delete success"
+    )   
     return redirect("dashboard")
 
 
@@ -85,11 +89,25 @@ def project_detail(request, pk):
     # Region label (choice label)
     region_label = project.get_project_region_display() if project.project_region else ""
 
-    location = format_location(
-        city=city_label,
-        region=region_label,
-        country="Saudi Arabia"
-    )
+    region_label = project.get_project_region_display() if project.project_region else ""
+    city_label = project.get_project_city_display() if project.project_city else ""
+
+    from django.utils.translation import gettext as _
+
+    country_label = _("Saudi Arabia")
+
+    location_parts = []
+
+    if country_label:
+        location_parts.append(country_label)
+
+    if region_label:
+        location_parts.append(region_label)
+
+    if city_label:
+        location_parts.append(city_label)
+
+    location = " • ".join(location_parts) if location_parts else ""
 
     return render(request, "pages/project_detail.html", {
         "project": project,
@@ -496,12 +514,6 @@ def contact_submit(request):
     return redirect("/#contact")
 
 
-# =======================
-# Dashboard
-# =======================
-# =======================
-# Dashboard
-# =======================
 @login_required
 def user_dashboard(request):
     if request.user.is_superuser:
@@ -531,7 +543,6 @@ def user_dashboard(request):
         recs_en=Subquery(last_result.values("recommendations_en")[:1]),
     )
 
-    # ======= Region/City labels (support OTHER + custom text) =======
     u = request.user
     REGION_LABELS = dict(Projects.REGION_CHOICES)
     CITY_LABELS = dict(Projects.CITY_CHOICES)
@@ -557,8 +568,18 @@ def user_dashboard(request):
         if default_storage.exists(u.profile_image.name):
             profile_image_url = u.profile_image.url
 
+    projects_count = qs.count()
+    analyses_qs = AnalysisResult.objects.filter(user=request.user)
+    analyses_count = analyses_qs.count()
+
+    avg_score_obj = analyses_qs.aggregate(avg=Avg("probability"))
+    avg_score = (avg_score_obj["avg"] or 0) * 100
+
     return render(request, "pages/dashboard.html", {
         "projects": projects,
+        "projects_count": projects_count,
+        "analyses_count": analyses_count,
+        "avg_score": avg_score,
         "profile_name": u.get_full_name() or u.username,
         "profile_email": u.email,
         "is_ar": is_ar,
@@ -585,27 +606,38 @@ def Admin_Dashboard(request):
     return render(request, "pages/admin_dashboard/admin.html", context)
 
 def user_detail(request , id):
-    user = User.objects.get( id = id)
-    if request.method =="POST":
-        form =  EditUserForm(request.POST, instance = user)
+    user = get_object_or_404(User, id =id)
+    if request.method =='POST':
+        form =  UserEditForm(request.POST, instance = user)
         if form.is_valid():
             form.save()
             return redirect ('Admin_Dashboard')
     else:
-        form = EditUserForm(instance = user)
-    return render(request, "pages/admin_dashboard/users_details.html", {"form":form})
+        form = UserEditForm(instance=user)
+    return render(request, "pages/admin_dashboard/users_details.html", {"form":form,"user" : user})
+    
+
+def edit_user(request , id):
+    user = User.objects.get(id = id)
+    if request.method == 'POST':
+        user.username = request.POST.get("username")
+        user.email = request.POST.get("email")
+        is_staff = request.POST.get("is_staff")
+        user.is_staff = True if is_staff == "on" else False
+        user.save()
+        return redirect("edit_user", id=user.id)
+    return render (request, "edit_user.html",{"user":user})
 
 def delete_user(request,id):
     user =get_object_or_404(User,id =id)
-    if request.user == user:
-        messages.error(request,("you can not delete your self."))
-        return redirect ('Admin_Dashboard')
-    try:
-        user.delete()
-        messages.success(request,("user deleted successfully."))
-    except Exception as e:
-        messages.error(request,f"User deletion failed: {str(e)}")
-    return redirect ('Admin_Dashboard')
+    if request.method == 'POST':
+        if request.user == user:
+            messages.error(request,("you can not delete your self."))
+            return redirect('Admin_Dashboard')
+    user.delete()
+    messages.success(request,("user deleted successfully."))
+    return redirect('Admin_Dashboard')
+    return render (request, "pages/admin_dashboard/delete_user.html",{"user":user})
 
 def user_projects(request , id):
     user = get_object_or_404(User , id = id)
@@ -614,7 +646,7 @@ def user_projects(request , id):
     
 def messages_list(request):
     messages = ContactMessage.objects.all()
-    return render(request, "pages/admin_dashboard/admin.html", {"messages" : messages})
+    return render(request, "pages/admin_dashboard/messages.html", {"users" : users})
 
 def send_message(request, message_id):
     message = get_object_or_404(ContactMessage, id =message_id)

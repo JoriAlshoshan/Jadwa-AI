@@ -79,15 +79,14 @@
       <div class="pd-row pd-label">{% trans "Type" %}</div>
       <div class="pd-row pd-val">
         {% if project.Project_type %}
-          {{ project.get_project_type_display|default:project.Project_type }}
-        {% else %}
+{{ project.get_Project_type_display|default:project.Project_type }}        {% else %}
           <span class="pd-muted">—</span>
         {% endif %}
       </div>
-  <div class="pd-row pd-label"> {% trans "Location" %}</div>
-      <div class="pd-row pd-val">
-        {{ location|default:"—" }}
-      </div>
+<div class="pd-row pd-label">{% trans "Location" %}</div>
+<div class="pd-row pd-val">
+  {{ location|default:"—" }}
+</div>
       <div class="pd-row pd-label">{% trans "Budget" %}</div>
       <div class="pd-row pd-val">
         {% if project.project_budget %}
@@ -118,16 +117,22 @@
           <span class="pd-muted">—</span>
         {% endif %}
       </div>
-
-      <div class="pd-row pd-label">{% trans "Economic Indicator (dataset)" %}</div>
-      <div class="pd-row pd-val">
-        {% if project.economic_indicator %}
-          {{ project.economic_indicator }}
-        {% else %}
-          <span class="pd-muted">—</span>
-        {% endif %}
-      </div>
-
+<div class="pd-row pd-label">{% trans "Economic Indicator (dataset)" %}</div>
+<div class="pd-row pd-val">
+  {% if project.economic_indicator == "Unknown" %}
+    {% trans "Unknown" %}
+  {% elif project.economic_indicator == "Low" %}
+    {% trans "Low" %}
+  {% elif project.economic_indicator == "Medium" %}
+    {% trans "Medium" %}
+  {% elif project.economic_indicator == "High" %}
+    {% trans "High" %}
+  {% elif project.economic_indicator %}
+    {{ project.economic_indicator }}
+  {% else %}
+    <span class="pd-muted">—</span>
+  {% endif %}
+</div>
       <div class="pd-row pd-label">{% trans "Similar enterprises (dataset)" %}</div>
       <div class="pd-row pd-val">
         {% if project.num_of_similar_enterprises %}

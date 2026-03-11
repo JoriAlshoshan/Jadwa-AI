@@ -191,7 +191,7 @@ label .required-star {
   <div class="card-body">
 
     <p style="color:#64748b; margin-bottom:16px;">
-      Adjust your project inputs to improve feasibility and re-run the analysis.
+{% trans "Adjust your project inputs to improve feasibility and re-run the analysis" %}
     </p>
 
       <form action="{% url 'project_edit' project.id %}" method="post" id="projectForm" novalidate>

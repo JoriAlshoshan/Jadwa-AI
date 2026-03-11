@@ -88,7 +88,7 @@ class Projects(models.Model):
     Project_type = models.CharField(max_length=50, choices=PROJECT_TYPE_CHOICES, db_column="Project_type")
 
     REGION_CHOICES = [
-        ("", _("---------")),
+        ("", _("Select region")),
         ("riyadh", _("Riyadh Region")),
         ("qassim", _("Qassim Region")),
         ("eastern", _("Eastern Region")),
@@ -106,7 +106,7 @@ class Projects(models.Model):
     ]
 
     CITY_CHOICES = [
-        ("", _("---------")),
+        ("", _("Select city")),
         ("riyadh", _("Riyadh")),
         ("diriyah", _("Diriyah")),
         ("kharj", _("Al Kharj")),
@@ -227,14 +227,14 @@ class Projects(models.Model):
             value = float(region_data["economic_indicator"].values[0])
 
         if value is None:
-            self.economic_indicator = "Unknown"
+            self.economic_indicator = _("Unknown")
         else:
             if value <= 0.33:
-                self.economic_indicator = "Low"
+                self.economic_indicator = _("Low")
             elif value <= 0.66:
-                self.economic_indicator = "Medium"
+                self.economic_indicator = _("Medium")
             else:
-                self.economic_indicator = "High"
+               self.economic_indicator = _("High")
 
         self.num_of_similar_enterprises = get_similar_enterprises(self.Project_type, self.project_location)
         super().save(*args, **kwargs)

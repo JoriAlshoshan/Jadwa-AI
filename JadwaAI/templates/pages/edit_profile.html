@@ -266,8 +266,33 @@
     cities.forEach(c => {
       const opt = document.createElement("option");
       opt.value = c;
-      opt.textContent = (c === "other") ? "{% trans 'Other' %}" : (c.charAt(0).toUpperCase() + c.slice(1));
-      citySelect.appendChild(opt);
+const cityNames = {
+  riyadh: "الرياض",
+  diriyah: "الدرعية",
+  kharj: "الخرج",
+  buraidah: "بريدة",
+  unaizah: "عنيزة",
+  ras: "الرس",
+  dammam: "الدمام",
+  khobar: "الخبر",
+  dhahran: "الظهران",
+  jubail: "الجبيل",
+  jeddah: "جدة",
+  taif: "الطائف",
+  madinah: "المدينة المنورة",
+  abha: "أبها",
+  khamees: "خميس مشيط",
+  tabuk: "تبوك",
+  jazan: "جازان",
+  hail: "حائل",
+  sakaka: "سكاكا",
+  arar: "عرعر",
+  najran: "نجران",
+  bahah: "الباحة",
+  other: "{% trans 'Other' %}"
+};
+
+opt.textContent = cityNames[c] || c;      citySelect.appendChild(opt);
     });
 
     if (keepValue && cities.includes(keepValue)) citySelect.value = keepValue;

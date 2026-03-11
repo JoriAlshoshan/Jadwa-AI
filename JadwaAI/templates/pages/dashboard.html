@@ -6,12 +6,11 @@
 /* ===== Toast Messages (WOW) ===== */
 .toast-wrap{
   position: fixed;
-  top: 88px;                 /* ✅ نزّلناه تحت الناف */
+  top: 88px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 2000;
-
-  width: min(1100px, calc(100% - 32px)); /* ✅ نفس كونتينر الداشبورد */
+  width: min(1100px, calc(100% - 32px));
   display: grid;
   gap: 10px;
 }
@@ -133,13 +132,15 @@ html[dir="rtl"] .menu-item{ text-align:right; }
 .menu-item.danger{ color:#b42318; }
 .menu-item.danger:hover{ background:#fee2e2; }
 
-/* align actions row */
 .actions-row{
-  display:flex; gap:10px; flex-wrap:wrap;
-  align-items:center; justify-content:flex-end;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:flex-end;
 }
 
-/* ===== Delete Modal (Soft + Center Buttons) ===== */
+/* ===== Delete Modal ===== */
 .modal-backdrop{
   position:fixed; inset:0;
   background:rgba(15,23,42,.50);
@@ -269,66 +270,28 @@ html[dir="rtl"] .menu-item{ text-align:right; }
   transition:all .15s ease;
 }
 .btn-danger:hover{ filter:brightness(.98); transform:translateY(-1px); }
-.back-home-btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
 
-  min-width: 420px;        /* نفس الإحساس بالصورة */
-  padding: 18px 28px;
-  border-radius: 18px;
-
-  background:#fff;
-  color:#0a2fbf;
-  border:3px solid #0a2fbf;
-
-  font-weight:900;
-  font-size:18px;
-  text-decoration:none;
-
-  transition: all .15s ease;
-}
-
-.back-home-btn:hover{
-  background: rgba(10,47,191,.06);
-  transform: translateY(-1px);
-}
-.back-home-btn:active{
-  transform: translateY(0);
-}
-
-/* موبايل */
-@media (max-width: 520px){
-  .back-home-btn{
-    min-width: 100%;
-  }
-}
-/* نفس زر AddProject */
 .dash-home-btn{
   flex: 1;
-  max-width: 200px;   /* نفس اللي عندك في AddProject */
+  max-width: 200px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
 }
-/* نفس ستايل btn-outline (مثل صفحة Add Project) */
+
 .btn-outline{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-
   padding:12px 18px;
   border-radius:999px;
-
   background:#fff;
   border:1px solid rgba(10,47,191,.35);
   color:#0a2fbf;
-
   font-weight:900;
   font-size:14px;
-  text-decoration:none;   /* يشيل الخط */
+  text-decoration:none;
   cursor:pointer;
-
   transition:all .15s ease;
 }
 
@@ -337,11 +300,11 @@ html[dir="rtl"] .menu-item{ text-align:right; }
   transform:translateY(-1px);
 }
 
-/* عشان حجم الزر يكون نفس اللي تبغاه */
 .dash-home-btn{
-  min-width:200px; /* أو 180 حسب ذوقك */
+  min-width:200px;
 }
-/* ===== Breadcrumb (Pro) ===== */
+
+/* ===== Breadcrumb ===== */
 .crumbs{
   display:flex;
   align-items:center;
@@ -370,21 +333,18 @@ html[dir="rtl"] .menu-item{ text-align:right; }
   font-weight:900;
 }
 
-/* RTL support */
 html[dir="rtl"] .crumbs .sep{
   transform: scaleX(-1);
 }
-/* ===== Formal Breadcrumb (Pro) ===== */
+
 .breadcrumb-pro{
   display:flex;
   align-items:center;
   gap:10px;
-
-  margin-top:18px;     /* يبعده عن الناف */
-  margin-bottom:10px;  /* مسافة قبل العنوان */
-
-  padding:10px 0;      /* رسمي بدون صندوق */
-  border-bottom:1px solid rgba(15,23,42,.06);  /* خط خفيف يعطي فصل */
+  margin-top:18px;
+  margin-bottom:18px;
+  padding:10px 0;
+  border-bottom:1px solid rgba(15,23,42,.06);
 }
 
 .breadcrumb-link{
@@ -410,92 +370,228 @@ html[dir="rtl"] .crumbs .sep{
   color:#64748b;
 }
 
-/* RTL */
 html[dir="rtl"] .breadcrumb-pro{
   direction:rtl;
 }
 html[dir="rtl"] .breadcrumb-sep{
   transform:scaleX(-1);
 }
-.breadcrumb-pro{
-  display:flex;
-  align-items:center;
-  gap:10px;
 
-  margin-top:18px;
-  margin-bottom:18px;  
+/* ===== Stats Section ===== */
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:14px;
+  margin:0 0 16px;
+}
 
-  padding:10px 0;
-  border-bottom:1px solid rgba(15,23,42,.06);
+.stat-card{
+  background:#fff;
+  border:1px solid rgba(15,23,42,.08);
+  border-radius:18px;
+  padding:16px 18px;
+  box-shadow:0 8px 24px rgba(15,23,42,.04);
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.stat-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 34px rgba(15,23,42,.08);
+  border-color:rgba(10,47,191,.14);
+}
+
+.stat-card.primary{
+  background:linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border-color:rgba(10,47,191,.12);
+}
+
+.stat-label{
+  font-size:12px;
+  font-weight:800;
+  color:#64748b;
+  margin-bottom:8px;
+  letter-spacing:.02em;
+}
+
+.stat-value{
+  font-size:30px;
+  line-height:1;
+  font-weight:900;
+  color:#0f172a;
+  letter-spacing:-.03em;
+}
+
+.stat-card.primary .stat-value{
+  color:#0a2fbf;
+}
+
+.stat-sub{
+  margin-top:8px;
+  font-size:12px;
+  color:#94a3b8;
+  line-height:1.5;
+}
+
+@media (max-width: 860px){
+  .stats-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media (max-width: 720px){
+  .actions-row{
+    justify-content:flex-start;
+  }
+}
+</style>
+<style>
+html[dir="rtl"] .page-container{
+  direction: rtl;
+}
+
+html[dir="rtl"] .stats-grid,
+html[dir="rtl"] .actions-row,
+html[dir="rtl"] .modal-actions,
+html[dir="rtl"] .modal-head,
+html[dir="rtl"] .modal-project,
+html[dir="rtl"] .toast,
+html[dir="rtl"] .breadcrumb-pro{
+  direction: rtl;
+}
+
+html[dir="rtl"] .stat-card{
+  text-align: right;
+}
+
+html[dir="rtl"] .stat-label,
+html[dir="rtl"] .stat-value,
+html[dir="rtl"] .stat-sub{
+  text-align: right;
+}
+
+html[dir="rtl"] .actions-row{
+  justify-content: flex-start;
+}
+
+html[dir="rtl"] .menu-dropdown{
+  right: auto;
+  left: 0;
+}
+
+html[dir="rtl"] .menu-item{
+  text-align: right;
+}
+
+html[dir="rtl"] .modal-head{
+  flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .modal-project{
+  flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .modal-warning{
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+html[dir="rtl"] .stats-grid .stat-card.primary .stat-value,
+html[dir="rtl"] .stats-grid .stat-card .stat-value{
+  text-align: right;
+}
+
+html[dir="rtl"] .profile-header-row{
+  direction: rtl;
+}
+
+html[dir="rtl"] .profile-info-wrap{
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] .top-actions-row{
+  direction: rtl;
+}
+
+html[dir="rtl"] .top-actions-row .btn{
+  margin-right: 0 !important;
+  margin-left: 8px !important;
+}
+
+html[dir="rtl"] .project-row{
+  direction: rtl;
+}
+
+html[dir="rtl"] .project-main{
+  text-align: right;
+}
+
+html[dir="rtl"] .project-meta{
+  justify-content: flex-start;
+}
+
+html[dir="rtl"] .project-empty{
+  text-align: right;
 }
 </style>
 {% if messages %}
   <div class="toast-wrap" id="toastWrap">
     {% for message in messages %}
-      {% with m=message|stringformat:"s"|lower %}
-        {% if "delete" in m or "deleted" in m or "حذف" in m %}
-          <div class="toast {{ message.tags|default:'info' }}" role="status" aria-live="polite">
-            <div class="toast-icon">
-              {% if 'success' in message.tags %}✓
-              {% elif 'error' in message.tags %}! 
-              {% elif 'warning' in message.tags %}! 
-              {% else %}i{% endif %}
-            </div>
-
-            <div class="toast-body">
-              <p class="toast-title">
-                {% if 'success' in message.tags %}{% trans "Success" %}
-                {% elif 'error' in message.tags %}{% trans "Error" %}
-                {% elif 'warning' in message.tags %}{% trans "Warning" %}
-                {% else %}{% trans "Info" %}{% endif %}
-              </p>
-              <p class="toast-text">{{ message }}</p>
-            </div>
-
-            <button type="button" class="toast-close" aria-label="Close">✕</button>
+      {% if "dashboard_delete" in message.tags %}
+        <div class="toast {{ message.tags|default:'info' }}" role="status" aria-live="polite">
+          <div class="toast-icon">
+            {% if 'success' in message.tags %}✓
+            {% elif 'error' in message.tags %}! 
+            {% elif 'warning' in message.tags %}! 
+            {% else %}i{% endif %}
           </div>
-        {% endif %}
-      {% endwith %}
+
+          <div class="toast-body">
+            <p class="toast-title">
+              {% if 'success' in message.tags %}{% trans "Success" %}
+              {% elif 'error' in message.tags %}{% trans "Error" %}
+              {% elif 'warning' in message.tags %}{% trans "Warning" %}
+              {% else %}{% trans "Info" %}{% endif %}
+            </p>
+            <p class="toast-text">{{ message }}</p>
+          </div>
+
+          <button type="button" class="toast-close" aria-label="{% trans 'Close' %}">✕</button>
+        </div>
+      {% endif %}
     {% endfor %}
   </div>
 {% endif %}
 
-
 <div class="page-container" style="padding:26px; max-width:1100px; margin:0 auto;">
 
-<!-- Top row: Title + Add Project -->
-<div style="display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; align-items:center; margin-bottom:14px; padding-right:10px;">
+<div class="top-actions-row" style="display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; align-items:center; margin-bottom:14px; padding-right:10px;">    <div style="min-width:320px;">
+      <!--
+      <nav class="breadcrumb-pro" aria-label="Breadcrumb">
+        <a href="{% url 'landing' %}" class="breadcrumb-link">{% trans "Home" %}</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">{% trans "Dashboard" %}</span>
+      </nav>
 
-  <div style="min-width:320px;">
-
-   <!-- <nav class="breadcrumb-pro" aria-label="Breadcrumb">
-  <a href="{% url 'landing' %}" class="breadcrumb-link">{% trans "Home" %}</a>
-  <span class="breadcrumb-sep">/</span>
-  <span class="breadcrumb-current">{% trans "Dashboard" %}</span>
-</nav>
-
-    <h1 style="margin:0; font-size:26px;">{% trans "Dashboard" %}</h1>
-    <p style="margin:6px 0 0; color:#64748b; font-size:14px;">
-      {% trans "Manage your projects and run feasibility analysis." %}
-    </p> -->
-  </div>
+      <h1 style="margin:0; font-size:26px;">{% trans "Dashboard" %}</h1>
+      <p style="margin:6px 0 0; color:#64748b; font-size:14px;">
+        {% trans "Manage your projects and run feasibility analysis." %}
+      </p>
+      -->
+    </div>
 
   <a href="{% url 'project_new' %}"
-     class="btn"
-     style="padding:10px 16px; font-size:14px; border-radius:999px; min-width:180px; text-align:center; margin-right:8px;">
-    {% trans "Add Project" %}
-  </a>
+   class="btn"
+   style="padding:10px 16px; font-size:14px; border-radius:999px; min-width:180px; text-align:center;">
+      {% trans "Add Project" %}
+    </a>
+  </div>
 
-</div>
-
-  <!-- Profile summary -->
   <div style="background:#fff; border:1px solid rgba(15,23,42,.10); border-radius:16px; padding:16px 18px; margin-bottom:14px;">
-    <div style="display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; align-items:center;">
-
-      <div style="display:flex; gap:12px; align-items:center; min-width:260px;">
-        <div style="width:52px; height:52px; border-radius:999px; overflow:hidden; background:#f1f5f9; border:1px solid rgba(15,23,42,.12); display:flex; align-items:center; justify-content:center;">
+<div class="profile-header-row" style="display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; align-items:center;">
+<div class="profile-info-wrap" style="display:flex; gap:12px; align-items:center; min-width:260px;">        <div style="width:52px; height:52px; border-radius:999px; overflow:hidden; background:#f1f5f9; border:1px solid rgba(15,23,42,.12); display:flex; align-items:center; justify-content:center;">
           {% if profile_image_url %}
-            <img src="{{ profile_image_url }}" alt="Profile" style="width:100%; height:100%; object-fit:cover;">
+            <img src="{{ profile_image_url }}" alt="{% trans 'Profile' %}" style="width:100%; height:100%; object-fit:cover;">
           {% else %}
             <span style="font-weight:900; color:#475569; font-size:18px;">
               {% if request.user.first_name %}
@@ -542,8 +638,27 @@ html[dir="rtl"] .breadcrumb-sep{
     </div>
   </div>
 
-  <!-- Projects list -->
-<div style="background:#fff; border:1px solid rgba(15,23,42,.10); border-radius:16px; overflow:visible;">
+  <div class="stats-grid">
+    <div class="stat-card primary">
+      <div class="stat-label">{% trans "Projects" %}</div>
+      <div class="stat-value">{{ projects_count }}</div>
+      <div class="stat-sub">{% trans "Total active projects" %}</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">{% trans "Analyses" %}</div>
+      <div class="stat-value">{{ analyses_count }}</div>
+      <div class="stat-sub">{% trans "Completed feasibility runs" %}</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">{% trans "Avg. Score" %}</div>
+      <div class="stat-value">{{ avg_score|floatformat:0 }}%</div>
+      <div class="stat-sub">{% trans "Average feasibility score" %}</div>
+    </div>
+  </div>
+
+  <div style="background:#fff; border:1px solid rgba(15,23,42,.10); border-radius:16px; overflow:visible;">
     <div style="padding:12px 16px; border-bottom:1px solid rgba(15,23,42,.08); font-weight:800; font-size:14px;">
       {% trans "My Projects" %}
     </div>
@@ -556,7 +671,7 @@ html[dir="rtl"] .breadcrumb-sep{
 
               <div style="min-width:260px;">
                 <div style="font-weight:900; font-size:16px; line-height:1.2;">
-                  {{ p.project_name|default:"Project" }}
+                  {{ p.project_name|default:_("Project") }}
                 </div>
 
                 {% if p.last_result_id %}
@@ -576,37 +691,37 @@ html[dir="rtl"] .breadcrumb-sep{
                     {% if is_ar %}
                       {% if p.recs_status_ar == "ready" and p.recs_ar %}
                         <span style="padding:3px 9px; border-radius:999px; background:rgba(34,197,94,.10); border:1px solid rgba(34,197,94,.22); color:#166534;">
-                          التوصيات جاهزة
+                          {% trans "Recommendations: Ready" %}
                         </span>
                       {% elif p.recs_status_ar == "failed" %}
                         <span style="padding:3px 9px; border-radius:999px; background:rgba(239,68,68,.10); border:1px solid rgba(239,68,68,.22); color:#991b1b;">
-                          فشلت التوصيات
+                          {% trans "Recommendations: Failed" %}
                         </span>
                       {% elif p.recs_status_ar == "translating" %}
                         <span style="padding:3px 9px; border-radius:999px; background:rgba(245,158,11,.12); border:1px solid rgba(245,158,11,.22); color:#92400e;">
-                          جاري الترجمة...
+                          {% trans "Translating..." %}
                         </span>
                       {% else %}
                         <span style="padding:3px 9px; border-radius:999px; background:rgba(245,158,11,.12); border:1px solid rgba(245,158,11,.22); color:#92400e;">
-                          لم يتم إنشاء التوصيات
+                          {% trans "Not Generated" %}
                         </span>
                       {% endif %}
                     {% else %}
                       {% if p.recs_status_en == "ready" and p.recs_en %}
                         <span style="padding:3px 9px; border-radius:999px; background:rgba(34,197,94,.10); border:1px solid rgba(34,197,94,.22); color:#166534;">
-                          Recommendations: Ready
+                          {% trans "Recommendations: Ready" %}
                         </span>
                       {% elif p.recs_status_en == "failed" %}
                         <span style="padding:3px 9px; border-radius:999px; background:rgba(239,68,68,.10); border:1px solid rgba(239,68,68,.22); color:#991b1b;">
-                          Recommendations: Failed
+                          {% trans "Recommendations: Failed" %}
                         </span>
                       {% elif p.recs_status_en == "translating" %}
                         <span style="padding:3px 9px; border-radius:999px; background:rgba(245,158,11,.12); border:1px solid rgba(245,158,11,.22); color:#92400e;">
-                          Translating...
+                          {% trans "Translating..." %}
                         </span>
                       {% else %}
                         <span style="padding:3px 9px; border-radius:999px; background:rgba(245,158,11,.12); border:1px solid rgba(245,158,11,.22); color:#92400e;">
-                          Not Generated
+                          {% trans "Not Generated" %}
                         </span>
                       {% endif %}
                     {% endif %}
@@ -620,7 +735,6 @@ html[dir="rtl"] .breadcrumb-sep{
                 {% endif %}
               </div>
 
-              <!-- Actions -->
               <div class="actions-row">
                 {% if p.last_result_id %}
                   <a class="btn"
@@ -641,9 +755,8 @@ html[dir="rtl"] .breadcrumb-sep{
                   </a>
                 {% endif %}
 
-                <!-- WOW menu (⋯) -->
                 <div class="menu-wrapper">
-                  <button type="button" class="menu-btn" aria-label="More">⋯</button>
+                  <button type="button" class="menu-btn" aria-label="{% trans 'More' %}">⋯</button>
 
                   <div class="menu-dropdown">
                     <a href="{% url 'project_detail' p.id %}" class="menu-item">{% trans "Project Details" %}</a>
@@ -652,7 +765,7 @@ html[dir="rtl"] .breadcrumb-sep{
                     <button type="button"
                             class="menu-item danger js-open-delete"
                             data-project-id="{{ p.id }}"
-                            data-project-name="{{ p.project_name|default:'Project' }}">
+                            data-project-name="{{ p.project_name|default:_('Project') }}">
                       {% trans "Delete Project" %}
                     </button>
                   </div>
@@ -673,13 +786,12 @@ html[dir="rtl"] .breadcrumb-sep{
 
 </div>
 
-<!-- Delete Modal -->
 <div class="modal-backdrop" id="deleteModal" role="dialog" aria-modal="true">
   <div class="modal" style="direction:{% if request.LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %};">
 
     <div class="modal-head">
       <h3 class="modal-title">{% trans "Delete Project" %}</h3>
-      <button type="button" class="modal-close" id="closeDeleteModal" aria-label="Close">✕</button>
+      <button type="button" class="modal-close" id="closeDeleteModal" aria-label="{% trans 'Close' %}">✕</button>
     </div>
 
     <div class="modal-body">
@@ -715,18 +827,16 @@ html[dir="rtl"] .breadcrumb-sep{
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-  // ===== Toast close + auto hide =====
-const toastWrap = document.getElementById("toastWrap");
-if (toastWrap){
-  toastWrap.querySelectorAll(".toast-close").forEach(btn=>{
-    btn.addEventListener("click", ()=> btn.closest(".toast").remove());
-  });
-  setTimeout(()=>{
-    toastWrap.querySelectorAll(".toast").forEach(t=> t.remove());
-  }, 3500);
-}
+  const toastWrap = document.getElementById("toastWrap");
+  if (toastWrap){
+    toastWrap.querySelectorAll(".toast-close").forEach(btn=>{
+      btn.addEventListener("click", ()=> btn.closest(".toast").remove());
+    });
+    setTimeout(()=>{
+      toastWrap.querySelectorAll(".toast").forEach(t=> t.remove());
+    }, 3500);
+  }
 
-  // ===== Dropdown menu (⋯) =====
   document.querySelectorAll(".menu-btn").forEach(btn => {
     btn.addEventListener("click", function(e){
       e.stopPropagation();
@@ -744,7 +854,6 @@ if (toastWrap){
     document.querySelectorAll(".menu-dropdown").forEach(m => m.style.display = "none");
   });
 
-  // ===== Delete modal =====
   const modal = document.getElementById("deleteModal");
   const closeBtn = document.getElementById("closeDeleteModal");
   const cancelBtn = document.getElementById("cancelDelete");
@@ -755,7 +864,7 @@ if (toastWrap){
   function openModal(projectId, projectName){
     const tpl = form.dataset.actionTemplate || `/projects/__ID__/delete/`;
     form.action = tpl.replace("__ID__", projectId);
-    nameBox.textContent = projectName || "Project";
+    nameBox.textContent = projectName || "{% trans 'Project' %}";
     modal.style.display = "flex";
     if (deleteBtn){
       deleteBtn.disabled = false;
@@ -791,11 +900,10 @@ if (toastWrap){
     if(e.key === "Escape") closeModal();
   });
 
-  // ===== Prevent double submit + loading state =====
   if (form && deleteBtn){
     form.addEventListener("submit", function () {
       deleteBtn.disabled = true;
-      deleteBtn.innerHTML = "{% trans 'Deleting...' %} ";
+      deleteBtn.innerHTML = "{% trans 'Deleting...' %}";
       deleteBtn.style.opacity = "0.7";
       deleteBtn.style.cursor = "not-allowed";
     });

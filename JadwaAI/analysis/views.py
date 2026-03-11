@@ -2,7 +2,6 @@ import os
 import re
 
 from django.conf import settings
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.staticfiles import finders
 from django.http import JsonResponse, HttpResponse
@@ -22,12 +21,8 @@ import arabic_reshaper
 from bidi.algorithm import get_display
 
 from .models import AnalysisResult
-from JADWA_AI.models import Projects  # ✅ جدول المشاريع من تطبيقك الأساسي
+from JADWA_AI.models import Projects
 
-
-# =======================
-# Helpers
-# =======================
 
 def rtl(txt: str) -> str:
     txt = (txt or "").strip()
@@ -40,9 +35,10 @@ def rtl(txt: str) -> str:
 ARABIC_RE = re.compile(r"[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]")
 _BIDI_CTRL_RE = re.compile(r"[\u200E\u200F\u202A-\u202E\u2066-\u2069\uFEFF]")
 
+
 def strip_bidi_controls(text: str) -> str:
     return _BIDI_CTRL_RE.sub("", text or "")
-    
+
 
 def has_arabic(text: str) -> bool:
     return bool(ARABIC_RE.search(text or ""))
@@ -50,60 +46,10 @@ def has_arabic(text: str) -> bool:
 
 def ensure_arabic_font():
     font_path = os.path.join(settings.BASE_DIR, "static", "fonts", "tahoma.ttf")
-
     if not os.path.exists(font_path):
         raise FileNotFoundError("Put tahoma.ttf inside static/fonts/")
-
     if "ArabicFont" not in pdfmetrics.getRegisteredFontNames():
         pdfmetrics.registerFont(TTFont("ArabicFont", font_path))
-
-
-
-
-def wrap_ltr_lines(p: canvas.Canvas, text: str, max_width: float, font_name: str, font_size: int):
-    p.setFont(font_name, font_size)
-    lines_out = []
-    for raw in (text or "").splitlines():
-        raw = raw.strip()
-        if not raw:
-            lines_out.append("")
-            continue
-        words = raw.split(" ")
-        current = ""
-        for w in words:
-            test = (current + " " + w).strip()
-            if p.stringWidth(test, font_name, font_size) <= max_width:
-                current = test
-            else:
-                if current:
-                    lines_out.append(current)
-                current = w
-        if current:
-            lines_out.append(current)
-    return lines_out
-
-
-def wrap_rtl_lines(p: canvas.Canvas, text: str, max_width: float, font_name: str, font_size: int):
-    p.setFont(font_name, font_size)
-    lines_out = []
-    for raw in (text or "").splitlines():
-        raw = raw.strip()
-        if not raw:
-            lines_out.append("")
-            continue
-        words = raw.split(" ")
-        current = ""
-        for w in words:
-            test = (current + " " + w).strip()
-            if p.stringWidth(test, font_name, font_size) <= max_width:
-                current = test
-            else:
-                if current:
-                    lines_out.append(rtl(current))
-                current = w
-        if current:
-            lines_out.append(rtl(current))
-    return lines_out
 
 
 def current_lang(request) -> str:
@@ -131,7 +77,6 @@ def set_recs_by_lang(result: AnalysisResult, lang: str, recs_text: str, status: 
         result.recommendations_status_en = status
 
 
-# ✅ الحالة النهائية: تعتمد على probability و threshold فقط
 def is_feasible_result(result: AnalysisResult) -> bool:
     try:
         return float(result.probability) >= float(result.threshold)
@@ -162,7 +107,6 @@ def normalize_recommendations_text(result: AnalysisResult, lang: str, recs_text:
             text = text.replace("غير قابل للتنفيذ", "__TMP__")
             text = text.replace("قابل للتنفيذ", "غير قابل للتنفيذ")
             text = text.replace("__TMP__", "غير قابل للتنفيذ")
-
     else:
         final_word = "feasible" if ok else "not feasible"
         rule = f"Note: Final decision uses probability ({prob:.4f}) vs threshold ({thr:.2f}); therefore the project is {final_word}."
@@ -199,30 +143,22 @@ def map_economic_indicator(value):
 
 
 def build_project_data(project: Projects) -> dict:
-    # 1️⃣ نقرأ المنطقة والمدينة من المشروع
     region = (getattr(project, "project_region", "") or "").strip()
     city = (getattr(project, "project_city", "") or "").strip()
 
-    # 2️⃣ نكوّن الموقع النهائي اللي يروح للـ ML
     if region and city:
         location_for_ml = f"{region}, {city}"
     else:
         location_for_ml = region or city
 
-    # 3️⃣ نرجّع البيانات للذكاء الاصطناعي
     return {
         "type_project": getattr(project, "Project_type", "Service"),
-        "region_project": location_for_ml,   # ⭐ هذا أهم سطر
+        "region_project": location_for_ml,
         "budget_project": float(getattr(project, "project_budget", 0) or 0),
         "project_duration_days": int(getattr(project, "project_duration", 0) or 0),
         "num_saudi_employees": int(getattr(project, "number_of_employees", 0) or 0),
     }
 
-
-
-# =======================
-# Views
-# =======================
 
 @login_required
 def run_analysis(request, project_id):
@@ -233,20 +169,15 @@ def run_analysis(request, project_id):
 
     project_data = build_project_data(project)
 
-    # messages.info(
-    #     request,
-    #     f"DEBUG → region={getattr(project,'project_region',None)} | city={getattr(project,'project_city',None)} | location sent to ML={project_data.get('region_project')}"
-    # )
-
     out = analyze_project(project_data, include_recommendations=False, lang=current_lang(request))
 
     saved_result = AnalysisResult.objects.create(
         user=request.user,
         project_id=project.id,
         project_name=getattr(project, "project_name", None)
-                     or getattr(project, "name", None)
-                     or getattr(project, "title", None)
-                     or "Project",
+        or getattr(project, "name", None)
+        or getattr(project, "title", None)
+        or "Project",
         probability=float(out.get("probability", 0) or 0),
         threshold=float(out.get("threshold", 0.5) or 0.5),
         label=str(out.get("label", "") or ""),
@@ -256,7 +187,6 @@ def run_analysis(request, project_id):
         recommendations_status_en="pending",
     )
 
-    # messages.success(request, _("Analysis completed successfully!"))
     return redirect("analysis_result", result_id=saved_result.id)
 
 
@@ -299,14 +229,6 @@ def analysis_result(request, result_id):
         else:
             improvement_direction = "same"
 
-    print("CURRENT RESULT:", result.id, result.probability, result.threshold)
-    print(
-        "PREVIOUS RESULT:",
-        previous_result.id if previous_result else None,
-        previous_result.probability if previous_result else None,
-        previous_result.threshold if previous_result else None
-    )
-
     return render(
         request,
         "analysis/result.html",
@@ -324,6 +246,7 @@ def analysis_result(request, result_id):
         },
     )
 
+
 @login_required
 def generate_recs(request, result_id):
     from ai.services.analyzer import analyze_project
@@ -334,11 +257,9 @@ def generate_recs(request, result_id):
     if request.method != "POST":
         return JsonResponse({"ok": False, "status": "method_not_allowed"}, status=405)
 
-    # اللغة اللي يختارها المستخدم (من UI) أو من Django
     req_lang = (request.POST.get("lang") or get_language_from_request(request) or current_lang(request) or "en").lower()
     lang = "ar" if req_lang.startswith("ar") else "en"
 
-    # إذا نفس اللغة جاهزة قبل، رجّعيها بسرعة بدون توليد جديد
     if get_status_by_lang(result_obj, lang) == "ready" and get_recs_by_lang(result_obj, lang):
         return JsonResponse({"ok": True, "status": "ready"})
 
@@ -346,7 +267,6 @@ def generate_recs(request, result_id):
     project_data = build_project_data(project)
 
     try:
-        # (اختياري) نحط الحالة "generating" عشان اللودينق
         set_recs_by_lang(result_obj, lang, "", "generating")
         result_obj.save(update_fields=["recommendations_status_ar", "recommendations_status_en"])
 
@@ -399,7 +319,6 @@ def translate_recs(request, result_id):
 
         from ai.services.translator import translate_text
         translated = translate_text(other_text, target_lang=("ar" if is_ar else "en"))
-
         translated = normalize_recommendations_text(result_obj, lang, translated)
 
         set_recs_by_lang(result_obj, lang, translated, "ready")
@@ -458,16 +377,31 @@ def analysis_pdf(request, result_id):
 
     lang = current_lang(request)
     is_ar_ui = str(lang).startswith("ar")
-
     status_text = feasibility_label_by_lang(result, lang)
-
     recs = get_recs_by_lang(result, lang) or _("No recommendations generated yet.")
-
-    # تنظيف مشاكل اتجاه النص (خصوصًا بعد الترجمة)
-    if not str(lang).startswith("ar"):
-        recs = strip_bidi_controls(recs)
-
+    recs = strip_bidi_controls(recs)
     recs_is_ar = has_arabic(recs)
+
+    previous_result = (
+        AnalysisResult.objects
+        .filter(user=request.user, project_id=result.project_id, id__lt=result.id)
+        .order_by("-id")
+        .first()
+    )
+
+    previous_feasibility_percent = None
+    improvement_value = None
+    improvement_direction = None
+
+    if previous_result:
+        previous_feasibility_percent = round(previous_result.probability * 100, 2)
+        improvement_value = round(feasibility_percent - previous_feasibility_percent, 2)
+        if improvement_value > 0:
+            improvement_direction = "up"
+        elif improvement_value < 0:
+            improvement_direction = "down"
+        else:
+            improvement_direction = "same"
 
     safe_name = (result.project_name or "Project").replace(" ", "_")
     filename = f"JadwaAI_Analysis_Result_{safe_name}_{result_id}.pdf"
@@ -479,23 +413,27 @@ def analysis_pdf(request, result_id):
     p.setTitle(f"Jadwa AI | Analysis Result | {result.project_name}")
 
     page_w, page_h = A4
-    margin = 2.2 * cm
+    margin = 1.8 * cm
     left = margin
     right = page_w - margin
 
-    TEXT = colors.HexColor("#111827")
-    MUTED = colors.HexColor("#6B7280")
-    BORDER = colors.HexColor("#E5E7EB")
-    PRIMARY = colors.HexColor("#2563EB")
-    SUCCESS = colors.HexColor("#16A34A")
-    DANGER = colors.HexColor("#DC2626")
+    TEXT = colors.HexColor("#0F172A")
+    MUTED = colors.HexColor("#667085")
+    BORDER = colors.HexColor("#E6EBF2")
+    PRIMARY = colors.HexColor("#183A9E")
+    SUCCESS = colors.HexColor("#166534")
+    SUCCESS_BG = colors.HexColor("#ECFDF3")
+    DANGER = colors.HexColor("#B42318")
+    DANGER_BG = colors.HexColor("#FEF3F2")
     LIGHT = colors.HexColor("#98A2B3")
 
     is_feasible = is_feasible_result(result)
     STATUS_COLOR = SUCCESS if is_feasible else DANGER
+    STATUS_BG = SUCCESS_BG if is_feasible else DANGER_BG
 
     AR_FONT = "ArabicFont"
     EN_FONT = "Helvetica"
+    EN_FONT_BOLD = "Helvetica-Bold"
 
     def static_path(rel_path: str) -> str:
         pth2 = os.path.join(settings.BASE_DIR, "static", rel_path)
@@ -507,14 +445,22 @@ def analysis_pdf(request, result_id):
     logo_path = static_path("img/jadwa-logo.png")
     bg_path = static_path("img/hero-bg.png")
 
-    def pick_font(s: str = "") -> str:
+    def pick_font(s: str = "", bold: bool = False) -> str:
         if has_arabic(s):
             return AR_FONT
-        return AR_FONT if is_ar_ui else EN_FONT
+        return EN_FONT_BOLD if bold else EN_FONT
 
     def display(s: str) -> str:
-        s = (s or "").strip()
+        s = strip_bidi_controls((s or "").strip())
         return rtl(s) if has_arabic(s) else s
+
+    def display_recommendation_line(s: str) -> str:
+        s = strip_bidi_controls((s or "").strip())
+        return rtl(s) if has_arabic(s) else s
+
+    def text_width(txt: str, size: float, bold: bool = False) -> float:
+        shown = display(txt)
+        return p.stringWidth(shown, pick_font(shown, bold=bold), size)
 
     def draw_bg_and_logo():
         p.setFillColor(colors.white)
@@ -524,20 +470,17 @@ def analysis_pdf(request, result_id):
             try:
                 bg = ImageReader(bg_path)
                 bw, bh = bg.getSize()
-                target_w = page_w * 0.75
+                target_w = page_w * 0.34
                 scale = target_w / float(bw)
                 target_h = bh * scale
-
-                x = -1.2 * cm
-                y = -2.6 * cm
-
+                x = -0.8 * cm
+                y = -1.8 * cm
                 p.saveState()
                 try:
-                    p.setFillAlpha(0.20)
-                    p.setStrokeAlpha(0.20)
+                    p.setFillAlpha(0.08)
+                    p.setStrokeAlpha(0.08)
                 except Exception:
                     pass
-
                 p.drawImage(bg, x, y, width=target_w, height=target_h, mask="auto")
                 p.restoreState()
             except Exception:
@@ -550,13 +493,11 @@ def analysis_pdf(request, result_id):
             try:
                 logo = ImageReader(logo_path)
                 lw, lh = logo.getSize()
-                target_w = 1.6 * cm
+                target_w = 1.5 * cm
                 scale = target_w / float(lw)
                 target_h = lh * scale
-
-                x = left - 0.4 * cm
-                y = page_h - margin - target_h - 0.2 * cm
-
+                x = left
+                y = page_h - margin - target_h + 0.15 * cm
                 p.drawImage(logo, x, y, width=target_w, height=target_h, mask="auto")
             except Exception:
                 pass
@@ -564,157 +505,287 @@ def analysis_pdf(request, result_id):
     def draw_footer():
         foot = display(_("Jadwa AI © 2026 | contact@jadwa-ai.com | Saudi Arabia"))
         p.setFillColor(LIGHT)
-        p.setFont(pick_font(foot), 9)
-        p.drawRightString(right, margin - 0.35 * cm, foot)
+        p.setFont(pick_font(foot), 8)
+        p.drawCentredString(page_w / 2, margin - 0.3 * cm, foot)
 
-    def card(x, y_top, w, h, radius=12):
+    def card(x, y_top, w, h, radius=16):
+        p.setFillColor(colors.white)
         p.setStrokeColor(BORDER)
         p.setLineWidth(1)
-        p.roundRect(x, y_top - h, w, h, radius, stroke=1, fill=0)
+        p.roundRect(x, y_top - h, w, h, radius, stroke=1, fill=1)
 
-    def draw_line(x_left, x_right, y, s, size=11, color=TEXT):
-        out = display(s)
+    def inner_box(x, y_top, w, h, radius=12):
+        p.setFillColor(colors.white)
+        p.setStrokeColor(BORDER)
+        p.setLineWidth(1)
+        p.roundRect(x, y_top - h, w, h, radius, stroke=1, fill=1)
+
+    def line_text(x_left, x_right, y, txt, size=11, color=TEXT, bold=False):
+        shown = display(txt)
         p.setFillColor(color)
-        p.setFont(pick_font(out), size)
-        if has_arabic(out):
-            p.drawRightString(x_right, y, out)
+        p.setFont(pick_font(shown, bold=bold), size)
+        if has_arabic(shown):
+            p.drawRightString(x_right, y, shown)
         else:
-            p.drawString(x_left, y, out)
+            p.drawString(x_left, y, shown)
+
+    def badge(x, y, txt, bg_color, fg_color):
+        shown = display(txt)
+        size = 9.2
+        pad_x = 9
+        h = 18
+        w = text_width(shown, size, bold=True) + pad_x * 2
+        p.setFillColor(bg_color)
+        p.setStrokeColor(bg_color)
+        p.roundRect(x, y - h + 4, w, h, 10, stroke=1, fill=1)
+        p.setFillColor(fg_color)
+        p.setFont(pick_font(shown, bold=True), size)
+        if has_arabic(shown):
+            p.drawRightString(x + w - pad_x, y - 7, shown)
+        else:
+            p.drawString(x + pad_x, y - 7, shown)
+        return w
+
+    def wrap_lines(text, max_width, font_name, font_size):
+        p.setFont(font_name, font_size)
+        out = []
+
+        for raw in (text or "").splitlines():
+            raw = strip_bidi_controls(raw.strip())
+            if not raw:
+                out.append("")
+                continue
+
+            words = raw.split(" ")
+            current = ""
+
+            for w in words:
+                test = (current + " " + w).strip()
+                if p.stringWidth(test, font_name, font_size) <= max_width:
+                    current = test
+                else:
+                    if current:
+                        out.append(current)
+                    current = w
+
+            if current:
+                out.append(current)
+
+        return out
 
     draw_bg_and_logo()
 
-    y = page_h - margin - 2.4 * cm
+    y = page_h - margin - 1.65 * cm
 
     title = display(_("Analysis Result"))
     p.setFillColor(TEXT)
-    p.setFont(pick_font(title), 22)
+    p.setFont(pick_font(title, bold=True), 20)
     p.drawCentredString(page_w / 2, y, title)
-    y -= 0.75 * cm
+    y -= 0.55 * cm
 
     sub = display(_("AI-powered feasibility insights for your project"))
-    p.setFillColor(PRIMARY)
-    p.setFont(pick_font(sub), 11)
+    p.setFillColor(MUTED)
+    p.setFont(pick_font(sub), 10.5)
     p.drawCentredString(page_w / 2, y, sub)
-    y -= 1.2 * cm
+    y -= 0.85 * cm
 
-    gap = 0.9 * cm
+    gap = 0.55 * cm
     col_w = (right - left - gap) / 2
+    cards_top_y = y
 
     if is_ar_ui:
-        proj_x = left + col_w + gap
         rec_x = left
+        proj_x = left + col_w + gap
     else:
         proj_x = left
         rec_x = left + col_w + gap
 
-    cards_top_y = y
+    proj_h = 6.95 * cm
+    rec_h = 6.95 * cm
 
-    proj_h = 4.2 * cm
     card(proj_x, cards_top_y, col_w, proj_h)
-
-    draw_line(proj_x + 0.6 * cm, proj_x + col_w - 0.6 * cm, cards_top_y - 0.9 * cm, _("Project Overview"), size=12)
-    draw_line(
-        proj_x + 0.6 * cm,
-        proj_x + col_w - 0.6 * cm,
-        cards_top_y - 1.8 * cm,
-        f"{_('Project')}: {result.project_name or ''}",
-        size=10.5,
-        color=MUTED,
-    )
-    draw_line(
-        proj_x + 0.6 * cm,
-        proj_x + col_w - 0.6 * cm,
-        cards_top_y - 2.6 * cm,
-        f"{_('Feasibility Probability')}: {feasibility_percent:.2f}%",
-        size=10.5,
-        color=PRIMARY,
-    )
-    
-
-    # ✅ الإضافة الوحيدة: سطر الثريشولد في الـ PDF
-    draw_line(
-        proj_x + 0.6 * cm,
-        proj_x + col_w - 0.6 * cm,
-        cards_top_y - 3.2 * cm,
-        f"{_('Decision Threshold')}: {result.threshold:.2f}",
-        size=10.5,
-        color=MUTED,
-    )
-
-    # (نزلنا سطر الحالة شوي عشان يركب كل شيء)
-    draw_line(
-        proj_x + 0.6 * cm,
-        proj_x + col_w - 0.6 * cm,
-        cards_top_y - 3.8 * cm,
-        f"{_('Status')}: {status_text}",
-        size=10.5,
-        color=STATUS_COLOR,
-    )
-
-    rec_h = 15.0 * cm
     card(rec_x, cards_top_y, col_w, rec_h)
-    draw_line(rec_x + 0.6 * cm, rec_x + col_w - 0.6 * cm, cards_top_y - 0.9 * cm, _("AI Recommendations"), size=12)
 
-    inner_w = col_w - 1.2 * cm
-    inner_left = rec_x + 0.6 * cm
-    inner_right = rec_x + col_w - 0.6 * cm
+    proj_pad = 0.5 * cm
+    proj_left = proj_x + proj_pad
+    proj_right = proj_x + col_w - proj_pad
+
+    rec_pad = 0.5 * cm
+    rec_left = rec_x + rec_pad
+    rec_right = rec_x + col_w - rec_pad
+
+    line_text(proj_left, proj_right, cards_top_y - 0.72 * cm, _("Project Overview"), size=12.5, color=TEXT, bold=True)
+    line_text(proj_left, proj_right, cards_top_y - 1.35 * cm, f"{_('Project')}: {result.project_name or ''}", size=10.2, color=MUTED)
+    line_text(proj_left, proj_right, cards_top_y - 2.05 * cm, f"{_('Feasibility Probability')}: {feasibility_percent:.2f}%", size=10.4, color=PRIMARY, bold=True)
+
+    current_y = cards_top_y - 2.75 * cm
+
+    if previous_result:
+        box_h = 1.95 * cm
+        inner_box(proj_left, current_y, col_w - 2 * proj_pad, box_h)
+
+        line_text(
+            proj_left + 0.28 * cm,
+            proj_right - 0.28 * cm,
+            current_y - 0.42 * cm,
+            _("Previous Feasibility"),
+            size=10,
+            color=MUTED,
+            bold=True,
+        )
+
+        prev_val = f"{previous_feasibility_percent:.2f}%"
+        p.setFillColor(TEXT)
+        p.setFont(EN_FONT_BOLD, 10)
+        if is_ar_ui:
+            p.drawString(proj_left + 0.28 * cm, current_y - 0.42 * cm, prev_val)
+        else:
+            p.drawRightString(proj_right - 0.28 * cm, current_y - 0.42 * cm, prev_val)
+
+        p.setStrokeColor(BORDER)
+        p.setLineWidth(1)
+        p.line(
+            proj_left + 0.22 * cm,
+            current_y - 0.82 * cm,
+            proj_right - 0.22 * cm,
+            current_y - 0.82 * cm,
+        )
+
+        if improvement_direction == "up":
+            diff_text = f"+{abs(improvement_value):.2f}% {_('Improvement from previous analysis')}"
+            diff_color = SUCCESS
+            diff_prefix = "▲ "
+        elif improvement_direction == "down":
+            diff_text = f"{abs(improvement_value):.2f}% {_('Change from previous analysis')}"
+            diff_color = DANGER
+            diff_prefix = "▼ "
+        else:
+            diff_text = "0.00%"
+            diff_color = MUTED
+            diff_prefix = "• "
+
+        diff_w = (col_w - 2 * proj_pad) - 0.60 * cm
+        diff_font = AR_FONT if has_arabic(diff_text) else EN_FONT_BOLD
+        diff_lines = wrap_lines(diff_prefix + diff_text, diff_w, diff_font, 9.1)
+
+        diff_y = current_y - 1.14 * cm
+        for line in diff_lines[:2]:
+            shown_line = display_recommendation_line(line)
+            p.setFillColor(diff_color)
+
+            if is_ar_ui and has_arabic(line):
+                p.setFont(AR_FONT, 9.1)
+                p.drawRightString(proj_right - 0.28 * cm, diff_y, shown_line)
+            else:
+                p.setFont(EN_FONT_BOLD, 9.1)
+                p.drawString(proj_left + 0.28 * cm, diff_y, shown_line)
+
+            diff_y -= 0.34 * cm
+
+        current_y -= 2.35 * cm
+
+    line_text(
+        proj_left,
+        proj_right,
+        current_y - 0.08 * cm,
+        f"{_('Decision Threshold')}: {result.threshold:.2f}",
+        size=10.2,
+        color=MUTED,
+    )
+
+    status_label = f"{_('')} "
+    line_text(proj_left, proj_right, current_y - 0.82 * cm, status_label, size=10.4, color=TEXT, bold=True)
+
+    if is_ar_ui:
+        badge_x = proj_right - 1.8 * cm
+    else:
+        badge_x = proj_left + text_width(status_label, 10.4, bold=True) + 10
+
+    badge(badge_x, current_y - 0.73 * cm, status_text, STATUS_BG, STATUS_COLOR)
+
+    line_text(rec_left, rec_right, cards_top_y - 0.72 * cm, _("AI Recommendations"), size=12.5, color=TEXT, bold=True)
+
+    text_box_top = cards_top_y - 1.08 * cm
+    text_box_h = rec_h - 1.55 * cm
+    inner_box(rec_left, text_box_top, col_w - 2 * rec_pad, text_box_h)
+
+    text_w = (col_w - 2 * rec_pad) - 0.7 * cm
+    text_left = rec_left + 0.35 * cm
+    text_right = rec_right - 0.35 * cm
+
+    first_page_font_size = 9.4
+    first_page_line_gap = 0.38 * cm
 
     if recs_is_ar:
-        all_lines = wrap_rtl_lines(p, recs, inner_w, AR_FONT, 10.5)
+        all_lines = wrap_lines(recs, text_w, AR_FONT, first_page_font_size)
     else:
-        all_lines = wrap_ltr_lines(p, recs, inner_w, EN_FONT, 10.5)
+        all_lines = wrap_lines(recs, text_w, EN_FONT, first_page_font_size)
 
-    yy = cards_top_y - 1.6 * cm
-    line_gap = 0.52 * cm
-    bottom_inside = (cards_top_y - rec_h) + 1.0 * cm
+    yy = text_box_top - 0.46 * cm
+    bottom_limit = (text_box_top - text_box_h) + 0.75 * cm
 
     idx = 0
-    while idx < len(all_lines) and yy >= bottom_inside:
+    while idx < len(all_lines) and yy >= bottom_limit:
         ln = all_lines[idx]
         if ln == "":
-            yy -= line_gap
+            yy -= first_page_line_gap
             idx += 1
             continue
+
+        shown_ln = display_recommendation_line(ln)
         p.setFillColor(TEXT)
+
         if recs_is_ar:
-            p.setFont(AR_FONT, 10.5)
-            p.drawRightString(inner_right, yy, ln)
+            p.setFont(AR_FONT, first_page_font_size)
+            p.drawRightString(text_right, yy, shown_ln)
         else:
-            p.setFont(EN_FONT, 10.5)
-            p.drawString(inner_left, yy, ln)
-        yy -= line_gap
+            p.setFont(EN_FONT, first_page_font_size)
+            p.drawString(text_left, yy, shown_ln)
+
+        yy -= first_page_line_gap
         idx += 1
+
+    if idx < len(all_lines):
+        more_text = display(_("Continued on next page..."))
+        p.setFillColor(MUTED)
+        p.setFont(pick_font(more_text, bold=True), 8.8)
+        if is_ar_ui:
+            p.drawRightString(text_right, (text_box_top - text_box_h) + 0.35 * cm, more_text)
+        else:
+            p.drawString(text_left, (text_box_top - text_box_h) + 0.35 * cm, more_text)
 
     draw_footer()
 
-    def new_page_recs():
+    while idx < len(all_lines):
         p.showPage()
         draw_bg_and_logo()
 
-    while idx < len(all_lines):
-        new_page_recs()
+        y2 = page_h - margin - 1.4 * cm
 
-        y2 = page_h - margin - 2.4 * cm
-        y2 -= 1.1 * cm
-
-        full_w = right - left
-        full_h = 20.0 * cm
-        card(left, y2, full_w, full_h)
-
-        inner_left2 = left + 0.8 * cm
-        inner_right2 = right - 0.8 * cm
-
-        label2 = display(_("AI Recommendations (continued)"))
+        title2 = display(_("AI Recommendations"))
         p.setFillColor(TEXT)
-        p.setFont(pick_font(label2), 12)
-        if is_ar_ui:
-            p.drawRightString(inner_right2, y2 - 0.9 * cm, label2)
-        else:
-            p.drawString(inner_left2, y2 - 0.9 * cm, label2)
+        p.setFont(pick_font(title2, bold=True), 16)
+        p.drawCentredString(page_w / 2, y2, title2)
+        y2 -= 0.75 * cm
 
-        yy2 = y2 - 1.6 * cm
-        bottom_inside2 = (y2 - full_h) + 1.0 * cm
-        line_gap2 = 0.55 * cm
+        card(left, y2, right - left, 23.0 * cm)
+
+        inner_left2 = left + 0.55 * cm
+        inner_right2 = right - 0.55 * cm
+
+        label2 = display(_(""))
+        line_text(inner_left2, inner_right2, y2 - 0.72 * cm, label2, size=11.5, color=TEXT, bold=True)
+
+        box_top2 = y2 - 1.05 * cm
+        box_h2 = 21.5 * cm
+        inner_box(inner_left2, box_top2, (right - left) - 1.1 * cm, box_h2)
+
+        text_left2 = inner_left2 + 0.35 * cm
+        text_right2 = inner_right2 - 0.35 * cm
+        yy2 = box_top2 - 0.5 * cm
+        bottom_inside2 = (box_top2 - box_h2) + 0.5 * cm
+        line_gap2 = 0.44 * cm
+        page2_font_size = 10.0
 
         while idx < len(all_lines) and yy2 >= bottom_inside2:
             ln = all_lines[idx]
@@ -722,13 +793,17 @@ def analysis_pdf(request, result_id):
                 yy2 -= line_gap2
                 idx += 1
                 continue
+
+            shown_ln = display_recommendation_line(ln)
             p.setFillColor(TEXT)
+
             if recs_is_ar:
-                p.setFont(AR_FONT, 10.8)
-                p.drawRightString(inner_right2, yy2, ln)
+                p.setFont(AR_FONT, page2_font_size)
+                p.drawRightString(text_right2, yy2, shown_ln)
             else:
-                p.setFont(EN_FONT, 10.8)
-                p.drawString(inner_left2, yy2, ln)
+                p.setFont(EN_FONT, page2_font_size)
+                p.drawString(text_left2, yy2, shown_ln)
+
             yy2 -= line_gap2
             idx += 1
 
@@ -736,4 +811,3 @@ def analysis_pdf(request, result_id):
 
     p.save()
     return response
-
