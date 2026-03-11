@@ -571,13 +571,13 @@ def user_dashboard(request):
 @staff_member_required
 def Admin_Dashboard(request):
     users = User.objects.all()
-    allmessages = ContactMessage.objects.all().order_by('-created_at')
+    messages = ContactMessage.objects.all().order_by('-created_at')
     users_count = User.objects.count()
     projects_count = Projects.objects.count() 
     contents = SiteContent.objects.all()
     context = {
         'users' : users,
-        'allmessages': allmessages,
+        'messages': messages,
         'users_count':users_count,
         'projects_count': projects_count,
         'contents': contents
@@ -614,7 +614,7 @@ def user_projects(request , id):
     
 def messages_list(request):
     messages = ContactMessage.objects.all()
-    return render(request, "pages/admin_dashboard/messages.html", {"users" : users})
+    return render(request, "pages/admin_dashboard/admin.html", {"messages" : messages})
 
 def send_message(request, message_id):
     message = get_object_or_404(ContactMessage, id =message_id)
