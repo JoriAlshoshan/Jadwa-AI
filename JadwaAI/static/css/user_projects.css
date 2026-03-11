@@ -1,7 +1,38 @@
+.table-container{
+    width: 90%;
+    margin: 0 auto;
+    align-content: center;
+    overflow-x: auto;
+}
+h2{
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: 600;
+}
 table{
+    width: 100%;
     border-collapse: collapse;
 }
-th, td{
-    border: 1px solid black;
-    padding: 8px;
+th{
+   padding: 12px;
+   background-color: #f2f2f2;
+   font-weight: 500;
+   white-space: nowrap;
+}
+
+td{
+    border: 1px solid #eee;
+    padding: 12px;
+}
+/* tr:nth-child(even){
+    background-color: #f2f2f2;
+} */
+tr:hover{
+    background-color: #f1f7ff;
+}
+thead{
+    position: sticky;
+    top: 0;
+    background: white;
 }
