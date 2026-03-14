@@ -370,3 +370,42 @@ body{
     outline: 3px solid rgba(255,255,255,.35);
     outline-offset: 3px;
 }
+/* hide main site navbar and footer in admin pages */
+
+header,
+nav,
+footer,
+.site-header,
+.site-navbar,
+.main-navbar,
+.main-header,
+.site-footer {
+    display: none !important;
+}
+.admin-topbar-actions{
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.lang-form,
+.logout-form{
+    margin: 0;
+}
+
+.lang-form button,
+.logout-form button{
+    font: inherit;
+}
+
+.danger-btn{
+    color: #b42318;
+    border-color: rgba(180, 35, 24, 0.14);
+    background: #fff;
+}
+
+.danger-btn:hover{
+    background: #fff5f5;
+    border-color: rgba(180, 35, 24, 0.22);
+}
