@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_admin.html" %}
 {% load i18n %}
 {% load static %}
 
@@ -27,17 +27,17 @@
 
   <section id="stats-section" class="admin-section active">
     <div class="stats-grid">
-      <div class="stat-card">
+      <div class="stat-card" role="button" tabindex="0" data-target="users-section">
         <div class="stat-label">{% trans "Users" %}</div>
         <div class="stat-value">{{ users_count }}</div>
       </div>
 
-      <div class="stat-card">
+      <div class="stat-card" role="button" tabindex="0" data-target="users-section">
         <div class="stat-label">{% trans "Projects" %}</div>
         <div class="stat-value">{{ projects_count }}</div>
       </div>
 
-      <div class="stat-card">
+      <div class="stat-card" role="button" tabindex="0" data-target="messages-section">
         <div class="stat-label">{% trans "Messages" %}</div>
         <div class="stat-value">{{ messages|length }}</div>
       </div>
@@ -62,12 +62,12 @@
               </div>
               <div>
                 <div class="data-title">{{ user.username }}</div>
-                <div class="data-meta">{{ user.email|default:"No email" }}</div>
+                <div class="data-meta">{{ user.email|default:_("No email") }}</div>
               </div>
             </div>
 
             <div class="menu-wrapper">
-              <button type="button" class="menu-btn" aria-label="More actions">⋯</button>
+              <button type="button" class="menu-btn" aria-label="{% trans 'More actions' %}">⋯</button>
               <div class="menu-dropdown">
                 <a href="{% url 'user_detail' user.id %}">{% trans "Details" %}</a>
                 <a href="{% url 'user_projects' user.id %}">{% trans "Projects" %}</a>
@@ -110,7 +110,7 @@
             </div>
 
             <div class="menu-wrapper">
-              <button type="button" class="menu-btn" aria-label="More actions">⋯</button>
+              <button type="button" class="menu-btn" aria-label="{% trans 'More actions' %}">⋯</button>
               <div class="menu-dropdown">
                 <a href="{% url 'send_message' msg.id %}">{% trans "Open message" %}</a>
               </div>
@@ -143,15 +143,35 @@
   const tabButtons = document.querySelectorAll(".tab-btn");
   const sections = document.querySelectorAll(".admin-section");
 
+  function activateSection(target) {
+    tabButtons.forEach(btn => btn.classList.remove("active"));
+    sections.forEach(section => section.classList.remove("active"));
+
+    const targetSection = document.getElementById(target);
+    const targetTab = document.querySelector(`.tab-btn[data-target="${target}"]`);
+
+    if (targetSection) targetSection.classList.add("active");
+    if (targetTab) targetTab.classList.add("active");
+  }
+
   tabButtons.forEach(button => {
     button.addEventListener("click", function () {
+      activateSection(this.dataset.target);
+    });
+  });
+
+  document.querySelectorAll(".stat-card").forEach(card => {
+    card.addEventListener("click", function () {
       const target = this.dataset.target;
+      if (target) activateSection(target);
+    });
 
-      tabButtons.forEach(btn => btn.classList.remove("active"));
-      sections.forEach(section => section.classList.remove("active"));
-
-      this.classList.add("active");
-      document.getElementById(target).classList.add("active");
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        const target = this.dataset.target;
+        if (target) activateSection(target);
+      }
     });
   });
 

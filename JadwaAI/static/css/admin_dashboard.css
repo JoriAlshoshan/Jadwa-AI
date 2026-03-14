@@ -362,3 +362,11 @@ body{
         display: block;
     }
 }
+.stat-card{
+    cursor: pointer;
+}
+
+.stat-card:focus{
+    outline: 3px solid rgba(255,255,255,.35);
+    outline-offset: 3px;
+}

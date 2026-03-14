@@ -1091,9 +1091,6 @@ msgstr "توصيات الذكاء الاصطناعي (متابعة)"
 msgid "Manage your projects and run feasibility analysis."
 msgstr "إدارة مشاريعك وتشغيل تحليل الجدوى."
 
-msgid "Projects"
-msgstr "المشاريع"
-
 msgid "Analyses"
 msgstr "التحليلات"
 
@@ -1176,8 +1173,6 @@ msgstr "هل أنت متأكد أنك تريد حذف هذا المشروع؟ ل
 msgid "Cancel"
 msgstr "إلغاء"
 
-msgid "Delete"
-msgstr "حذف"
 
 msgid "Deleting..."
 msgstr "جارٍ الحذف..."
@@ -1308,3 +1303,63 @@ msgstr "إذا لم تجد الرسالة، يرجى التحقق من مجلد 
 
 msgid "Already activated your account?"
 msgstr "هل قمت بتفعيل حسابك بالفعل؟"
+
+msgid "Admin Panel"
+msgstr "لوحة الإدارة"
+
+msgid "Admin Dashboard"
+msgstr "لوحة تحكم الإدارة"
+
+msgid "Manage users, projects, messages, and site content from one place."
+msgstr "إدارة المستخدمين والمشاريع والرسائل ومحتوى الموقع من مكان واحد."
+
+msgid "View Site"
+msgstr "عرض الموقع"
+
+msgid "Statistics"
+msgstr "الإحصائيات"
+
+msgid "Users"
+msgstr "المستخدمون"
+
+msgid "Projects"
+msgstr "المشاريع"
+
+msgid "Messages"
+msgstr "الرسائل"
+
+msgid "Site Content"
+msgstr "محتوى الموقع"
+
+msgid "Manage registered platform users."
+msgstr "إدارة مستخدمي المنصة المسجلين."
+
+msgid "No email"
+msgstr "لا يوجد بريد إلكتروني"
+
+msgid "More actions"
+msgstr "مزيد من الإجراءات"
+
+msgid "Details"
+msgstr "التفاصيل"
+
+msgid "Delete"
+msgstr "حذف"
+
+msgid "No users found."
+msgstr "لم يتم العثور على مستخدمين."
+
+msgid "Review contact requests and user inquiries."
+msgstr "مراجعة طلبات التواصل واستفسارات المستخدمين."
+
+msgid "Open message"
+msgstr "فتح الرسالة"
+
+msgid "No messages found."
+msgstr "لم يتم العثور على رسائل."
+
+msgid "Manage public website content and future admin tools here."
+msgstr "إدارة محتوى الموقع العام وأدوات الإدارة المستقبلية هنا."
+
+msgid "This section is ready for future content management features."
+msgstr "هذا القسم جاهز لميزات إدارة المحتوى المستقبلية."
