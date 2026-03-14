@@ -1297,3 +1297,14 @@ msgstr "حفظ وإعادة تشغيل التحليل"
 msgid "Project deleted successfully."
 msgstr "تم حذف المشروع بنجاح."
 
+msgid "Activate your account"
+msgstr "فعّل حسابك"
+
+msgid "To activate your account please open the link that was sent to your email."
+msgstr "لتفعيل حسابك، يرجى فتح الرابط الذي تم إرساله إلى بريدك الإلكتروني."
+
+msgid "If you don't see the email, check your spam folder."
+msgstr "إذا لم تجد الرسالة، يرجى التحقق من مجلد البريد غير الهام (Spam)."
+
+msgid "Already activated your account?"
+msgstr "هل قمت بتفعيل حسابك بالفعل؟"
