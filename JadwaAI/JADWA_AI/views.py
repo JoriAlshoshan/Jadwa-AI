@@ -642,16 +642,19 @@ def edit_user(request , id):
         return redirect("edit_user", id=user.id)
     return render (request, "edit_user.html",{"user":user})
 
-def delete_user(request,id):
-    user =get_object_or_404(User,id =id)
-    if request.method == 'POST':
-        if request.user == user:
-            messages.error(request,("you can not delete your self."))
-            return redirect('Admin_Dashboard')
+@login_required
+@staff_member_required
+@require_POST
+def delete_user(request, id):
+    user = get_object_or_404(User, id=id)
+
+    if request.user == user:
+        messages.error(request, _("You cannot delete yourself."))
+        return redirect("Admin_Dashboard")
+
     user.delete()
-    messages.success(request,("user deleted successfully."))
-    return redirect('Admin_Dashboard')
-    return render (request, "pages/admin_dashboard/delete_user.html",{"user":user})
+    messages.success(request, _("User deleted successfully."))
+    return redirect("Admin_Dashboard")
 
 def user_projects(request , id):
     user = get_object_or_404(User , id = id)

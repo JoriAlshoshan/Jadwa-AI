@@ -84,10 +84,17 @@
 
             <div class="menu-wrapper">
               <button type="button" class="menu-btn" aria-label="{% trans 'More actions' %}">⋯</button>
+
               <div class="menu-dropdown">
                 <a href="{% url 'user_detail' user.id %}">{% trans "Details" %}</a>
                 <a href="{% url 'user_projects' user.id %}">{% trans "Projects" %}</a>
-                <a href="{% url 'delete_user' user.id %}">{% trans "Delete" %}</a>
+
+                <form action="{% url 'delete_user' user.id %}" method="post" class="menu-delete-form">
+                  {% csrf_token %}
+                  <button type="submit" class="menu-link danger-link">
+                    {% trans "Delete" %}
+                  </button>
+                </form>
               </div>
             </div>
           </div>
@@ -154,6 +161,36 @@
     </div>
   </section>
 </div>
+
+<style>
+  .menu-delete-form{
+    margin: 0;
+  }
+
+  .menu-link{
+    width: 100%;
+    display: block;
+    border: none;
+    background: transparent;
+    text-align: left;
+    padding: 10px 14px;
+    font: inherit;
+    cursor: pointer;
+    color: inherit;
+  }
+
+  .menu-link:hover{
+    background: #f8fafc;
+  }
+
+  .danger-link{
+    color: #dc2626;
+  }
+
+  html[dir="rtl"] .menu-link{
+    text-align: right;
+  }
+</style>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
