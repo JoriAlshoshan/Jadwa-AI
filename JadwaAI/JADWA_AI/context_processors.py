@@ -79,14 +79,83 @@ def global_page_meta(request):
             "show": True,
         },
 
-            "success_stories": {
-            "title": "",  
-            "subtitle": "", 
+        "success_stories": {
+            "title": "",
+            "subtitle": "",
             "crumbs": [
                 {"label": _("Home"), "url": HOME_URL},
                 {"label": _("Success Stories"), "url": None},
             ],
-            "show": True,  
+            "show": True,
+        },
+
+        "Admin_Dashboard": {
+            "title": _("Admin Dashboard"),
+            "subtitle": _("Manage users, projects, messages, and site content from one place."),
+            "crumbs": [
+                {"label": _("Home"), "url": HOME_URL},
+                {"label": _("Admin Dashboard"), "url": None},
+            ],
+            "show": True,
+        },
+
+        "user_detail": {
+            "title": _("User Details"),
+            "subtitle": _("Manage user account information and permissions."),
+            "crumbs": [
+                {"label": _("Home"), "url": HOME_URL},
+                {"label": _("Admin Dashboard"), "url": reverse("Admin_Dashboard")},
+                {"label": _("Users"), "url": reverse("Admin_Dashboard")},
+                {"label": _("User Details"), "url": None},
+            ],
+            "show": True,
+        },
+
+        "edit_user": {
+            "title": _("Edit User"),
+            "subtitle": _("Update user account details and roles."),
+            "crumbs": [
+                {"label": _("Home"), "url": HOME_URL},
+                {"label": _("Admin Dashboard"), "url": reverse("Admin_Dashboard")},
+                {"label": _("Users"), "url": reverse("Admin_Dashboard")},
+                {"label": _("Edit User"), "url": None},
+            ],
+            "show": True,
+        },
+
+        "user_projects": {
+            "title": _("User Projects"),
+            "subtitle": _("Review projects created by this user."),
+            "crumbs": [
+                {"label": _("Home"), "url": HOME_URL},
+                {"label": _("Admin Dashboard"), "url": reverse("Admin_Dashboard")},
+                {"label": _("Users"), "url": reverse("Admin_Dashboard")},
+                {"label": _("User Projects"), "url": None},
+            ],
+            "show": True,
+        },
+
+        "messages_list": {
+            "title": _("Messages"),
+            "subtitle": _("Review contact requests and user inquiries."),
+            "crumbs": [
+                {"label": _("Home"), "url": HOME_URL},
+                {"label": _("Admin Dashboard"), "url": reverse("Admin_Dashboard")},
+                {"label": _("Messages"), "url": None},
+            ],
+            "show": True,
+        },
+
+        "send_message": {
+            "title": _("Message Details"),
+            "subtitle": _("Read and reply to contact messages."),
+            "crumbs": [
+                {"label": _("Home"), "url": HOME_URL},
+                {"label": _("Admin Dashboard"), "url": reverse("Admin_Dashboard")},
+                {"label": _("Messages"), "url": reverse("messages_list")},
+                {"label": _("Message Details"), "url": None},
+            ],
+            "show": True,
         },
     }
 

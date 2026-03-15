@@ -8,13 +8,13 @@
 <div class="admin-shell">
   <div class="admin-topbar">
     <div class="admin-topbar-left">
-      <div class="admin-breadcrumb">
-        <a href="{% url 'admin_dashboard' %}">{% trans "Dashboard" %}</a>
-        <span>/</span>
-        <a href="{% url 'admin_dashboard' %}">{% trans "Users" %}</a>
-        <span>/</span>
-        <span>{{ user.username }} {% trans "details" %}</span>
-      </div>
+     <div class="admin-breadcrumb">
+    <a href="{% url 'Admin_Dashboard' %}">{% trans "Dashboard" %}</a>
+    <span>/</span>
+    <a href="{% url 'Admin_Dashboard' %}">{% trans "Users" %}</a>
+    <span>/</span>
+    <span>{{ user.username }} {% trans "details" %}</span>
+</div>
 
       <p class="admin-eyebrow">{% trans "Admin Panel" %}</p>
       <h1 class="admin-title">{{ user.username }} {% trans "details" %}</h1>
