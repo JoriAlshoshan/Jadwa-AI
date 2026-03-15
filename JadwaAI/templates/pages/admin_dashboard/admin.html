@@ -87,8 +87,12 @@
               <div class="menu-dropdown">
                 <a href="{% url 'user_detail' user.id %}">{% trans "Details" %}</a>
                 <a href="{% url 'user_projects' user.id %}">{% trans "Projects" %}</a>
-                <a href="{% url 'delete_user' user.id %}">{% trans "Delete" %}</a>
-              </div>
+<form action="{% url 'delete_user' user.id %}" method="post">
+  {% csrf_token %}
+  <button type="submit" class="menu-link danger-link">
+    {% trans "Delete" %}
+  </button>
+</form>              </div>
             </div>
           </div>
         {% empty %}

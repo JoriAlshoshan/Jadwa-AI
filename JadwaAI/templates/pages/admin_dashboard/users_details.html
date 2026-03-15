@@ -7,276 +7,88 @@
   <div class="admin-topbar">
     <div class="admin-topbar-left">
       <p class="admin-eyebrow">{% trans "Admin Panel" %}</p>
-      <h1 class="admin-title">{% trans "Admin Dashboard" %}</h1>
-      <p class="admin-subtitle">{% trans "Manage users, projects, messages, and site content from one place." %}</p>
+      <h1 class="admin-title">{% trans "User Details" %}</h1>
+      <p class="admin-subtitle">{% trans "View and edit selected user information." %}</p>
     </div>
 
     <div class="admin-topbar-actions">
-      <form action="{% url 'set_language' %}" method="post" class="lang-form">
-        {% csrf_token %}
-        <input name="next" type="hidden" value="{{ request.path }}">
-        {% get_current_language as LANGUAGE_CODE %}
-        {% if LANGUAGE_CODE == 'ar' %}
-          <input type="hidden" name="language" value="en">
-          <button type="submit" class="ghost-btn">English</button>
-        {% else %}
-          <input type="hidden" name="language" value="ar">
-          <button type="submit" class="ghost-btn">عربي</button>
-        {% endif %}
-      </form>
-
-      <a href="{% url 'landing' %}" class="ghost-btn">{% trans "View Site" %}</a>
-
-      <form action="{% url 'logout' %}" method="post" class="logout-form">
-        {% csrf_token %}
-        <button type="submit" class="ghost-btn danger-btn">{% trans "Logout" %}</button>
-      </form>
+      <a href="{% url 'Admin_Dashboard' %}" class="ghost-btn">{% trans "Back to Dashboard" %}</a>
     </div>
   </div>
 
-  <div class="admin-tabs">
-    <button class="tab-btn active" data-target="stats-section">{% trans "Statistics" %}</button>
-    <button class="tab-btn" data-target="users-section">{% trans "Users" %}</button>
-    <button class="tab-btn" data-target="messages-section">{% trans "Messages" %}</button>
-    <button class="tab-btn" data-target="content-section">{% trans "Site Content" %}</button>
-  </div>
-
-  <section id="stats-section" class="admin-section active">
-    <div class="stats-grid">
-      <div class="stat-card" role="button" tabindex="0" data-target="users-section">
-        <div class="stat-label">{% trans "Users" %}</div>
-        <div class="stat-value">{{ users_count }}</div>
-      </div>
-
-      <div class="stat-card" role="button" tabindex="0" data-target="users-section">
-        <div class="stat-label">{% trans "Projects" %}</div>
-        <div class="stat-value">{{ projects_count }}</div>
-      </div>
-
-      <div class="stat-card" role="button" tabindex="0" data-target="messages-section">
-        <div class="stat-label">{% trans "Messages" %}</div>
-        <div class="stat-value">{{ contact_messages|length }}</div>
-      </div>
-    </div>
-  </section>
-
-  <section id="users-section" class="admin-section">
+  <section class="admin-section active">
     <div class="section-card">
       <div class="section-head">
         <div>
-          <h2>{% trans "Users" %}</h2>
-          <p>{% trans "Manage registered platform users." %}</p>
+          <h2>{% trans "User Information" %}</h2>
+          <p>{% trans "Basic account details." %}</p>
         </div>
       </div>
 
       <div class="data-list">
-        {% for user in users %}
-          <div class="data-row">
-            <div class="data-main">
-              <div class="avatar-circle">
-                {{ user.username|slice:":1"|upper }}
-              </div>
-              <div>
-                <div class="data-title">{{ user.username }}</div>
-                <div class="data-meta">{{ user.email|default:_("No email") }}</div>
-              </div>
+        <div class="data-row">
+          <div class="data-main">
+            <div class="avatar-circle">
+              {{ user.username|slice:":1"|upper }}
             </div>
-
-            <div class="menu-wrapper">
-              <button type="button" class="menu-btn" aria-label="{% trans 'More actions' %}">⋯</button>
-
-              <div class="menu-dropdown">
-                <a href="{% url 'user_detail' user.id %}">{% trans "Details" %}</a>
-                <a href="{% url 'user_projects' user.id %}">{% trans "Projects" %}</a>
-
-                <form action="{% url 'delete_user' user.id %}" method="post" class="menu-delete-form">
-                  {% csrf_token %}
-                  <button type="submit" class="menu-link danger-link">
-                    {% trans "Delete" %}
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        {% empty %}
-          <div class="empty-state">{% trans "No users found." %}</div>
-        {% endfor %}
-      </div>
-    </div>
-  </section>
-
-  <section id="messages-section" class="admin-section">
-    <div class="section-card">
-      <div class="section-head">
-        <div>
-          <h2>{% trans "Messages" %}</h2>
-          <p>{% trans "Review contact requests and user inquiries." %}</p>
-        </div>
-      </div>
-
-      <div class="data-list">
-        {% for msg in contact_messages %}
-          <div class="data-row">
-            <div class="data-main">
-              <div class="avatar-circle soft">
-                {{ msg.full_name|default:"?"|slice:":1"|upper }}
-              </div>
-              <div>
-                <div class="data-title">{{ msg.full_name|default:_("Unknown sender") }}</div>
-                <div class="data-meta">{{ msg.email|default:_("No email") }}</div>
-                <div class="data-submeta">
-                  <span>{{ msg.topic|default:_("No topic") }}</span>
-                  <span>•</span>
-                  <span>{{ msg.created_at }}</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="menu-wrapper">
-              <button type="button" class="menu-btn" aria-label="{% trans 'More actions' %}">⋯</button>
-              <div class="menu-dropdown">
-                <a href="{% url 'send_message' msg.id %}">{% trans "Open message" %}</a>
+            <div>
+              <div class="data-title">{{ user.username }}</div>
+              <div class="data-meta">{{ user.email|default:_("No email") }}</div>
+              <div class="data-submeta">
+                <span>{% trans "User ID" %}: {{ user.id }}</span>
+                <span>•</span>
+                <span>
+                  {% if user.is_active %}
+                    {% trans "Active" %}
+                  {% else %}
+                    {% trans "Inactive" %}
+                  {% endif %}
+                </span>
+                <span>•</span>
+                <span>
+                  {% if user.is_staff %}
+                    {% trans "Staff" %}
+                  {% else %}
+                    {% trans "Regular User" %}
+                  {% endif %}
+                </span>
               </div>
             </div>
           </div>
-        {% empty %}
-          <div class="empty-state">{% trans "No messages found." %}</div>
-        {% endfor %}
+        </div>
       </div>
     </div>
-  </section>
 
-  <section id="content-section" class="admin-section">
-    <div class="section-card">
+    <div class="section-card" style="margin-top: 22px;">
       <div class="section-head">
         <div>
-          <h2>{% trans "Site Content" %}</h2>
-          <p>{% trans "Manage public website content and future admin tools here." %}</p>
+          <h2>{% trans "Edit User" %}</h2>
+          <p>{% trans "Update this user's account settings." %}</p>
         </div>
       </div>
 
-      <div class="placeholder-box">
-        {% trans "This section is ready for future content management features." %}
-      </div>
+      <form method="post" class="admin-form">
+        {% csrf_token %}
+
+        <div class="form-grid">
+          {% for field in form %}
+            <div class="form-group">
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field }}
+              {% if field.errors %}
+                <div class="form-error">{{ field.errors|striptags }}</div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="form-actions" style="margin-top:20px; display:flex; gap:12px; flex-wrap:wrap;">
+          <button type="submit" class="ghost-btn">{% trans "Save Changes" %}</button>
+          <a href="{% url 'user_projects' user.id %}" class="ghost-btn">{% trans "View Projects" %}</a>
+          <a href="{% url 'Admin_Dashboard' %}" class="ghost-btn">{% trans "Back" %}</a>
+        </div>
+      </form>
     </div>
   </section>
 </div>
-
-<style>
-  .menu-delete-form{
-    margin: 0;
-  }
-
-  .menu-link{
-    width: 100%;
-    display: block;
-    border: none;
-    background: transparent;
-    text-align: left;
-    padding: 10px 14px;
-    font: inherit;
-    cursor: pointer;
-    color: inherit;
-  }
-
-  .menu-link:hover{
-    background: #f8fafc;
-  }
-
-  .danger-link{
-    color: #dc2626;
-  }
-
-  html[dir="rtl"] .menu-link{
-    text-align: right;
-  }
-</style>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const tabButtons = document.querySelectorAll(".tab-btn");
-    const sections = document.querySelectorAll(".admin-section");
-
-    function activateSection(target) {
-      tabButtons.forEach(btn => btn.classList.remove("active"));
-      sections.forEach(section => section.classList.remove("active"));
-
-      const targetSection = document.getElementById(target);
-      const targetTab = document.querySelector('.tab-btn[data-target="' + target + '"]');
-
-      if (targetSection) {
-        targetSection.classList.add("active");
-      }
-
-      if (targetTab) {
-        targetTab.classList.add("active");
-      }
-    }
-
-    tabButtons.forEach(button => {
-      button.addEventListener("click", function () {
-        const target = this.dataset.target;
-        if (target) {
-          activateSection(target);
-          window.location.hash = target;
-        }
-      });
-    });
-
-    document.querySelectorAll(".stat-card").forEach(card => {
-      card.addEventListener("click", function () {
-        const target = this.dataset.target;
-        if (target) {
-          activateSection(target);
-          window.location.hash = target;
-        }
-      });
-
-      card.addEventListener("keydown", function (e) {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          const target = this.dataset.target;
-          if (target) {
-            activateSection(target);
-            window.location.hash = target;
-          }
-        }
-      });
-    });
-
-    document.querySelectorAll(".menu-btn").forEach(btn => {
-      btn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        const menu = this.nextElementSibling;
-
-        document.querySelectorAll(".menu-dropdown").forEach(drop => {
-          if (drop !== menu) {
-            drop.style.display = "none";
-          }
-        });
-
-        menu.style.display = menu.style.display === "block" ? "none" : "block";
-      });
-    });
-
-    document.addEventListener("click", function () {
-      document.querySelectorAll(".menu-dropdown").forEach(drop => {
-        drop.style.display = "none";
-      });
-    });
-
-    const hash = window.location.hash.replace("#", "").trim();
-
-    if (
-      hash === "users-section" ||
-      hash === "messages-section" ||
-      hash === "content-section" ||
-      hash === "stats-section"
-    ) {
-      activateSection(hash);
-    } else {
-      activateSection("stats-section");
-    }
-  });
-</script>
 {% endblock %}

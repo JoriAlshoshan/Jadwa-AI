@@ -605,6 +605,7 @@ def Admin_Dashboard(request):
         'contents': contents,
     }
     return render(request, "pages/admin_dashboard/admin.html", context)
+
 @login_required
 @staff_member_required
 def user_detail(request, id):
@@ -614,11 +615,10 @@ def user_detail(request, id):
         form = UserEditForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            return redirect('Admin_Dashboard')
+            messages.success(request, _("User updated successfully."))
+            return redirect('user_detail', id=user.id)
     else:
         form = UserEditForm(instance=user)
-
-    contact_messages = ContactMessage.objects.all().order_by('-created_at')
 
     return render(
         request,
@@ -626,7 +626,6 @@ def user_detail(request, id):
         {
             "form": form,
             "user": user,
-            "contact_messages": contact_messages,
         }
     )
     
