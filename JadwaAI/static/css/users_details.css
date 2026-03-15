@@ -282,3 +282,10 @@ body{
         grid-template-columns: 1fr;
     }
 }
+.admin-section{
+  display: none;
+}
+
+.admin-section.active{
+  display: block;
+}
