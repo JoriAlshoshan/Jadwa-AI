@@ -538,4 +538,15 @@ class ResetPasswordForm(SetPasswordForm):
 class UserEditForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ["username", "email","is_active","is_staff","is_superuser"]
+        fields = ["username", "email", "is_active", "is_staff", "is_superuser"]
+        labels = {
+            "username": _("Username"),
+            "email": _("Email"),
+            "is_active": _("Account active"),
+            "is_staff": _("Admin access"),
+            "is_superuser": _("Full admin access"),
+        }
+        widgets = {
+            "username": forms.TextInput(attrs={"class": "form-input"}),
+            "email": forms.EmailInput(attrs={"class": "form-input"}),
+        }

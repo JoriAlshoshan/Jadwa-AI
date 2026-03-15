@@ -17,14 +17,6 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: .\JADWA_AI\forms.py:13 .\JADWA_AI\forms.py:147
-#: .\templates\pages\landing.html:223
-msgid "Email"
-msgstr "البريد الإلكتروني"
-
-#: .\JADWA_AI\forms.py:20 .\JADWA_AI\forms.py:26
-msgid "Username"
-msgstr "اسم المستخدم"
 
 #: .\JADWA_AI\forms.py:29
 msgid "Password"
@@ -1361,8 +1353,7 @@ msgstr "لوحة تحكم الإدارة"
 msgid "Manage users, projects, messages, and site content from one place."
 msgstr "إدارة المستخدمين والمشاريع والرسائل ومحتوى الموقع من مكان واحد."
 
-msgid "User Details"
-msgstr "تفاصيل المستخدم"
+
 
 msgid "Manage user account information and permissions."
 msgstr "إدارة معلومات حساب المستخدم والصلاحيات."
@@ -1379,3 +1370,21 @@ msgstr "رجوع"
 msgid "View Site"
 msgstr "عرض الموقع"
 
+
+msgid "Username"
+msgstr "اسم المستخدم"
+
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+msgid "Account active"
+msgstr "الحساب مفعل"
+
+msgid "Admin access"
+msgstr "صلاحيات الإدارة"
+
+msgid "Full admin access"
+msgstr "صلاحيات كاملة"
+
+msgid "User Details"
+msgstr "تفاصيل المستخدم"
