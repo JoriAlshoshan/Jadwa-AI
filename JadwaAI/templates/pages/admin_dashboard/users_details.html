@@ -1,42 +1,99 @@
-{% extends "base.html" %}
+{% extends "base_admin.html" %}
 {% load i18n %}
 {% load static %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/users_details.css' %}">
 
-<h3 class="username"> {{ user.username }} details</h3>
-<form method ="post" class="form-container">
-    {% csrf_token %}
-    <div class="field">
-        {{form.username.label_tag}}
-        {{form.username}}
-        {{form.username.errors}}
+<div class="admin-shell">
+  <div class="admin-topbar">
+    <div class="admin-topbar-left">
+      <div class="admin-breadcrumb">
+        <a href="{% url 'admin_dashboard' %}">{% trans "Dashboard" %}</a>
+        <span>/</span>
+        <a href="{% url 'admin_dashboard' %}">{% trans "Users" %}</a>
+        <span>/</span>
+        <span>{{ user.username }} {% trans "details" %}</span>
+      </div>
+
+      <p class="admin-eyebrow">{% trans "Admin Panel" %}</p>
+      <h1 class="admin-title">{{ user.username }} {% trans "details" %}</h1>
+      <p class="admin-subtitle">{% trans "Manage user account information and permissions." %}</p>
     </div>
-    <div class="field">
-        {{form.email.label_tag}}
-        {{form.email}}
-        {{form.email.errors}}
+
+    <div class="admin-topbar-actions">
+      <form action="{% url 'set_language' %}" method="post" class="lang-form">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ request.path }}">
+        {% get_current_language as LANGUAGE_CODE %}
+        {% if LANGUAGE_CODE == 'ar' %}
+          <input type="hidden" name="language" value="en">
+          <button type="submit" class="ghost-btn">English</button>
+        {% else %}
+          <input type="hidden" name="language" value="ar">
+          <button type="submit" class="ghost-btn">عربي</button>
+        {% endif %}
+      </form>
+
+      <a href="{% url 'landing' %}" class="ghost-btn">{% trans "View Site" %}</a>
+
+      <form action="{% url 'logout' %}" method="post" class="logout-form">
+        {% csrf_token %}
+        <button type="submit" class="ghost-btn danger-btn">{% trans "Logout" %}</button>
+      </form>
     </div>
-    <div class="checkbox-field">
-        {{form.is_active}}
-        {{form.is_active.label_tag}}
-        {{form.is_active.errors}}
+  </div>
+
+  <div class="section-card user-details-card">
+    <div class="section-head">
+      <div>
+        <h2>{% trans "User Details" %}</h2>
+        <p>{% trans "Update username, email, and account roles." %}</p>
+      </div>
     </div>
-    <div class="checkbox-field">
-        {{form.is_staff}}
-        {{form.is_staff.label_tag}}
-        {{form.is_staff_active.errors}}
-    </div>
-    <div class="checkbox-field">
-        {{form.is_superuser}}
-        {{form.is_superuser.label_tag}}
-        {{form.is_superuser.errors}}
-    </div>
-    <div class="button-container">
-        <button type submit>Save changes</button>
-        <button type="button" onclick="history.back()" >return</button>
-    </div>
-    
-</form>
+
+    <form method="post" class="details-form">
+      {% csrf_token %}
+
+      <div class="form-grid">
+        <div class="field">
+          {{ form.username.label_tag }}
+          {{ form.username }}
+          {{ form.username.errors }}
+        </div>
+
+        <div class="field">
+          {{ form.email.label_tag }}
+          {{ form.email }}
+          {{ form.email.errors }}
+        </div>
+      </div>
+
+      <div class="checks-card">
+        <div class="checkbox-field">
+          {{ form.is_active }}
+          {{ form.is_active.label_tag }}
+          {{ form.is_active.errors }}
+        </div>
+
+        <div class="checkbox-field">
+          {{ form.is_staff }}
+          {{ form.is_staff.label_tag }}
+          {{ form.is_staff.errors }}
+        </div>
+
+        <div class="checkbox-field">
+          {{ form.is_superuser }}
+          {{ form.is_superuser.label_tag }}
+          {{ form.is_superuser.errors }}
+        </div>
+      </div>
+
+      <div class="button-container">
+        <button type="submit" class="primary-btn">{% trans "Save changes" %}</button>
+        <button type="button" class="secondary-btn" onclick="history.back()">{% trans "Back" %}</button>
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock %}
