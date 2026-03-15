@@ -11,8 +11,7 @@
      <div class="admin-breadcrumb">
     <a href="{% url 'Admin_Dashboard' %}">{% trans "Dashboard" %}</a>
     <span>/</span>
-    <a href="{% url 'Admin_Dashboard' %}">{% trans "Users" %}</a>
-    <span>/</span>
+<a href="{% url 'Admin_Dashboard' %}#users-section">{% trans "Users" %}</a>    <span>/</span>
     <span>{{ user.username }} {% trans "details" %}</span>
 </div>
 
@@ -91,7 +90,6 @@
 
       <div class="button-container">
         <button type="submit" class="primary-btn">{% trans "Save changes" %}</button>
-        <button type="button" class="secondary-btn" onclick="history.back()">{% trans "Back" %}</button>
       </div>
     </form>
   </div>
