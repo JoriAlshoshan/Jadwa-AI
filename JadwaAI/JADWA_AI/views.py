@@ -592,29 +592,43 @@ def user_dashboard(request):
 @staff_member_required
 def Admin_Dashboard(request):
     users = User.objects.all()
-    messages = ContactMessage.objects.all().order_by('-created_at')
+    contact_messages = ContactMessage.objects.all().order_by('-created_at')
     users_count = User.objects.count()
-    projects_count = Projects.objects.count() 
+    projects_count = Projects.objects.count()
     contents = SiteContent.objects.all()
+
     context = {
-        'users' : users,
-        'messages': messages,
-        'users_count':users_count,
+        'users': users,
+        'contact_messages': contact_messages,
+        'users_count': users_count,
         'projects_count': projects_count,
-        'contents': contents
+        'contents': contents,
     }
     return render(request, "pages/admin_dashboard/admin.html", context)
+@login_required
+@staff_member_required
+def user_detail(request, id):
+    user = get_object_or_404(User, id=id)
 
-def user_detail(request , id):
-    user = get_object_or_404(User, id =id)
-    if request.method =='POST':
-        form =  UserEditForm(request.POST, instance = user)
+    if request.method == 'POST':
+        form = UserEditForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            return redirect ('Admin_Dashboard')
+            return redirect('Admin_Dashboard')
     else:
         form = UserEditForm(instance=user)
-    return render(request, "pages/admin_dashboard/users_details.html", {"form":form,"user" : user})
+
+    contact_messages = ContactMessage.objects.all().order_by('-created_at')
+
+    return render(
+        request,
+        "pages/admin_dashboard/users_details.html",
+        {
+            "form": form,
+            "user": user,
+            "contact_messages": contact_messages,
+        }
+    )
     
 
 def edit_user(request , id):
