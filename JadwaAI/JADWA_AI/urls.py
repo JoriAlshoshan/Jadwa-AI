@@ -35,7 +35,6 @@ urlpatterns = [
 
     path("admin-dashboard/", views.Admin_Dashboard, name="Admin_Dashboard"),
     path("users-details/<int:id>/", views.user_detail, name="user_detail"),
-    path("edit-user/<int:id>/", views.edit_user, name="edit_user"),
     path("delete-user/<int:id>/", views.delete_user, name="delete_user"),
     path("user_projects/<int:id>/", views.user_projects, name="user_projects"),
     path("admin/messages/list/", views.messages_list, name="messages_list"),
