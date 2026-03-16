@@ -49,7 +49,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from .models import Projects, SiteContent
 from analysis.models import AnalysisResult
-from JADWA_AI.forms import UserEditForm
+from JADWA_AI.forms import EditUserForm
 from JADWA_AI.forms import EditProfileForm
 
 
@@ -608,38 +608,16 @@ def Admin_Dashboard(request):
 
 @login_required
 @staff_member_required
-def user_detail(request, id):
-    user = get_object_or_404(User, id=id)
-
-    if request.method == 'POST':
-        form = UserEditForm(request.POST, instance=user)
+def user_detail(request , id):
+    user = User.objects.get( id = id)
+    if request.method =="POST":
+        form =  EditUserForm(request.POST, instance = user)
         if form.is_valid():
             form.save()
-            messages.success(request, _("User updated successfully."))
-            return redirect('user_detail', id=user.id)
+            return redirect ('Admin_Dashboard')
     else:
-        form = UserEditForm(instance=user)
-
-    return render(
-        request,
-        "pages/admin_dashboard/users_details.html",
-        {
-            "form": form,
-            "user": user,
-        }
-    )
-    
-
-def edit_user(request , id):
-    user = User.objects.get(id = id)
-    if request.method == 'POST':
-        user.username = request.POST.get("username")
-        user.email = request.POST.get("email")
-        is_staff = request.POST.get("is_staff")
-        user.is_staff = True if is_staff == "on" else False
-        user.save()
-        return redirect("edit_user", id=user.id)
-    return render (request, "edit_user.html",{"user":user})
+        form = EditUserForm(instance = user)
+    return render(request, "pages/admin_dashboard/users_details.html", {"form":form})
 
 @login_required
 @staff_member_required
