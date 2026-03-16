@@ -1,94 +1,67 @@
-{% extends "base_admin.html" %}
+{% extends "base.html" %}
 {% load i18n %}
 {% load static %}
 
 {% block content %}
-<div class="admin-shell">
-  <div class="admin-topbar">
-    <div class="admin-topbar-left">
-      <p class="admin-eyebrow">{% trans "Admin Panel" %}</p>
-      <h1 class="admin-title">{% trans "User Details" %}</h1>
-      <p class="admin-subtitle">{% trans "View and edit selected user information." %}</p>
-    </div>
+<link rel="stylesheet" href="{% static 'css/users_details.css' %}">
 
-    <div class="admin-topbar-actions">
-      <a href="{% url 'Admin_Dashboard' %}" class="ghost-btn">{% trans "Back to Dashboard" %}</a>
-    </div>
-  </div>
-
-  <section class="admin-section active">
-    <div class="section-card">
-      <div class="section-head">
-        <div>
-          <h2>{% trans "User Information" %}</h2>
-          <p>{% trans "Basic account details." %}</p>
-        </div>
-      </div>
-
-      <div class="data-list">
-        <div class="data-row">
-          <div class="data-main">
-            <div class="avatar-circle">
-              {{ user.username|slice:":1"|upper }}
+<div class="user-details-page">
+    <div class="details-container">
+        <h3> User Details</h3>
+        <form method ="post" class="form-container">
+            {% csrf_token %}
+            <div class="field">
+                {{form.username.label_tag}}
+                {{form.username}}
             </div>
-            <div>
-              <div class="data-title">{{ user.username }}</div>
-              <div class="data-meta">{{ user.email|default:_("No email") }}</div>
-              <div class="data-submeta">
-                <span>{% trans "User ID" %}: {{ user.id }}</span>
-                <span>•</span>
-                <span>
-                  {% if user.is_active %}
-                    {% trans "Active" %}
-                  {% else %}
-                    {% trans "Inactive" %}
-                  {% endif %}
-                </span>
-                <span>•</span>
-                <span>
-                  {% if user.is_staff %}
-                    {% trans "Staff" %}
-                  {% else %}
-                    {% trans "Regular User" %}
-                  {% endif %}
-                </span>
-              </div>
+            <div class="field">
+                {{form.email.label_tag}}
+                {{form.email}}
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section-card" style="margin-top: 22px;">
-      <div class="section-head">
-        <div>
-          <h2>{% trans "Edit User" %}</h2>
-          <p>{% trans "Update this user's account settings." %}</p>
-        </div>
-      </div>
-
-      <form method="post" class="admin-form">
-        {% csrf_token %}
-
-        <div class="form-grid">
-          {% for field in form %}
-            <div class="form-group">
-              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-              {{ field }}
-              {% if field.errors %}
-                <div class="form-error">{{ field.errors|striptags }}</div>
-              {% endif %}
+            <div class="field">
+                {{form.region.label_tag}}
+                {{form.region}}
             </div>
-          {% endfor %}
-        </div>
-
-        <div class="form-actions" style="margin-top:20px; display:flex; gap:12px; flex-wrap:wrap;">
-          <button type="submit" class="ghost-btn">{% trans "Save Changes" %}</button>
-          <a href="{% url 'user_projects' user.id %}" class="ghost-btn">{% trans "View Projects" %}</a>
-          <a href="{% url 'Admin_Dashboard' %}" class="ghost-btn">{% trans "Back" %}</a>
-        </div>
-      </form>
+            <div class="field">
+                {{form.city.label_tag}}
+                {{form.city}}
+            </div>
+            <div class="field">
+                {{form.bio.label_tag}}
+                {{form.bio}}
+            </div>
+            <div class="field">
+                {{form.linkedin.label_tag}}
+                {{form.linkedin}}
+            </div>
+            <div class="checkbox-container">
+                <div>
+                    <label class="checkbox-field">
+                        {{form.is_active}}
+                        <span class="checkmark"></span>
+                        Active Account
+                    </label>
+                </div>
+                <div>
+                    <label class="checkbox-field">
+                        {{form.is_staff}}
+                        <span class="checkmark"></span>
+                        Staff Member
+                    </label>
+                </div>
+                <div>
+                    <label class="checkbox-field">
+                        {{form.is_superuser}}
+                        <span class="checkmark"></span>
+                        Administrator
+                    </label>
+                </div>
+            </div>
+            <div class="button-container">
+                <button type submit >Save changes</button>
+                <button type="button" onclick="history.back()" >return</button>
+            </div>
+        </form>
     </div>
-  </section>
 </div>
 {% endblock %}
