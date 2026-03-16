@@ -1,49 +1,371 @@
-{% extends "base.html" %}
+{% extends "base_admin.html" %}
 {% load i18n %}
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/user_projects.css' %}">
-{% csrf_token %}
-<div class="table-container">
-    <h2> User Projects</h2>
-    <table>
+<style>
+  body{
+    margin:0;
+    background:#f6f8fc;
+    background-image: radial-gradient(circle at top left, rgba(10,47,191,.06), transparent 260px);
+  }
+
+  .admin-shell{
+    width:min(1280px, calc(100% - 32px));
+    margin:34px auto 48px;
+  }
+
+  .admin-topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:24px;
+    background:#ffffff;
+    border:1px solid rgba(15, 23, 42, 0.08);
+    border-radius:24px;
+    padding:28px;
+    box-shadow:0 10px 30px rgba(15, 23, 42, 0.06);
+    margin-bottom:22px;
+  }
+
+  .admin-topbar-left{
+    flex:1;
+    min-width:0;
+  }
+
+  .admin-breadcrumb{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:10px;
+    font-size:13px;
+    font-weight:700;
+    color:#64748b;
+  }
+
+  .admin-breadcrumb a{
+    color:#2563eb;
+    text-decoration:none;
+  }
+
+  .admin-breadcrumb a:hover{
+    text-decoration:underline;
+  }
+
+  .admin-eyebrow{
+    margin:0 0 8px;
+    color:#1d4ed8;
+    font-size:13px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+  }
+
+  .admin-title{
+    margin:0;
+    color:#0f172a;
+    font-size:38px;
+    font-weight:800;
+    line-height:1.1;
+  }
+
+  .admin-subtitle{
+    margin:10px 0 0;
+    color:#64748b;
+    font-size:15px;
+    max-width:760px;
+    line-height:1.7;
+  }
+
+  .admin-topbar-actions{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:flex-end;
+    flex-shrink:0;
+  }
+
+  .admin-topbar-actions form,
+  .lang-form,
+  .logout-form{
+    margin:0;
+  }
+
+  .lang-form button,
+  .logout-form button{
+    font:inherit;
+  }
+
+  .ghost-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    background:#f8fafc;
+    color:#0f172a;
+    border:1px solid rgba(15, 23, 42, 0.08);
+    padding:12px 18px;
+    border-radius:14px;
+    font-size:14px;
+    font-weight:700;
+    transition:.2s ease;
+    cursor:pointer;
+  }
+
+  .ghost-btn:hover{
+    background:#eef2ff;
+    border-color:rgba(29, 78, 216, 0.18);
+  }
+
+  .danger-btn{
+    color:#b42318;
+    border-color:rgba(180, 35, 24, 0.14);
+    background:#fff;
+  }
+
+  .danger-btn:hover{
+    background:#fff5f5;
+    border-color:rgba(180, 35, 24, 0.22);
+  }
+
+  .projects-card{
+    background:#ffffff;
+    border:1px solid rgba(15, 23, 42, 0.08);
+    border-radius:24px;
+    box-shadow:0 10px 30px rgba(15, 23, 42, 0.06);
+    overflow:hidden;
+  }
+
+  .card-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:18px;
+    padding:24px 24px 18px;
+    flex-wrap:wrap;
+    border-bottom:1px solid rgba(15, 23, 42, 0.06);
+  }
+
+  .card-head h2{
+    margin:0;
+    color:#0f172a;
+    font-size:24px;
+    font-weight:800;
+  }
+
+  .card-head p{
+    margin:8px 0 0;
+    color:#64748b;
+    font-size:14px;
+    line-height:1.7;
+  }
+
+  .table-wrap{
+    width:100%;
+    overflow-x:auto;
+  }
+
+  .projects-table{
+    width:100%;
+    min-width:1400px;
+    border-collapse:separate;
+    border-spacing:0;
+  }
+
+  .projects-table thead th{
+    position:sticky;
+    top:0;
+    background:#f8fafc;
+    color:#0f172a;
+    font-size:13px;
+    font-weight:800;
+    text-align:left;
+    padding:16px 18px;
+    border-bottom:1px solid rgba(15, 23, 42, 0.08);
+    white-space:nowrap;
+  }
+
+  .projects-table tbody td{
+    padding:16px 18px;
+    font-size:14px;
+    color:#334155;
+    border-bottom:1px solid rgba(15, 23, 42, 0.06);
+    vertical-align:top;
+    line-height:1.7;
+  }
+
+  .projects-table tbody tr:hover{
+    background:#fafcff;
+  }
+
+  .projects-table tbody tr:last-child td{
+    border-bottom:none;
+  }
+
+  .project-name{
+    font-weight:800;
+    color:#0f172a;
+  }
+
+  .empty-state{
+    text-align:center;
+    padding:34px 20px !important;
+    color:#64748b !important;
+    font-weight:700;
+  }
+
+  .muted{
+    color:#94a3b8;
+  }
+
+  html[dir="rtl"] .admin-breadcrumb{
+    direction:rtl;
+  }
+
+  html[dir="rtl"] .admin-breadcrumb .separator{
+    transform:scaleX(-1);
+    display:inline-block;
+  }
+
+  html[dir="rtl"] .admin-topbar,
+  html[dir="rtl"] .projects-card,
+  html[dir="rtl"] .card-head{
+    direction:rtl;
+    text-align:right;
+  }
+
+  html[dir="rtl"] .admin-topbar-actions{
+    justify-content:flex-start;
+  }
+
+  html[dir="rtl"] .projects-table thead th,
+  html[dir="rtl"] .projects-table tbody td{
+    text-align:right;
+  }
+
+  @media (max-width: 992px){
+    .admin-topbar{
+      flex-direction:column;
+      align-items:stretch;
+    }
+
+    .admin-topbar-actions{
+      justify-content:flex-start;
+    }
+  }
+
+  @media (max-width: 768px){
+    .admin-shell{
+      width:min(100% - 20px, 100%);
+      margin-top:20px;
+    }
+
+    .admin-title{
+      font-size:30px;
+    }
+
+    .admin-topbar,
+    .projects-card{
+      border-radius:20px;
+    }
+
+    .admin-topbar,
+    .card-head{
+      padding:18px;
+    }
+  }
+</style>
+
+<div class="admin-shell">
+  <div class="admin-topbar">
+    <div class="admin-topbar-left">
+      <div class="admin-breadcrumb">
+        <a href="{% url 'landing' %}">{% trans "Home" %}</a>
+        <span class="separator">/</span>
+        <a href="{% url 'Admin_Dashboard' %}">{% trans "Admin Dashboard" %}</a>
+        <span class="separator">/</span>
+        <a href="{% url 'Admin_Dashboard' %}?tab=users">{% trans "Users" %}</a>
+        <span class="separator">/</span>
+        <span class="current">{% trans "User Projects" %}</span>
+      </div>
+
+      <p class="admin-eyebrow">{% trans "Admin Panel" %}</p>
+      <h1 class="admin-title">{% trans "User Projects" %}</h1>
+      <p class="admin-subtitle">{% trans "Review all projects submitted by this user in one place." %}</p>
+    </div>
+
+    <div class="admin-topbar-actions">
+      <form action="{% url 'set_language' %}" method="post" class="lang-form">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ request.path }}">
+        {% get_current_language as LANGUAGE_CODE %}
+        {% if LANGUAGE_CODE == 'ar' %}
+          <input type="hidden" name="language" value="en">
+          <button type="submit" class="ghost-btn">English</button>
+        {% else %}
+          <input type="hidden" name="language" value="ar">
+          <button type="submit" class="ghost-btn">عربي</button>
+        {% endif %}
+      </form>
+
+      <a href="{% url 'landing' %}" class="ghost-btn">{% trans "View Site" %}</a>
+
+      <form action="{% url 'logout' %}" method="post" class="logout-form">
+        {% csrf_token %}
+        <button type="submit" class="ghost-btn danger-btn">{% trans "Logout" %}</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="projects-card">
+    <div class="card-head">
+      <div>
+        <h2>{% trans "Projects List" %}</h2>
+        <p>{% trans "The table below shows all projects linked to the selected user account." %}</p>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="projects-table">
         <thead>
-            <tr>
-                <th>Project Name</th>
-                <th>Project Type</th>
-                <th>Project Region</th>
-                <th>Project City</th>
-                <th>Project Location Other</th>
-                <th>Project Location</th>
-                <th>Project Location Type</th>
-                <th>Project Budget</th>
-                <th>Project Duration</th>
-                <th>Number of Employees</th>
-                <th>Description</th>
-            </tr>
+          <tr>
+            <th>{% trans "Project Name" %}</th>
+            <th>{% trans "Project Type" %}</th>
+            <th>{% trans "Project Region" %}</th>
+            <th>{% trans "Project City" %}</th>
+            <th>{% trans "Other Location" %}</th>
+            <th>{% trans "Location Type" %}</th>
+            <th>{% trans "Project Budget" %}</th>
+            <th>{% trans "Project Duration" %}</th>
+            <th>{% trans "Number of Employees" %}</th>
+            <th>{% trans "Description" %}</th>
+          </tr>
         </thead>
-        <tbody>
-            {% for project in projects%}
-            <tr>
-                <td>{{project.project_name}}</td>
-                <td>{{project.Project_type}}</td>
-                <td>{{project.project_region}}</td>
-                <td>{{project.project_city}}</td>
-                <td>{{project.project_location_other}}</td>
-                <td>{{project.project_location}}</td>
-                <td>{{project.project_location_type }}</td>
-                <td>{{project.project_budget}}</td>
-                <td>{{project.project_duration}}</td>
-                <td>{{project.number_of_employees}}</td>
-                <td>{{project.description}}</td>
-                {% empty %}
-                <tr>
-                    <td colspan="11" style="text-align:center;"> There is no projects</td>
-                </tr>
-            </tr>
-        </tbody>
-        {% endfor%}
-    </table>
+
+<tbody>
+  {% for project in projects %}
+  <tr>
+    <td class="project-name">{{ project.project_name|default:"—" }}</td>
+    <td>{% if project.Project_type %}{% trans project.Project_type %}{% else %}—{% endif %}</td>
+    <td>{% if project.project_region %}{% trans project.project_region %}{% else %}—{% endif %}</td>
+    <td>{% if project.project_city %}{% trans project.project_city %}{% else %}—{% endif %}</td>
+    <td>{{ project.project_location_other|default:"—" }}</td>
+    <td>{% if project.project_location_type %}{% trans project.project_location_type %}{% else %}—{% endif %}</td>
+    <td>{{ project.project_budget|default:"—" }}</td>
+    <td>{{ project.project_duration|default:"—" }}</td>
+    <td>{{ project.number_of_employees|default:"—" }}</td>
+    <td>{{ project.description|default:"—" }}</td>
+  </tr>
+  {% empty %}
+  <tr>
+    <td colspan="11" class="empty-state">{% trans "There are no projects." %}</td>
+  </tr>
+  {% endfor %}
+</tbody>
+      </table>
+    </div>
+  </div>
 </div>
 {% endblock %}

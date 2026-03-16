@@ -537,8 +537,7 @@ html[dir="rtl"] .project-empty{
 {% if messages %}
   <div class="toast-wrap" id="toastWrap">
     {% for message in messages %}
-      {% if "dashboard_delete" in message.tags %}
-        <div class="toast {{ message.tags|default:'info' }}" role="status" aria-live="polite">
+{% if "user_project_delete" in message.tags %}        <div class="toast {{ message.tags|default:'info' }}" role="status" aria-live="polite">
           <div class="toast-icon">
             {% if 'success' in message.tags %}✓
             {% elif 'error' in message.tags %}! 

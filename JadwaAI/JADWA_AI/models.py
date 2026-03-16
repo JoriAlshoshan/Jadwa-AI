@@ -256,8 +256,16 @@ class PasswordResetOTP(models.Model):
         return now <= expiry_time
 
 class SiteContent(models.Model):
-    key = models.CharField()
-    content = models.TextField()
+    hero_title = models.CharField(max_length=255, blank=True)
+    hero_subtitle = models.TextField(blank=True)
+    about_title = models.CharField(max_length=255, blank=True)
+    about_text = models.TextField(blank=True)
+    contact_email = models.EmailField(blank=True)
+    footer_text = models.CharField(max_length=255, blank=True)
 
-    def str(self):
-        return f"{self.key} - {self.content}"
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "Site Content"
+
+

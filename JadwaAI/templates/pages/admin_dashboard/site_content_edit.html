@@ -87,17 +87,6 @@
     flex-shrink:0;
   }
 
-  .admin-topbar-actions form,
-  .lang-form,
-  .logout-form{
-    margin:0;
-  }
-
-  .lang-form button,
-  .logout-form button{
-    font:inherit;
-  }
-
   .ghost-btn{
     display:inline-flex;
     align-items:center;
@@ -138,84 +127,66 @@
     box-shadow:0 10px 30px rgba(15, 23, 42, 0.06);
   }
 
-  .section-title{
+  .section-head{
+    margin-bottom:18px;
+  }
+
+  .section-head h2{
     margin:0;
     color:#0f172a;
     font-size:24px;
     font-weight:800;
   }
 
-  .section-desc{
-    margin:8px 0 22px;
+  .section-head p{
+    margin:8px 0 0;
     color:#64748b;
     font-size:14px;
-    line-height:1.7;
   }
 
-  .details-grid{
+  .form-grid{
     display:grid;
     grid-template-columns:repeat(2, minmax(0,1fr));
     gap:18px;
-    margin-bottom:22px;
   }
 
-  .field-card{
-    background:#f8fafc;
-    border:1px solid rgba(15,23,42,.08);
-    border-radius:18px;
-    padding:16px 18px;
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
   }
 
-  .field-card.full{
+  .field.full{
     grid-column:1 / -1;
   }
 
-  .field-label{
-    display:block;
-    margin-bottom:8px;
+  .field label{
     color:#0f172a;
     font-size:14px;
     font-weight:800;
   }
 
-  .field-value{
-    color:#475569;
-    font-size:15px;
-    line-height:1.8;
-    word-break:break-word;
-  }
-
-  .reply-card{
-    margin-top:22px;
-    border:1px solid rgba(15,23,42,.08);
-    border-radius:20px;
-    background:#f8fafc;
-    padding:18px;
-  }
-
-  .reply-title{
-    margin:0 0 14px;
-    color:#0f172a;
-    font-size:15px;
-    font-weight:900;
-  }
-
-  .reply-textarea{
+  .field input,
+  .field textarea{
     width:100%;
-    min-height:170px;
     box-sizing:border-box;
     border:1px solid rgba(15,23,42,.10);
-    background:#fff;
+    background:#f8fafc;
     border-radius:16px;
     padding:14px 16px;
     font-size:15px;
     color:#0f172a;
     outline:none;
-    resize:vertical;
     transition:border-color .18s ease, box-shadow .18s ease, background .18s ease;
   }
 
-  .reply-textarea:focus{
+  .field textarea{
+    min-height:120px;
+    resize:vertical;
+  }
+
+  .field input:focus,
+  .field textarea:focus{
     background:#fff;
     border-color:rgba(37,99,235,.35);
     box-shadow:0 0 0 4px rgba(37,99,235,.08);
@@ -252,28 +223,6 @@
     filter:brightness(.98);
   }
 
-  .secondary-btn{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    min-width:190px;
-    border-radius:999px;
-    padding:14px 22px;
-    font-size:15px;
-    font-weight:900;
-    cursor:pointer;
-    text-decoration:none;
-    transition:all .18s ease;
-    border:1px solid rgba(15,23,42,.12);
-    color:#0f172a;
-    background:#fff;
-  }
-
-  .secondary-btn:hover{
-    background:#f8fafc;
-    transform:translateY(-1px);
-  }
-
   .toast-wrap{
     position: fixed;
     top: 88px;
@@ -294,20 +243,8 @@
     background:#fff;
     border:1px solid rgba(15,23,42,.10);
     box-shadow:0 18px 60px rgba(2,6,23,.18);
-    animation: toastIn .18s ease-out forwards;
     position: relative;
     overflow:hidden;
-  }
-
-  @keyframes toastIn{
-    from{
-      opacity:0;
-      transform: translateY(-6px) scale(.99);
-    }
-    to{
-      opacity:1;
-      transform: translateY(0) scale(1);
-    }
   }
 
   .toast::before{
@@ -317,15 +254,7 @@
     top:0;
     bottom:0;
     width:4px;
-    background:#cbd5e1;
-  }
-
-  .toast-success::before{
     background:#22c55e;
-  }
-
-  .toast-error::before{
-    background:#ef4444;
   }
 
   .toast-icon{
@@ -337,18 +266,8 @@
     flex:0 0 28px;
     font-size:14px;
     font-weight:900;
-    background:#e2e8f0;
-    color:#0f172a;
-  }
-
-  .toast-success .toast-icon{
     background:#dcfce7;
     color:#166534;
-  }
-
-  .toast-error .toast-icon{
-    background:#fee2e2;
-    color:#991b1b;
   }
 
   .toast-content strong{
@@ -378,40 +297,13 @@
     font-weight:900;
   }
 
-  .toast-close:hover{
-    color:#0f172a;
-  }
-
-  html[dir="rtl"] .toast-close{
-    right:auto;
-    left:10px;
-  }
-
-  html[dir="rtl"] .admin-breadcrumb{
-    direction:rtl;
-  }
-
-  html[dir="rtl"] .admin-breadcrumb .separator{
-    transform:scaleX(-1);
-    display:inline-block;
-  }
-
+  html[dir="rtl"] .admin-breadcrumb,
   html[dir="rtl"] .admin-topbar,
   html[dir="rtl"] .details-card,
-  html[dir="rtl"] .field-card,
-  html[dir="rtl"] .reply-card{
+  html[dir="rtl"] .field,
+  html[dir="rtl"] .section-head{
     direction:rtl;
     text-align:right;
-  }
-
-  html[dir="rtl"] .section-title,
-  html[dir="rtl"] .section-desc,
-  html[dir="rtl"] .field-label,
-  html[dir="rtl"] .field-value,
-  html[dir="rtl"] .reply-title,
-  html[dir="rtl"] .reply-textarea{
-    text-align:right;
-    direction:rtl;
   }
 
   html[dir="rtl"] .admin-topbar-actions{
@@ -420,6 +312,11 @@
 
   html[dir="rtl"] .button-container{
     justify-content:flex-start;
+  }
+
+  html[dir="rtl"] .toast-close{
+    right:auto;
+    left:10px;
   }
 
   @media (max-width: 992px){
@@ -449,7 +346,7 @@
       border-radius:20px;
     }
 
-    .details-grid{
+    .form-grid{
       grid-template-columns:1fr;
     }
   }
@@ -460,122 +357,80 @@
     <div class="admin-topbar-left">
       <div class="admin-breadcrumb">
         <a href="{% url 'landing' %}">{% trans "Home" %}</a>
-        <span class="separator">/</span>
+        <span>/</span>
         <a href="{% url 'Admin_Dashboard' %}">{% trans "Admin Dashboard" %}</a>
-        <span class="separator">/</span>
-        <a href="{% url 'Admin_Dashboard' %}?tab=messages">{% trans "Messages" %}</a>
-        <span class="separator">/</span>
-        <span class="current">{% trans "Message Details" %}</span>
+        <span>/</span>
+        <span>{% trans "Site Content" %}</span>
       </div>
 
       <p class="admin-eyebrow">{% trans "Admin Panel" %}</p>
-      <h1 class="admin-title">{% trans "Message Details" %}</h1>
-      <p class="admin-subtitle">{% trans "Review the sender information and reply to the message from here." %}</p>
+      <h1 class="admin-title">{% trans "Site Content" %}</h1>
+      <p class="admin-subtitle">{% trans "Manage the public content shown on the website landing page." %}</p>
     </div>
 
     <div class="admin-topbar-actions">
-      <form action="{% url 'set_language' %}" method="post" class="lang-form">
-        {% csrf_token %}
-        <input name="next" type="hidden" value="{{ request.path }}">
-        {% get_current_language as LANGUAGE_CODE %}
-        {% if LANGUAGE_CODE == 'ar' %}
-          <input type="hidden" name="language" value="en">
-          <button type="submit" class="ghost-btn">English</button>
-        {% else %}
-          <input type="hidden" name="language" value="ar">
-          <button type="submit" class="ghost-btn">عربي</button>
-        {% endif %}
-      </form>
-
-      <a href="{% url 'landing' %}" class="ghost-btn">{% trans "View Site" %}</a>
-
-      <form action="{% url 'logout' %}" method="post" class="logout-form">
-        {% csrf_token %}
-        <button type="submit" class="ghost-btn danger-btn">{% trans "Logout" %}</button>
-      </form>
+      <a href="{% url 'Admin_Dashboard' %}?tab=site-content" class="ghost-btn">{% trans "Back to Dashboard" %}</a>
     </div>
   </div>
 
   {% if messages %}
   <div class="toast-wrap">
     {% for message in messages %}
-    <div class="toast {% if 'success' in message.tags %}toast-success{% elif 'error' in message.tags %}toast-error{% endif %}">
-      <button type="button" class="toast-close" onclick="this.parentElement.remove()">×</button>
-
-      <div class="toast-icon">
-        {% if 'success' in message.tags %}
-          ✓
-        {% elif 'error' in message.tags %}
-          !
-        {% else %}
-          i
-        {% endif %}
+      <div class="toast">
+        <button type="button" class="toast-close" onclick="this.parentElement.remove()">×</button>
+        <div class="toast-icon">✓</div>
+        <div class="toast-content">
+          <strong>{% trans "Success" %}</strong>
+          <p>{{ message }}</p>
+        </div>
       </div>
-
-      <div class="toast-content">
-        <strong>
-          {% if 'success' in message.tags %}
-            {% trans "Success" %}
-          {% elif 'error' in message.tags %}
-            {% trans "Error" %}
-          {% else %}
-            {% trans "Notice" %}
-          {% endif %}
-        </strong>
-        <p>{{ message }}</p>
-      </div>
-    </div>
     {% endfor %}
   </div>
   {% endif %}
 
   <div class="details-card">
-    <h2 class="section-title">{% trans "Sender Information" %}</h2>
-    <p class="section-desc">{% trans "Below are the details of the selected contact message." %}</p>
-
-    <div class="details-grid">
-      <div class="field-card">
-        <span class="field-label">{% trans "Name" %}</span>
-        <div class="field-value">{{ message.full_name|default:"—" }}</div>
-      </div>
-
-      <div class="field-card">
-        <span class="field-label">{% trans "Email" %}</span>
-        <div class="field-value">{{ message.email|default:"—" }}</div>
-      </div>
-
-      <div class="field-card">
-        <span class="field-label">{% trans "Topic" %}</span>
-        <div class="field-value">{{ message.topic|default:"—" }}</div>
-      </div>
-
-      <div class="field-card">
-        <span class="field-label">{% trans "Date" %}</span>
-        <div class="field-value">{{ message.created_at|default:"—" }}</div>
-      </div>
-
-      <div class="field-card full">
-        <span class="field-label">{% trans "Message" %}</span>
-        <div class="field-value">{{ message.message|default:"—" }}</div>
-      </div>
+    <div class="section-head">
+      <h2>{% trans "Landing Page Content" %}</h2>
+      <p>{% trans "Edit the main text content that appears on the public website." %}</p>
     </div>
 
     <form method="post">
       {% csrf_token %}
 
-      <div class="reply-card">
-        <p class="reply-title">{% trans "Reply Message" %}</p>
-        <textarea name="reply" class="reply-textarea" placeholder="{% trans 'Type your reply here' %}">{{ message.reply }}</textarea>
-
-        <div class="button-container">
-          <button type="submit" class="primary-btn">
-            {% if message.is_replied %}
-              {% trans "Update Reply" %}
-            {% else %}
-              {% trans "Send Reply" %}
-            {% endif %}
-          </button>
+      <div class="form-grid">
+        <div class="field full">
+          {{ form.hero_title.label_tag }}
+          {{ form.hero_title }}
         </div>
+
+        <div class="field full">
+          {{ form.hero_subtitle.label_tag }}
+          {{ form.hero_subtitle }}
+        </div>
+
+        <div class="field">
+          {{ form.about_title.label_tag }}
+          {{ form.about_title }}
+        </div>
+
+        <div class="field">
+          {{ form.contact_email.label_tag }}
+          {{ form.contact_email }}
+        </div>
+
+        <div class="field full">
+          {{ form.about_text.label_tag }}
+          {{ form.about_text }}
+        </div>
+
+        <div class="field full">
+          {{ form.footer_text.label_tag }}
+          {{ form.footer_text }}
+        </div>
+      </div>
+
+      <div class="button-container">
+        <button type="submit" class="primary-btn">{% trans "Save Changes" %}</button>
       </div>
     </form>
   </div>
@@ -584,15 +439,11 @@
 <script>
 setTimeout(function(){
   const toasts = document.querySelectorAll(".toast");
-
   toasts.forEach(function(toast){
     toast.style.transition = "opacity .4s ease, transform .4s ease";
     toast.style.opacity = "0";
     toast.style.transform = "translateY(-6px)";
-
-    setTimeout(function(){
-      toast.remove();
-    }, 400);
+    setTimeout(function(){ toast.remove(); }, 400);
   });
 }, 4000);
 </script>

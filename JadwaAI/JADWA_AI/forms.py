@@ -4,6 +4,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, SetP
 from django.utils.translation import gettext_lazy as _
 from .models import Projects
 from django.utils import translation
+from django import forms
+from .models import SiteContent
 User = get_user_model()
 
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -535,22 +537,67 @@ class OTPForm(forms.Form):
 class ResetPasswordForm(SetPasswordForm):
     pass
 
+
 class EditUserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'email', 'bio', 'region', 'city', 'linkedin', 'is_active', 'is_staff', 'is_superuser']
+        fields = [
+            'username',
+            'email',
+            'bio',
+            'region',
+            'city',
+            'linkedin',
+            'is_active',
+            'is_staff',
+            'is_superuser',
+        ]
         labels = {
             "username": _("Username"),
             "email": _("Email"),
+            "bio": _("Bio"),
+            "region": _("Region"),
+            "city": _("City"),
+            "linkedin": _("LinkedIn"),
             "is_active": _("Account active"),
             "is_staff": _("Admin access"),
             "is_superuser": _("Full admin access"),
         }
         widgets = {
-            'username': forms.TextInput(attrs={'readonly' : 'readonly'}),
-            'email': forms.TextInput(attrs={'readonly' : 'readonly'}),
-            'bio': forms.TextInput(attrs={'readonly' : 'readonly'}),
-            'region': forms.TextInput(attrs={'readonly' : 'readonly'}),
-            'city': forms.TextInput(attrs={'readonly' : 'readonly'}),
-            'linkedin': forms.TextInput(attrs={'readonly' : 'readonly'}),
+            'username': forms.TextInput(attrs={'class': 'form-input'}),
+            'email': forms.EmailInput(attrs={'class': 'form-input'}),
+            'bio': forms.Textarea(attrs={'class': 'form-input', 'rows': 4}),
+            'region': forms.TextInput(attrs={'class': 'form-input'}),
+            'city': forms.TextInput(attrs={'class': 'form-input'}),
+            'linkedin': forms.URLInput(attrs={'class': 'form-input'}),
+        }
+
+
+
+class SiteContentForm(forms.ModelForm):
+    class Meta:
+        model = SiteContent
+        fields = [
+            "hero_title",
+            "hero_subtitle",
+            "about_title",
+            "about_text",
+            "contact_email",
+            "footer_text",
+        ]
+        labels = {
+            "hero_title": "Hero Title",
+            "hero_subtitle": "Hero Subtitle",
+            "about_title": "About Section Title",
+            "about_text": "About Section Text",
+            "contact_email": "Contact Email",
+            "footer_text": "Footer Text",
+        }
+        widgets = {
+            "hero_title": forms.TextInput(attrs={"placeholder": "Enter hero title"}),
+            "hero_subtitle": forms.Textarea(attrs={"rows": 4, "placeholder": "Enter hero subtitle"}),
+            "about_title": forms.TextInput(attrs={"placeholder": "Enter about section title"}),
+            "about_text": forms.Textarea(attrs={"rows": 5, "placeholder": "Enter about section text"}),
+            "contact_email": forms.EmailInput(attrs={"placeholder": "Enter contact email"}),
+            "footer_text": forms.TextInput(attrs={"placeholder": "Enter footer text"}),
         }

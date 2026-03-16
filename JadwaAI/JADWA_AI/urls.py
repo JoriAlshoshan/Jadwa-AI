@@ -41,4 +41,5 @@ urlpatterns = [
     # path("message/<int:id>/", views.message_detail, name="message_detail"),
     path("message/<int:message_id>/", views.send_message, name="send_message"),
     path("start-analysis/", views.start_feasibility_gateway, name="start_analysis"),
+    path("admin-dashboard/site-content/", views.site_content_edit, name="site_content_edit"),
 ]

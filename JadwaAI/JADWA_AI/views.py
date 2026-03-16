@@ -1,5 +1,6 @@
 import json
 import random
+from .forms import SiteContentForm
 from django.db.models import OuterRef, Subquery, FloatField, ExpressionWrapper, Avg
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -60,7 +61,6 @@ def project_delete(request, pk):
     project = get_object_or_404(Projects, pk=pk, user=request.user)
 
     AnalysisResult.objects.filter(user=request.user, project_id=project.id).delete()
-
     AnalysisResult.objects.filter(user=request.user, project_name=project.project_name).delete()
 
     project.delete()
@@ -68,8 +68,7 @@ def project_delete(request, pk):
     messages.success(
         request,
         _("Project deleted successfully."),
-        extra_tags="dashboard_delete success"
-    )   
+        extra_tags="user_project_delete success"    )
     return redirect("dashboard")
 
 
@@ -608,16 +607,26 @@ def Admin_Dashboard(request):
 
 @login_required
 @staff_member_required
-def user_detail(request , id):
-    user = User.objects.get( id = id)
-    if request.method =="POST":
-        form =  EditUserForm(request.POST, instance = user)
+def user_detail(request, id):
+    selected_user = get_object_or_404(User, id=id)
+
+    if request.method == "POST":
+        form = EditUserForm(request.POST, instance=selected_user)
         if form.is_valid():
             form.save()
-            return redirect ('Admin_Dashboard')
+            messages.success(request, _("User details updated successfully."))
+            return redirect("user_detail", id=selected_user.id)
     else:
-        form = EditUserForm(instance = user)
-    return render(request, "pages/admin_dashboard/users_details.html", {"form":form})
+        form = EditUserForm(instance=selected_user)
+
+    return render(
+        request,
+        "pages/admin_dashboard/users_details.html",
+        {
+            "form": form,
+            "selected_user": selected_user,
+        },
+    )
 
 @login_required
 @staff_member_required
@@ -626,11 +635,19 @@ def delete_user(request, id):
     user = get_object_or_404(User, id=id)
 
     if request.user == user:
-        messages.error(request, _("You cannot delete yourself."))
+        messages.error(
+            request,
+            _("You cannot delete yourself."),
+            extra_tags="admin_user_delete error"        )
         return redirect("Admin_Dashboard")
 
+    deleted_username = user.username
     user.delete()
-    messages.success(request, _("User deleted successfully."))
+
+    messages.success(
+        request,
+        _('User "%(username)s" deleted successfully.') % {"username": deleted_username},
+extra_tags="admin_user_delete success"    )
     return redirect("Admin_Dashboard")
 
 def user_projects(request , id):
@@ -640,23 +657,58 @@ def user_projects(request , id):
     
 def messages_list(request):
     messages = ContactMessage.objects.all()
-    return render(request, "pages/admin_dashboard/messages.html", {"users" : users})
+    return render(request, "pages/admin_dashboard/messages.html", {"messages": messages})
 
+@login_required
+@staff_member_required
 def send_message(request, message_id):
-    message = get_object_or_404(ContactMessage, id =message_id)
-    if request.method == 'POST':
-        reply = request.POST['reply']
+    message = get_object_or_404(ContactMessage, id=message_id)
+
+    if request.method == "POST":
+        reply = (request.POST.get("reply") or "").strip()
+
+        if not reply:
+            messages.error(request, _("Please write a reply before sending."))
+            return redirect("send_message", message_id=message.id)
+
         message.reply = reply
         if not message.is_replied:
             message.is_replied = True
         message.save()
-        
+
         send_mail(
-            subject = "Thank you for conntect us",
-            message = reply,
-            from_email=None,
+            subject=_("Thank you for contacting us"),   # ← هنا الفاصلة
+            message=reply,
+            from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[message.email],
             fail_silently=False,
         )
-        return redirect('Admin_Dashboard')
-    return render (request,"pages/admin_dashboard/message_detail.html",{"message":message})
+
+        messages.success(request, _("Reply sent successfully."))
+        return redirect("send_message", message_id=message.id)
+
+    return render(
+        request,
+        "pages/admin_dashboard/message_detail.html",
+        {"message": message}
+    )
+
+@login_required
+@staff_member_required
+def site_content_edit(request):
+    content, created = SiteContent.objects.get_or_create(id=1)
+
+    if request.method == "POST":
+        form = SiteContentForm(request.POST, instance=content)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _("Site content updated successfully."))
+            return redirect("site_content_edit")
+    else:
+        form = SiteContentForm(instance=content)
+
+    return render(
+        request,
+        "pages/admin_dashboard/site_content_edit.html",
+        {"form": form}
+    )

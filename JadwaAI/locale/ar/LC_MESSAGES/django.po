@@ -1153,14 +1153,8 @@ msgstr "تنبيه"
 msgid "Info"
 msgstr "معلومة"
 
-msgid "Close"
-msgstr "إغلاق"
-
 msgid "Are you sure you want to delete this project? This action cannot be undone."
 msgstr "هل أنت متأكد أنك تريد حذف هذا المشروع؟ لا يمكن التراجع عن هذا الإجراء."
-
-msgid "Cancel"
-msgstr "إلغاء"
 
 
 msgid "Deleting..."
@@ -1274,9 +1268,6 @@ msgid "Save & Re-run Analysis"
 msgstr "حفظ وإعادة تشغيل التحليل"
 
 
-msgid "Project deleted successfully."
-msgstr "تم حذف المشروع بنجاح."
-
 msgid "Activate your account"
 msgstr "فعّل حسابك"
 
@@ -1388,3 +1379,117 @@ msgstr "صلاحيات كاملة"
 
 msgid "User Details"
 msgstr "تفاصيل المستخدم"
+
+msgid "Project deleted successfully."
+msgstr "تم حذف المشروع بنجاح."
+
+msgid "You cannot delete yourself."
+msgstr "لا يمكنك حذف حسابك."
+
+msgid "User \"%(username)s\" deleted successfully."
+msgstr "تم حذف المستخدم \"%(username)s\" بنجاح."
+
+msgid "Delete User"
+msgstr "حذف المستخدم"
+
+msgid "Are you sure you want to delete this user? This action cannot be undone."
+msgstr "هل أنت متأكد أنك تريد حذف هذا المستخدم؟ لا يمكن التراجع عن هذا الإجراء."
+
+msgid "Cancel"
+msgstr "إلغاء"
+
+msgid "Close"
+msgstr "إغلاق"
+msgid "Permissions & Status"
+msgstr "الصلاحيات والحالة"
+msgid "Save Changes"
+msgstr "حفظ التغييرات"
+
+msgid "Active Account"
+msgstr "حساب نشط"
+
+msgid "Staff Member"
+msgstr "عضو طاقم"
+
+msgid "Administrator"
+msgstr "مسؤول"
+
+msgid "User details updated successfully."
+msgstr "تم تحديث بيانات المستخدم بنجاح."
+
+msgid "User Projects"
+msgstr "مشاريع المستخدم"
+
+msgid "Review all projects submitted by this user in one place."
+msgstr "استعراض جميع المشاريع التي أضافها هذا المستخدم في مكان واحد."
+
+msgid "Projects List"
+msgstr "قائمة المشاريع"
+
+msgid "The table below shows all projects linked to the selected user account."
+msgstr "يعرض الجدول أدناه جميع المشاريع المرتبطة بحساب المستخدم المحدد."
+
+
+msgid "Project Region"
+msgstr "المنطقة"
+
+msgid "Project City"
+msgstr "المدينة"
+
+msgid "Other Location"
+msgstr "موقع آخر"
+
+msgid "Project Location"
+msgstr "موقع المشروع"
+
+msgid "Location Type"
+msgstr "نوع الموقع"
+
+msgid "tabuk"
+msgstr "تبوك"
+
+
+
+
+msgid "Number of Employees"
+msgstr "عدد الموظفين"
+
+
+msgid "There are no projects."
+msgstr "لا توجد مشاريع."
+
+
+
+msgid "Message Details"
+msgstr "تفاصيل الرسالة"
+
+msgid "Name"
+msgstr "الاسم"
+
+msgid "Review the sender information and reply to the message from here."
+msgstr "استعرض معلومات المرسل وقم بالرد على الرسالة من هنا."
+
+msgid "Sender Information"
+msgstr "معلومات المرسل"
+
+msgid "Below are the details of the selected contact message."
+msgstr "فيما يلي تفاصيل رسالة التواصل المحددة."
+
+msgid "Reply Message"
+msgstr "الرد على الرسالة"
+
+msgid "Type your reply here"
+msgstr "اكتبي ردك هنا"
+
+msgid "Send Reply"
+msgstr "إرسال الرد"
+
+msgid "Reply sent successfully."
+msgstr "تم إرسال الرد بنجاح."
+
+
+msgid "Date"
+msgstr "التاريخ"
+
+msgid "Update Reply"
+msgstr "تحديث الرد"
