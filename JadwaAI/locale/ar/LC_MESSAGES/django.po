@@ -1493,3 +1493,169 @@ msgstr "التاريخ"
 
 msgid "Update Reply"
 msgstr "تحديث الرد"
+
+#: admin dashboard content
+msgid "Contact Email"
+msgstr "البريد الإلكتروني"
+
+msgid "Update the public email address."
+msgstr "تحديث البريد الإلكتروني الظاهر للمستخدمين."
+
+msgid "Hero Section"
+msgstr "قسم الواجهة الرئيسية"
+
+msgid "Edit the landing title and subtitle."
+msgstr "تعديل عنوان ووصف الصفحة الرئيسية."
+
+msgid "How It Works"
+msgstr "كيف يعمل الموقع"
+
+msgid "Edit the how it works section title and description."
+msgstr "تعديل عنوان ووصف قسم كيف يعمل الموقع."
+
+msgid "Product Section"
+msgstr "قسم المنتج"
+
+msgid "Edit the product section title and description."
+msgstr "تعديل عنوان ووصف قسم المنتج."
+
+
+
+msgid "Edit the footer message shown on the website."
+msgstr "تعديل النص الظاهر في أسفل الموقع."
+
+msgid "Edit the success stories section title and description."
+msgstr "تعديل عنوان ووصف قسم قصص النجاح."
+
+msgid "CONTENT MANAGER"
+msgstr "إدارة المحتوى"
+
+msgid "Manage the main content displayed on the public website."
+msgstr "إدارة المحتوى الرئيسي المعروض في الموقع."
+
+msgid "Preview Website"
+msgstr "معاينة الموقع"
+
+msgid "Edit Site Content"
+msgstr "تعديل محتوى الموقع"
+
+
+msgid "Content Manager"
+msgstr "مدير المحتوى"
+
+
+
+
+msgid "Landing Page Content"
+msgstr "محتوى الصفحة الرئيسية"
+
+msgid "Edit the main text content that appears on the public website."
+msgstr "تعديل المحتوى الرئيسي الظاهر في الموقع"
+
+msgid "Hero Title:"
+msgstr "عنوان الواجهة:"
+
+msgid "Enter hero title"
+msgstr "أدخل عنوان الواجهة"
+
+msgid "Hero Subtitle:"
+msgstr "الوصف الفرعي:"
+
+msgid "Enter hero subtitle"
+msgstr "أدخل الوصف الفرعي"
+
+msgid "Contact Email:"
+msgstr "بريد التواصل:"
+
+msgid "Enter contact email"
+msgstr "أدخل بريد التواصل"
+
+msgid "Product Section Title:"
+msgstr "عنوان قسم المنتج:"
+
+msgid "Enter product title"
+msgstr "أدخل عنوان المنتج"
+
+msgid "Product Section Description:"
+msgstr "وصف قسم المنتج:"
+
+msgid "Enter product description"
+msgstr "أدخل وصف المنتج"
+
+msgid "How It Works Title:"
+msgstr "عنوان كيف يعمل:"
+
+msgid "Enter how it works title"
+msgstr "أدخل عنوان كيف يعمل"
+
+msgid "How It Works Description:"
+msgstr "وصف كيف يعمل:"
+
+msgid "Enter how it works description"
+msgstr "أدخل وصف كيف يعمل"
+
+msgid "Success Stories Title:"
+msgstr "عنوان قصص النجاح:"
+
+msgid "Enter success stories title"
+msgstr "أدخل عنوان قصص النجاح"
+
+msgid "Success Stories Description:"
+msgstr "وصف قصص النجاح:"
+
+msgid "Enter success stories description"
+msgstr "أدخل وصف قصص النجاح"
+
+msgid "Footer Text:"
+msgstr "نص التذييل:"
+
+msgid "Enter footer text"
+msgstr "أدخل نص التذييل"
+
+
+msgid "Manage the public content shown on the website landing page."
+msgstr "إدارة المحتوى العام الظاهر في الصفحة الرئيسية للموقع."
+
+msgid "Hero Title"
+msgstr "عنوان الواجهة"
+
+msgid "Hero Subtitle"
+msgstr "الوصف الفرعي"
+
+
+msgid "Product Section Title"
+msgstr "عنوان قسم المنتج"
+
+msgid "Product Section Description"
+msgstr "وصف قسم المنتج"
+
+msgid "How It Works Title"
+msgstr "عنوان كيف يعمل"
+
+msgid "How It Works Description"
+msgstr "وصف كيف يعمل"
+
+msgid "Success Stories Title"
+msgstr "عنوان قصص النجاح"
+
+msgid "Success Stories Description"
+msgstr "وصف قصص النجاح"
+
+msgid "Footer Text"
+msgstr "نص التذييل"
+msgid "Site content updated successfully."
+msgstr "تم تحديث محتوى الموقع بنجاح."
+
+msgid "Welcome to Jadwa AI"
+msgstr "مرحبًا بك في Jadwa AI"
+
+msgid "Welcome %(username)s to Jadwa AI. Your account has been successfully activated."
+msgstr "مرحبًا %(username)s في Jadwa AI. تم تفعيل حسابك بنجاح."
+
+msgid "You can now log in and start using the platform."
+msgstr "يمكنك الآن تسجيل الدخول والبدء باستخدام المنصة."
+
+msgid "Login to your account"
+msgstr "تسجيل الدخول إلى حسابك"
+msgid "Profile updated successfully!"
+msgstr "تم تحديث الملف الشخصي بنجاح."

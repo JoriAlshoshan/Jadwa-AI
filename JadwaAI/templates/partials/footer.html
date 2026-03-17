@@ -9,9 +9,16 @@
       <div class="footer-brand">
         <img src="{% static 'img/jadwa-logo.png' %}" alt="Jadwa AI">
       </div>
-      <p class="footer-desc">
-        {% trans "Jadwa AI helps entrepreneurs evaluate business ideas using AI-powered feasibility insights." %}
-      </p>
+   <p class="footer-desc">
+    {{ site_content.footer_description }}
+<p class="footer-desc">
+  {% if site_content and site_content.footer_text %}
+    {{ site_content.footer_text }}
+  {% else %}
+    {% trans "Jadwa AI helps entrepreneurs evaluate business ideas using AI-powered feasibility insights." %}
+  {% endif %}
+</p>
+</p>
     </div>
 
 <!-- Column 2 -->
@@ -43,8 +50,12 @@
     <!-- Column 4 -->
     <div class="footer-col">
       <div class="footer-title">{% trans "Contact" %}</div>
-      <a href="mailto:contact@jadwa-ai.com" class="footer-meta footer-link">contact@jadwa-ai.com</a>
-      <div class="footer-meta">{% trans "Saudi Arabia" %}</div>
+{% if site_content and site_content.contact_email %}
+  <a href="mailto:{{ site_content.contact_email }}">{{ site_content.contact_email }}</a>
+{% else %}
+  <a href="mailto:contact@jadwa-ai.com">contact@jadwa-ai.com</a>
+{% endif %}
+ <div class="footer-meta">{% trans "Saudi Arabia" %}</div>
     </div>
 
   </div>

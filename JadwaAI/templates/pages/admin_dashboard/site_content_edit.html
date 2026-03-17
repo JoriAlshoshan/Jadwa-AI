@@ -87,6 +87,17 @@
     flex-shrink:0;
   }
 
+  .admin-topbar-actions form,
+  .lang-form,
+  .logout-form{
+    margin:0;
+  }
+
+  .lang-form button,
+  .logout-form button{
+    font:inherit;
+  }
+
   .ghost-btn{
     display:inline-flex;
     align-items:center;
@@ -142,6 +153,7 @@
     margin:8px 0 0;
     color:#64748b;
     font-size:14px;
+    line-height:1.7;
   }
 
   .form-grid{
@@ -297,6 +309,10 @@
     font-weight:900;
   }
 
+  .toast-close:hover{
+    color:#0f172a;
+  }
+
   html[dir="rtl"] .admin-breadcrumb,
   html[dir="rtl"] .admin-topbar,
   html[dir="rtl"] .details-card,
@@ -304,6 +320,11 @@
   html[dir="rtl"] .section-head{
     direction:rtl;
     text-align:right;
+  }
+
+  html[dir="rtl"] .admin-breadcrumb .separator{
+    transform:scaleX(-1);
+    display:inline-block;
   }
 
   html[dir="rtl"] .admin-topbar-actions{
@@ -350,6 +371,17 @@
       grid-template-columns:1fr;
     }
   }
+  .section-head{
+  display:block !important;
+}
+
+.section-head h2{
+  margin-bottom:8px;
+}
+
+.section-head p{
+  margin:0;
+}
 </style>
 
 <div class="admin-shell">
@@ -357,9 +389,9 @@
     <div class="admin-topbar-left">
       <div class="admin-breadcrumb">
         <a href="{% url 'landing' %}">{% trans "Home" %}</a>
-        <span>/</span>
+        <span class="separator">/</span>
         <a href="{% url 'Admin_Dashboard' %}">{% trans "Admin Dashboard" %}</a>
-        <span>/</span>
+        <span class="separator">/</span>
         <span>{% trans "Site Content" %}</span>
       </div>
 
@@ -369,7 +401,25 @@
     </div>
 
     <div class="admin-topbar-actions">
-      <a href="{% url 'Admin_Dashboard' %}?tab=site-content" class="ghost-btn">{% trans "Back to Dashboard" %}</a>
+      <form action="{% url 'set_language' %}" method="post" class="lang-form">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ request.path }}">
+        {% get_current_language as LANGUAGE_CODE %}
+        {% if LANGUAGE_CODE == 'ar' %}
+          <input type="hidden" name="language" value="en">
+          <button type="submit" class="ghost-btn">English</button>
+        {% else %}
+          <input type="hidden" name="language" value="ar">
+          <button type="submit" class="ghost-btn">عربي</button>
+        {% endif %}
+      </form>
+
+      <a href="{% url 'landing' %}" class="ghost-btn">{% trans "View Site" %}</a>
+
+      <form action="{% url 'logout' %}" method="post" class="logout-form">
+        {% csrf_token %}
+        <button type="submit" class="ghost-btn danger-btn">{% trans "Logout" %}</button>
+      </form>
     </div>
   </div>
 
@@ -409,18 +459,38 @@
         </div>
 
         <div class="field">
-          {{ form.about_title.label_tag }}
-          {{ form.about_title }}
-        </div>
-
-        <div class="field">
           {{ form.contact_email.label_tag }}
           {{ form.contact_email }}
         </div>
 
         <div class="field full">
-          {{ form.about_text.label_tag }}
-          {{ form.about_text }}
+          {{ form.product_title.label_tag }}
+          {{ form.product_title }}
+        </div>
+
+        <div class="field full">
+          {{ form.product_desc.label_tag }}
+          {{ form.product_desc }}
+        </div>
+
+        <div class="field full">
+          {{ form.how_title.label_tag }}
+          {{ form.how_title }}
+        </div>
+
+        <div class="field full">
+          {{ form.how_desc.label_tag }}
+          {{ form.how_desc }}
+        </div>
+
+        <div class="field full">
+          {{ form.stories_title.label_tag }}
+          {{ form.stories_title }}
+        </div>
+
+        <div class="field full">
+          {{ form.stories_desc.label_tag }}
+          {{ form.stories_desc }}
         </div>
 
         <div class="field full">

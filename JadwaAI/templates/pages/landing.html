@@ -6,44 +6,66 @@
 
 <div class="page {% if request.LANGUAGE_CODE == 'ar' %}lang-ar{% else %}lang-en{% endif %}">
 
-
-
-
 <section class="hero" id="home">
   <div class="hero-center-logo hero-overlay">
     <img src="{% static 'img/hero-title.png' %}" class="hero-title-img" alt="Jadwa AI">
   </div>
 
   <div class="container hero-content">
-    <h1 class="hero-title">{% trans "Business Feasibility Powered by AI" %}</h1>
-    <p class="hero-subtitle">{% trans "Jadwa AI helps entrepreneurs evaluate business ideas using AI-powered feasibility insights." %}</p>
+    <h1 class="hero-title">
+      {% if content and content.hero_title %}
+        {{ content.hero_title }}
+      {% else %}
+        {% trans "Business Feasibility Powered by AI" %}
+      {% endif %}
+    </h1>
 
-<div class="hero-actions">
-  {% if user.is_authenticated and user.is_superuser %}
-    <a href="{% url 'Admin_Dashboard' %}" class="btn">
-  {% trans "Go to Admin Dashboard" %}
-</a>
-  {% elif user.is_authenticated %}
-    <a href="{% url 'start_analysis' %}" class="btn">
-      {% trans "Start Feasibility Analysis" %}
-    </a>
-  {% else %}
-    <a href="{% url 'login' %}?next={% url 'start_analysis' %}" class="btn">
-      {% trans "Start Feasibility Analysis" %}
-    </a>
-  {% endif %}
-</div>
-  </div> 
+    <p class="hero-subtitle">
+      {% if content and content.hero_subtitle %}
+        {{ content.hero_subtitle }}
+      {% else %}
+        {% trans "Jadwa AI helps entrepreneurs evaluate business ideas using AI-powered feasibility insights." %}
+      {% endif %}
+    </p>
 
+    <div class="hero-actions">
+      {% if user.is_authenticated and user.is_superuser %}
+        <a href="{% url 'Admin_Dashboard' %}" class="btn">
+          {% trans "Go to Admin Dashboard" %}
+        </a>
+      {% elif user.is_authenticated %}
+        <a href="{% url 'start_analysis' %}" class="btn">
+          {% trans "Start Feasibility Analysis" %}
+        </a>
+      {% else %}
+        <a href="{% url 'login' %}?next={% url 'start_analysis' %}" class="btn">
+          {% trans "Start Feasibility Analysis" %}
+        </a>
+      {% endif %}
+    </div>
+  </div>
 </section>
-
 
 <section class="product" id="product">
   <div class="container">
     <div class="section-head">
       <span class="badge">{% trans "Product" %}</span>
-      <h2 class="section-title">{% trans "What You Get with Jadwa AI" %}</h2>
-      <p class="section-desc">{% trans "A professional feasibility experience designed for Saudi entrepreneurs." %}</p>
+
+      <h2 class="section-title">
+        {% if content and content.product_title %}
+          {{ content.product_title }}
+        {% else %}
+          {% trans "What You Get with Jadwa AI" %}
+        {% endif %}
+      </h2>
+
+      <p class="section-desc">
+        {% if content and content.product_desc %}
+          {{ content.product_desc }}
+        {% else %}
+          {% trans "A professional feasibility experience designed for Saudi entrepreneurs." %}
+        {% endif %}
+      </p>
     </div>
 
     <div class="product-grid">
@@ -86,13 +108,26 @@
   </div>
 </section>
 
-
 <section class="how" id="how">
   <div class="container">
     <div class="section-head">
       <span class="badge">{% trans "How it works" %}</span>
-      <h2 class="section-title">{% trans "How Jadwa AI Works" %}</h2>
-      <p class="section-desc">{% trans "A clear, guided flow that turns your idea into a feasibility decision." %}</p>
+
+      <h2 class="section-title">
+        {% if content and content.how_title %}
+          {{ content.how_title }}
+        {% else %}
+          {% trans "How Jadwa AI Works" %}
+        {% endif %}
+      </h2>
+
+      <p class="section-desc">
+        {% if content and content.how_desc %}
+          {{ content.how_desc }}
+        {% else %}
+          {% trans "A clear, guided flow that turns your idea into a feasibility decision." %}
+        {% endif %}
+      </p>
     </div>
 
     <div class="how-steps">
@@ -140,13 +175,26 @@
   </div>
 </section>
 
-
 <section class="stories" id="stories">
   <div class="container">
     <div class="section-head">
       <span class="badge">{% trans "Success stories" %}</span>
-      <h2 class="section-title">{% trans "Saudi Success Stories" %}</h2>
-      <p class="section-desc">{% trans "Examples of strong execution backed by smart feasibility decisions." %}</p>
+
+      <h2 class="section-title">
+        {% if content and content.stories_title %}
+          {{ content.stories_title }}
+        {% else %}
+          {% trans "Saudi Success Stories" %}
+        {% endif %}
+      </h2>
+
+      <p class="section-desc">
+        {% if content and content.stories_desc %}
+          {{ content.stories_desc }}
+        {% else %}
+          {% trans "Examples of strong execution backed by smart feasibility decisions." %}
+        {% endif %}
+      </p>
     </div>
 
     <div class="stories-grid">
@@ -190,7 +238,6 @@
   </div>
 </section>
 
-
 <section class="contact" id="contact">
   <div class="container">
     <div class="contact-wrap">
@@ -200,7 +247,13 @@
         <p class="contact-sub">{% trans "Have a question, partnership idea, or want a demo? Send us a message." %}</p>
 
         <div class="contact-meta">
-          <a href="mailto:contact@jadwa-ai.com" class="contact-link">contact@jadwa-ai.com</a>
+          <a href="mailto:{% if content and content.contact_email %}{{ content.contact_email }}{% else %}contact@jadwa-ai.com{% endif %}" class="contact-link">
+            {% if content and content.contact_email %}
+              {{ content.contact_email }}
+            {% else %}
+              contact@jadwa-ai.com
+            {% endif %}
+          </a>
           <span class="dot">•</span>
           <span>{% trans "Saudi Arabia" %}</span>
           <span class="dot">•</span>
@@ -212,7 +265,7 @@
         <form class="contact-form" method="post" action="{% url 'contact_submit' %}" novalidate>
           {% csrf_token %}
 
-{% if messages and request.resolver_match.url_name == 'contact_submit' %}
+          {% if messages and request.resolver_match.url_name == 'contact_submit' %}
             {% for m in messages %}
               <div class="inline-msg {% if 'success' in m.tags %}inline-msg--success{% else %}inline-msg--error{% endif %}">
                 {{ m }}
@@ -258,17 +311,9 @@
   </div>
 </section>
 
-
-
-
-
-
-
-
 <script>
   document.addEventListener("DOMContentLoaded", () => {
 
-    // Smooth anchor scroll
     document.querySelectorAll('a[href^="#"]').forEach((link) => {
       link.addEventListener("click", (e) => {
         const targetId = link.getAttribute("href");
@@ -279,7 +324,6 @@
       });
     });
 
-    // Stories animation
     const cards = document.querySelectorAll(".story-card");
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
@@ -291,7 +335,6 @@
     }, { threshold: 0.18 });
     cards.forEach((card) => io.observe(card));
 
-    // Contact form validation
     const form = document.querySelector(".contact-form");
     if (!form) return;
 

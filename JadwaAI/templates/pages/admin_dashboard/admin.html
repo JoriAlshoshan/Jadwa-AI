@@ -991,6 +991,40 @@ html[dir="rtl"] .mini-info-card{
 html[dir="rtl"] .site-content-actions{
   justify-content:flex-start;
 }
+.data-row{
+  position: relative;
+  overflow: visible;
+}
+
+.menu-wrapper{
+  position: relative;
+  z-index: 300;
+}
+
+.menu-btn{
+  position: relative;
+  z-index: 301;
+}
+
+.menu-dropdown{
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 190px;
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 22px;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.14);
+  padding: 8px;
+  display: none;
+  z-index: 9999;
+  pointer-events: auto;
+}
+
+html[dir="rtl"] .menu-dropdown{
+  right: auto;
+  left: 0;
+}
 </style>
 
 {% if messages %}
@@ -1184,26 +1218,7 @@ html[dir="rtl"] .site-content-actions{
           </a>
         </div>
       </div>
-
-      <!-- <div class="site-content-preview">
-        <div class="preview-window">
-          <div class="preview-topbar">
-            <span></span><span></span><span></span>
-          </div>
-
-          <div class="preview-body">
-            <div class="preview-line preview-line-lg"></div>
-            <div class="preview-line"></div>
-            <div class="preview-line preview-line-sm"></div>
-
-            <div class="preview-grid">
-              <div class="preview-box"></div>
-              <div class="preview-box"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
+    </div>
 
     <div class="site-content-info-grid">
       <div class="mini-info-card">
@@ -1223,10 +1238,26 @@ html[dir="rtl"] .site-content-actions{
       </div>
 
       <div class="mini-info-card">
-        <div class="mini-info-icon">i</div>
+        <div class="mini-info-icon">P</div>
         <div class="mini-info-text">
-          <h3>{% trans "About Section" %}</h3>
-          <p>{% trans "Manage the about text content." %}</p>
+          <h3>{% trans "Product Section" %}</h3>
+          <p>{% trans "Edit the product section title and description." %}</p>
+        </div>
+      </div>
+
+      <div class="mini-info-card">
+        <div class="mini-info-icon">H</div>
+        <div class="mini-info-text">
+          <h3>{% trans "How It Works" %}</h3>
+          <p>{% trans "Edit the how it works section title and description." %}</p>
+        </div>
+      </div>
+
+      <div class="mini-info-card">
+        <div class="mini-info-icon">S</div>
+        <div class="mini-info-text">
+          <h3>{% trans "Success Stories" %}</h3>
+          <p>{% trans "Edit the success stories section title and description." %}</p>
         </div>
       </div>
 
@@ -1234,12 +1265,22 @@ html[dir="rtl"] .site-content-actions{
         <div class="mini-info-icon">F</div>
         <div class="mini-info-text">
           <h3>{% trans "Footer Text" %}</h3>
-          <p>{% trans "Edit the footer message." %}</p>
+          <p>{% trans "Edit the footer message shown on the website." %}</p>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+
+
+
+
+
+
+
+
+
 
   <div id="deleteUserModal" class="delete-modal-overlay" role="dialog" aria-modal="true">
     <div class="delete-modal" style="direction:{% if request.LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %};">
@@ -1373,17 +1414,24 @@ html[dir="rtl"] .site-content-actions{
   const deleteUserForm = document.getElementById("deleteUserForm");
   const deleteUserName = document.getElementById("deleteUserName");
 
-  document.querySelectorAll(".open-delete-user").forEach(btn => {
-    btn.onclick = () => {
-      const id = btn.dataset.id;
-      const username = btn.dataset.username;
+document.querySelectorAll(".open-delete-user").forEach(btn => {
+  btn.addEventListener("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
 
-      deleteUserName.textContent = username;
-      deleteUserForm.action = `/delete-user/${id}/`;
+    const id = this.dataset.id;
+    const username = this.dataset.username;
 
-      deleteUserModal.style.display = "flex";
-    };
+    deleteUserName.textContent = username;
+    deleteUserForm.action = `/delete-user/${id}/`;
+
+    document.querySelectorAll(".menu-dropdown").forEach(drop => {
+      drop.style.display = "none";
+    });
+
+    deleteUserModal.style.display = "flex";
   });
+});
 
   document.getElementById("closeDeleteUserModal").onclick = () => {
     deleteUserModal.style.display = "none";

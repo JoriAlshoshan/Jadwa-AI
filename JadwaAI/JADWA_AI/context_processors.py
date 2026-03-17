@@ -1,6 +1,6 @@
 from django.urls import reverse
 from django.utils.translation import gettext as _
-
+from .models import SiteContent
 def global_page_meta(request):
     url_name = getattr(getattr(request, "resolver_match", None), "url_name", "") or ""
 
@@ -174,4 +174,10 @@ def global_page_meta(request):
         "page_subtitle": meta.get("subtitle", ""),
         "breadcrumbs": meta.get("crumbs", []),
         "show_page_header": meta.get("show", True),
+    }
+
+def global_site_content(request):
+    site_content = SiteContent.objects.first()
+    return {
+        "site_content": site_content
     }

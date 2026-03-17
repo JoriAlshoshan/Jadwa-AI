@@ -258,9 +258,21 @@ class PasswordResetOTP(models.Model):
 class SiteContent(models.Model):
     hero_title = models.CharField(max_length=255, blank=True)
     hero_subtitle = models.TextField(blank=True)
-    about_title = models.CharField(max_length=255, blank=True)
-    about_text = models.TextField(blank=True)
+
     contact_email = models.EmailField(blank=True)
+
+    # Product
+    product_title = models.CharField(max_length=255, blank=True)
+    product_desc = models.TextField(blank=True)
+
+    # How it works
+    how_title = models.CharField(max_length=255, blank=True)
+    how_desc = models.TextField(blank=True)
+
+    # Success stories
+    stories_title = models.CharField(max_length=255, blank=True)
+    stories_desc = models.TextField(blank=True)
+
     footer_text = models.CharField(max_length=255, blank=True)
 
     updated_at = models.DateTimeField(auto_now=True)

@@ -165,7 +165,13 @@ def edit_profile(request):
         form = EditProfileForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
-            messages.success(request, _("Profile updated successfully!"))
+
+            messages.success(
+            request,
+            _("Profile updated successfully!"),
+            extra_tags="profile_update success"
+        )
+            
             return redirect("dashboard")
     else:
         form = EditProfileForm(instance=user)
@@ -186,19 +192,26 @@ def edit_profile(request):
 # Public pages (No Login)
 # =======================
 def landing(request):
-    return render(request, "pages/landing.html")
+    content, created = SiteContent.objects.get_or_create(id=1)
+    return render(request, "pages/landing.html", {
+        "content": content
+    })
 
 
 def success_stories(request):
-    return render(request, "pages/success_stories.html")
-
+    return render(request, "pages/success_stories.html", {
+        "content": SiteContent.objects.get_or_create(id=1)[0],
+    })
 
 def privacy(request):
-    return render(request, "pages/privacy.html")
-
+    return render(request, "pages/privacy.html", {
+        "content": SiteContent.objects.get_or_create(id=1)[0],
+    })
 
 def terms(request):
-    return render(request, "pages/terms.html")
+    return render(request, "pages/terms.html", {
+        "content": SiteContent.objects.get_or_create(id=1)[0],
+    })
 
 
 # =======================
@@ -242,11 +255,14 @@ def jadwa_signup(request):
     else:
         form = JadwaUserCreationForm()
 
-    return render(request, "pages/register.html", {"form": form})
-
+    return render(request, "pages/register.html", {
+        "form": form,
+        "content": SiteContent.objects.get_or_create(id=1)[0],
+    })
 def check_email(request):
-    return render(request, "emails/check_email.html")
-
+    return render(request, "emails/check_email.html", {
+        "content": SiteContent.objects.get_or_create(id=1)[0],
+    })
 def activate_account(request, uid, token):
     user = get_object_or_404(User, pk=uid)
 
@@ -255,7 +271,10 @@ def activate_account(request, uid, token):
             user.is_active = True
             user.save()
 
-        return render(request, "emails/account_activated.html", {"user": user})
+        return render(request, "emails/account_activated.html", {
+            "user": user,
+            "content": SiteContent.objects.get_or_create(id=1)[0],
+        })
 
     else:
         messages.error(request, _("Activation link is invalid or expired."))
@@ -294,8 +313,10 @@ def jadwa_login(request):
     else:
         form = JadwaAuthenticationForm()
 
-    return render(request, "registration/login.html", {"form": form})
-
+    return render(request, "registration/login.html", {
+        "form": form,
+        "content": SiteContent.objects.get_or_create(id=1)[0],
+    })
 @login_required
 def start_feasibility_gateway(request):
     if request.user.is_superuser:
@@ -331,8 +352,10 @@ def forgot_password(request):
     else:
         form = ForgotPasswordForm()
 
-    return render(request, "pages/forgot_password.html", {"form": form})
-
+    return render(request, "pages/forgot_password.html", {
+        "form": form,
+        "content": SiteContent.objects.get_or_create(id=1)[0],
+    })
 
 def verify_otp(request):
     user_id = request.session.get("reset_user_id")
@@ -367,6 +390,7 @@ def verify_otp(request):
         "form": form,
         "otp_invalid": otp_invalid,
         "otp_incomplete": otp_incomplete,
+        "content": SiteContent.objects.get_or_create(id=1)[0],
     })
 
 
@@ -389,8 +413,10 @@ def reset_password(request):
     else:
         form = ResetPasswordForm(user)
 
-    return render(request, "pages/reset_password.html", {"form": form})
-
+    return render(request, "pages/reset_password.html", {
+        "form": form,
+        "content": SiteContent.objects.get_or_create(id=1)[0],
+    })
 
 # =======================
 # Project Create (After Login)
@@ -470,8 +496,10 @@ def register(request):
     else:
         form = JadwaUserCreationForm()
 
-    return render(request, "pages/register.html", {"form": form})
-
+    return render(request, "pages/register.html", {
+        "form": form,
+        "content": SiteContent.objects.get_or_create(id=1)[0],
+    })
 
 # =======================
 # Contact
@@ -639,7 +667,7 @@ def delete_user(request, id):
             request,
             _("You cannot delete yourself."),
             extra_tags="admin_user_delete error"        )
-        return redirect("Admin_Dashboard")
+        return redirect("/admin-dashboard/?tab=users")
 
     deleted_username = user.username
     user.delete()
@@ -648,7 +676,7 @@ def delete_user(request, id):
         request,
         _('User "%(username)s" deleted successfully.') % {"username": deleted_username},
 extra_tags="admin_user_delete success"    )
-    return redirect("Admin_Dashboard")
+    return redirect("/admin-dashboard/?tab=users")   
 
 def user_projects(request , id):
     user = get_object_or_404(User , id = id)

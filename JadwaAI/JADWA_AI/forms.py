@@ -571,33 +571,77 @@ class EditUserForm(forms.ModelForm):
             'city': forms.TextInput(attrs={'class': 'form-input'}),
             'linkedin': forms.URLInput(attrs={'class': 'form-input'}),
         }
-
-
-
 class SiteContentForm(forms.ModelForm):
     class Meta:
         model = SiteContent
         fields = [
             "hero_title",
             "hero_subtitle",
-            "about_title",
-            "about_text",
             "contact_email",
+            "product_title",
+            "product_desc",
+            "how_title",
+            "how_desc",
+            "stories_title",
+            "stories_desc",
             "footer_text",
         ]
+
         labels = {
-            "hero_title": "Hero Title",
-            "hero_subtitle": "Hero Subtitle",
-            "about_title": "About Section Title",
-            "about_text": "About Section Text",
-            "contact_email": "Contact Email",
-            "footer_text": "Footer Text",
+            "hero_title": _("Hero Title"),
+            "hero_subtitle": _("Hero Subtitle"),
+            "contact_email": _("Contact Email"),
+
+            "product_title": _("Product Section Title"),
+            "product_desc": _("Product Section Description"),
+
+            "how_title": _("How It Works Title"),
+            "how_desc": _("How It Works Description"),
+
+            "stories_title": _("Success Stories Title"),
+            "stories_desc": _("Success Stories Description"),
+
+            "footer_text": _("Footer Text"),
         }
+
         widgets = {
-            "hero_title": forms.TextInput(attrs={"placeholder": "Enter hero title"}),
-            "hero_subtitle": forms.Textarea(attrs={"rows": 4, "placeholder": "Enter hero subtitle"}),
-            "about_title": forms.TextInput(attrs={"placeholder": "Enter about section title"}),
-            "about_text": forms.Textarea(attrs={"rows": 5, "placeholder": "Enter about section text"}),
-            "contact_email": forms.EmailInput(attrs={"placeholder": "Enter contact email"}),
-            "footer_text": forms.TextInput(attrs={"placeholder": "Enter footer text"}),
+            "hero_title": forms.TextInput(attrs={
+                "placeholder": _("Enter hero title")
+            }),
+            "hero_subtitle": forms.Textarea(attrs={
+                "rows": 4,
+                "placeholder": _("Enter hero subtitle")
+            }),
+
+            "contact_email": forms.EmailInput(attrs={
+                "placeholder": _("Enter contact email")
+            }),
+
+            "product_title": forms.TextInput(attrs={
+                "placeholder": _("Enter product title")
+            }),
+            "product_desc": forms.Textarea(attrs={
+                "rows": 3,
+                "placeholder": _("Enter product description")
+            }),
+
+            "how_title": forms.TextInput(attrs={
+                "placeholder": _("Enter how it works title")
+            }),
+            "how_desc": forms.Textarea(attrs={
+                "rows": 3,
+                "placeholder": _("Enter how it works description")
+            }),
+
+            "stories_title": forms.TextInput(attrs={
+                "placeholder": _("Enter success stories title")
+            }),
+            "stories_desc": forms.Textarea(attrs={
+                "rows": 3,
+                "placeholder": _("Enter success stories description")
+            }),
+
+            "footer_text": forms.TextInput(attrs={
+                "placeholder": _("Enter footer text")
+            }),
         }
