@@ -1044,6 +1044,61 @@ html[dir="rtl"] .menu-dropdown{
   line-height:1.2 !important;
   box-sizing:border-box !important;
 }
+.data-row{
+  position: relative;
+  z-index: 1;
+}
+
+.data-row:hover{
+  z-index: 999;
+}
+
+.menu-dropdown{
+  z-index: 99999 !important;
+}
+
+.section-card{
+  isolation: isolate;
+}
+.data-list,
+.section-card,
+.admin-section,
+.admin-shell{
+  overflow: visible !important;
+}
+
+.data-row{
+  position: relative !important;
+  overflow: visible !important;
+  z-index: 1;
+}
+
+.data-row:hover,
+.data-row:focus-within{
+  z-index: 5000;
+}
+
+.menu-wrapper{
+  position: relative !important;
+  z-index: 6000;
+}
+
+.menu-btn{
+  position: relative;
+  z-index: 6001;
+}
+
+.menu-dropdown{
+  position: absolute !important;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 7000 !important;
+}
+
+html[dir="rtl"] .menu-dropdown{
+  right: auto;
+  left: 0;
+}
 </style>
 
 {% if messages %}
