@@ -110,6 +110,11 @@ Cloud deployment ensures reliability, real-world applicability, and future scala
 
 ---
 
+## Testing:
+Automated testing was implemented using Django TestCase to validate key system functionalities including login, project submission, validation, and analysis execution.
+
+---
+
 ## Project Links
 - **Live Demo:** https://jadwa-ai.com
 - **Source Code:** https://github.com/JoriAlshoshan/Jadwa-AI
