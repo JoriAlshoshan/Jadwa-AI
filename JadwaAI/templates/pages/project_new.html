@@ -226,12 +226,16 @@ label .required-star {
                 <label for="{{ field.id_for_label }}">
                   {{ field.label }}
                   {% if field.name in "project_region project_city" %}
-                    <span class="required-star">*</span>
-                  {% elif field.field.required %}
-                    <span class="required-star">*</span>
+                   <span class="required-star">*</span>
+                  {% elif field.name != "project_location_other" and field.field.required %}
+                   <span class="required-star">*</span>
                   {% endif %}
-                </label>
+                  {% if field.name == "project_location_other" %}
+                   <span class="required-star" id="star_location_other" style="display:none;">*</span>
+                  {% endif %}
+                 </label>         
               </div>
+
 
               <div class="field-wrap {% if field.errors %}field-error-wrap{% endif %}" id="wrap_{{ field.name }}">
                 {{ field }}
@@ -560,9 +564,13 @@ document.getElementById("projectForm")?.addEventListener("change", function(e){
   }
 
   function toggleOther() {
-    const show = norm(regionSelect.value) === "other" || norm(citySelect.value) === "other";
-    if (otherRow) otherRow.style.display = show ? "" : "none";
+  const show = norm(regionSelect.value) === "other" || norm(citySelect.value) === "other";
+  if (otherRow) otherRow.style.display = show ? "" : "none";
+  const star = document.getElementById("star_location_other");
+  if (star) {
+    star.style.display = show ? "inline" : "none";
   }
+}
 
   regionSelect.addEventListener("change", () => {
     updateCities(true);
