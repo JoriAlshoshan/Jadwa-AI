@@ -130,7 +130,7 @@ EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST_USER = "contact@jadwa-ai.com"
-EMAIL_HOST_PASSWORD = "JadwaAI@2026!"
+EMAIL_HOST_PASSWORD = "Feasibility@2026!"
 CONTACT_NOTIFY_EMAIL = "contact@jadwa-ai.com"
 DEFAULT_FROM_EMAIL = "Jadwa AI <contact@jadwa-ai.com>"
 
