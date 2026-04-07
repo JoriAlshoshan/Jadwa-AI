@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from .models import Projects
 from django.utils import translation
 from django import forms
+import re
 from .models import SiteContent
 User = get_user_model()
 
@@ -387,6 +388,14 @@ class ProjectInformationForm(forms.ModelForm):
             "number_of_employees": {"required": _("This field is required.")},
         }
 
+    def clean_project_name(self):
+        name = (self.cleaned_data.get("project_name") or "").strip()
+
+        if not re.search(r'[A-Za-z\u0600-\u06FF]', name):
+            raise forms.ValidationError(_("Project name must contain letters."))
+
+        return name
+    
     def clean(self):
         cleaned = super().clean()
 
@@ -396,7 +405,6 @@ class ProjectInformationForm(forms.ModelForm):
 
         is_other = (region == "other" or city == "other")
 
-        # ✅ لو مو other: فضّي الحقل وخلاص
         if not is_other:
             cleaned["project_location_other"] = ""
             return cleaned

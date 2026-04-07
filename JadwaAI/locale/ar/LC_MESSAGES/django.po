@@ -1659,3 +1659,6 @@ msgid "Login to your account"
 msgstr "تسجيل الدخول إلى حسابك"
 msgid "Profile updated successfully!"
 msgstr "تم تحديث الملف الشخصي بنجاح."
+
+msgid "Project name must contain letters."
+msgstr "يجب أن يحتوي اسم المشروع على أحرف."
