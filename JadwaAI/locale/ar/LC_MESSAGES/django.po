@@ -59,8 +59,8 @@ msgid "Project Budget"
 msgstr "ميزانية المشروع"
 
 #: .\JADWA_AI\forms.py:95
-msgid "Project Duration"
-msgstr "مدة المشروع"
+msgid "Project Duration (Months)"
+msgstr "مدة المشروع (بالأشهر)"
 
 #: .\JADWA_AI\forms.py:96
 msgid "Number Of Employees"

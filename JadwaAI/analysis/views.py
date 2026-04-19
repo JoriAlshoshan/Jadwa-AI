@@ -151,14 +151,15 @@ def build_project_data(project: Projects) -> dict:
     else:
         location_for_ml = region or city
 
+    months = int(getattr(project, "project_duration", 0) or 0)
+
     return {
         "type_project": getattr(project, "Project_type", "Service"),
         "region_project": location_for_ml,
         "budget_project": float(getattr(project, "project_budget", 0) or 0),
-        "project_duration_days": int(getattr(project, "project_duration", 0) or 0),
+        "project_duration_days": months * 30,  # ✅ هنا التعديل
         "num_saudi_employees": int(getattr(project, "number_of_employees", 0) or 0),
     }
-
 
 @login_required
 def run_analysis(request, project_id):

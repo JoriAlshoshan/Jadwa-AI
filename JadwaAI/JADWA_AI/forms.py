@@ -368,7 +368,7 @@ class ProjectInformationForm(forms.ModelForm):
             "project_location_other": _("Specify Location"),
             "project_location_type": _("Project Location Type"),
             "project_budget": _("Project Budget"),
-            "project_duration": _("Project Duration"),
+           "project_duration": _("Project Duration (Months)"),
             "number_of_employees": _("Number Of Employees"),
             "description": _("Description (Optional)"),
         }
