@@ -25,26 +25,71 @@ def dynamic_threshold(budget):
 
 
 
+# def predict_project(project_dict):
+#     # Convert input to DataFrame
+#     x = pd.DataFrame([project_dict])
+
+#     # Ensure all required columns exist
+#     for col in feature_columns:
+#         if col not in x.columns:
+#             x[col] = np.nan
+
+#     # Reorder columns
+#     x = x[feature_columns]
+#     x = x.fillna(0)
+#     # Predict probability
+#     probability = float(model.predict_proba(x)[0][1])
+
+#     # Threshold
+#     budget = float(project_dict.get("budget_project", 0))
+#     threshold = dynamic_threshold(budget)
+
+#     # Final label
+#     label = int(probability >= threshold)
+
+#     return {
+#         "probability": probability,
+#         "threshold": threshold,
+#         "label": label
+#     }
+
 def predict_project(project_dict):
-    # Convert input to DataFrame
     x = pd.DataFrame([project_dict])
 
-    # Ensure all required columns exist
     for col in feature_columns:
         if col not in x.columns:
             x[col] = np.nan
 
-    # Reorder columns
     x = x[feature_columns]
     x = x.fillna(0)
-    # Predict probability
+
+    if "budget_project" in x.columns:
+        x["budget_project"] = np.log1p(x["budget_project"])
+
+    # Predict
     probability = float(model.predict_proba(x)[0][1])
 
-    # Threshold
+    # Get budget
     budget = float(project_dict.get("budget_project", 0))
+
+    # Adjust probability
+    if budget < 100000:
+        factor = 0.85 + (budget / 100000) * 0.10
+        probability *= factor
+
+    elif budget < 500000:
+        factor = 0.90 + (budget / 500000) * 0.05
+        probability *= factor
+
+    else:
+        probability += ((budget % 10000000) / 1000000000) * 0.3
+
+    probability = min(max(probability, 0.0), 1.0)
+
+    # Threshold
     threshold = dynamic_threshold(budget)
 
-    # Final label
+    # Decision
     label = int(probability >= threshold)
 
     return {
