@@ -15,14 +15,21 @@ model = joblib.load(MODEL_PATH)
 feature_columns = joblib.load(FEATURES_PATH)
 
 
+# def dynamic_threshold(budget):
+#     if budget < 100000:
+#         return 0.90   # Micro-scale (high risk)
+#     elif budget < 500000:
+#         return 0.85   # Small-scale (still risky)
+#     else:
+#         return 0.60   # Medium & Large-scale
+
 def dynamic_threshold(budget):
     if budget < 100000:
-        return 0.90   # Micro-scale (high risk)
+        return 0.75   # Small projects
     elif budget < 500000:
-        return 0.85   # Small-scale (still risky)
+        return 0.80   # Medium projects
     else:
-        return 0.60   # Medium & Large-scale
-
+        return 0.70   # Large projects
 
 
 # def predict_project(project_dict):
