@@ -29,7 +29,7 @@ html{ scroll-behavior:smooth; }
   padding:14px 0;
 }
 .brand{ display:inline-flex; align-items:center; text-decoration:none; }
-.brand-logo{ height:80px; display:block; }
+.brand-logo{ height:100px; display:block; }
 
 .nav-right{
   display:flex;
