@@ -215,7 +215,11 @@ label .required-star {
 
               <div class="field-wrap {% if field.errors %}field-error-wrap{% endif %}" id="wrap_{{ field.name }}">
                 {{ field }}
-
+                  {% if field.help_text %}
+  <small style="color:#64748b; font-size:12px; display:block; margin-top:6px;">
+    {{ field.help_text }}
+  </small>
+{% endif %}
                 {% if field.name == "project_name" %}
                   <div class="help-row">
                     <small>{% trans "Keep it short (max 80 characters)." %}</small>
@@ -286,6 +290,8 @@ const MSG_BUDGET_REQUIRED = "{% trans 'Project budget is required.' %}";
 const MSG_DURATION_REQUIRED = "{% trans 'Project duration is required.' %}";
 const MSG_EMP_REQUIRED = "{% trans 'Number of employees is required.' %}";
 const MSG_POSITIVE = "{% trans 'Enter a valid positive number.' %}";
+const MSG_DESC_REQUIRED = "{% trans 'Project description is required.' %}";
+const MSG_DESC_SHORT = "{% trans 'Please write a more detailed description (at least 20 characters).' %}";
 const TXT_OTHER = "{% trans 'Other' %}";
 </script>
 
@@ -459,7 +465,18 @@ const TXT_OTHER = "{% trans 'Other' %}";
     } else {
       setErr("number_of_employees", "");
     }
+const descriptionInput = document.getElementById("id_description");
+const descVal = (descriptionInput?.value || "").trim();
 
+if (!descVal) {
+  setErr("description", MSG_DESC_REQUIRED);
+  ok = false;
+} else if (descVal.length < 20) {
+  setErr("description", MSG_DESC_SHORT);
+  ok = false;
+} else {
+  setErr("description", "");
+}
     if (!ok) e.preventDefault();
   });
 })();

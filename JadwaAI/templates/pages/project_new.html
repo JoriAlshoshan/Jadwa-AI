@@ -239,6 +239,11 @@ label .required-star {
 
               <div class="field-wrap {% if field.errors %}field-error-wrap{% endif %}" id="wrap_{{ field.name }}">
                 {{ field }}
+                {% if field.help_text %}
+  <small style="color:#64748b; font-size:12px; display:block; margin-top:6px;">
+    {{ field.help_text }}
+  </small>
+{% endif %}
 
                 {% if field.name == "project_name" %}
                   <div class="help-row">
@@ -312,7 +317,8 @@ window.REGION_TO_CITIES = {
   const MSG_DURATION_REQUIRED = "{% trans 'Project duration is required.' %}";
   const MSG_EMP_REQUIRED = "{% trans 'Number of employees is required.' %}";
   const MSG_POSITIVE = "{% trans 'Enter a valid positive number.' %}";
-
+const MSG_DESC_REQUIRED = "{% trans 'Project description is required.' %}";
+const MSG_DESC_SHORT = "{% trans 'Please write a more detailed description (at least 20 characters).' %}";
   const TXT_OTHER = "{% trans 'Other' %}";
 </script>
 
@@ -399,7 +405,7 @@ window.REGION_TO_CITIES = {
 
   form.addEventListener("submit", function (e) {
     let ok = true;
-
+    
     const nameVal = (nameInput?.value || "").trim();
     if (!nameVal) {
       setErr("project_name", MSG_REQUIRED_NAME);
@@ -473,6 +479,16 @@ window.REGION_TO_CITIES = {
     if (isEmpty(durationInput)) {
       setErr("project_duration", MSG_DURATION_REQUIRED);
       ok = false;
+
+      if (!descVal) {
+  setErr("description", MSG_DESC_REQUIRED);
+  ok = false;
+} else if (descVal.length < 20) {
+  setErr("description", MSG_DESC_SHORT);
+  ok = false;
+} else {
+  setErr("description", "");
+}
     } else if (!isPositiveNumber(durationInput)) {
       setErr("project_duration", MSG_POSITIVE);
       ok = false;
@@ -489,6 +505,11 @@ window.REGION_TO_CITIES = {
     } else {
       setErr("number_of_employees", "");
     }
+// بعد employees validation مباشرة
+
+const descriptionInput = document.getElementById("id_description");
+const descVal = (descriptionInput?.value || "").trim();
+
 
     if (!ok) e.preventDefault();
   });

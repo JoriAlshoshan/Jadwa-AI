@@ -353,11 +353,11 @@ class ProjectInformationForm(forms.ModelForm):
             "project_budget": forms.NumberInput(attrs={"class": "form-input"}),
             "project_duration": forms.NumberInput(attrs={"class": "form-input"}),
             "number_of_employees": forms.NumberInput(attrs={"class": "form-input"}),
-            "description": forms.Textarea(attrs={
-                "class": "form-input",
-                "rows": 4,
-                "placeholder": _("Describe competitors and target audience (optional)"),
-            }),
+           "description": forms.Textarea(attrs={
+            "class": "form-input",
+            "rows": 4,
+            "placeholder": _("Describe your project idea, target customers, competitors, and what makes it unique."),
+        }),
         }
 
         labels = {
@@ -370,7 +370,7 @@ class ProjectInformationForm(forms.ModelForm):
             "project_budget": _("Project Budget"),
            "project_duration": _("Project Duration (Months)"),
             "number_of_employees": _("Number Of Employees"),
-            "description": _("Description (Optional)"),
+            "description": _("Project Description")
         }
 
         error_messages = {
@@ -387,7 +387,12 @@ class ProjectInformationForm(forms.ModelForm):
             "project_duration": {"required": _("This field is required.")},
             "number_of_employees": {"required": _("This field is required.")},
         }
-
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["description"].required = True
+        self.fields["description"].help_text = _(
+        "The more detailed your description, the more accurate the AI recommendations will be."
+    )
     def clean_project_name(self):
         name = (self.cleaned_data.get("project_name") or "").strip()
 
@@ -396,6 +401,13 @@ class ProjectInformationForm(forms.ModelForm):
 
         return name
     
+    def clean_description(self):
+        desc = (self.cleaned_data.get("description") or "").strip()
+        if len(desc) < 20:
+            raise forms.ValidationError(
+                _("Please write a more detailed description (at least 20 characters).")
+            )
+        return desc
     def clean(self):
         cleaned = super().clean()
 

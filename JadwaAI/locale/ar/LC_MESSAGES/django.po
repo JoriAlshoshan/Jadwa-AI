@@ -1665,3 +1665,19 @@ msgstr "تم تحديث الملف الشخصي بنجاح."
 
 msgid "Project name must contain letters."
 msgstr "يجب أن يحتوي اسم المشروع على أحرف."
+
+
+
+msgid "The more detailed your description, the more accurate the AI recommendations will be."
+msgstr "كلما كان وصف المشروع أكثر تفصيلاً، كانت توصيات الذكاء الاصطناعي أدق."
+
+msgid "Project Description"
+msgstr "وصف المشروع"
+
+msgid "Project description is required."
+msgstr "وصف المشروع مطلوب."
+
+msgid "Please write a more detailed description (at least 20 characters)."
+msgstr "يرجى كتابة وصف أكثر تفصيلاً (20 حرفًا على الأقل)."
+msgid "Describe your project idea, target customers, competitors, and what makes it unique."
+msgstr "اشرح فكرة مشروعك، والفئة المستهدفة، والمنافسين، وما الذي يميز مشروعك."

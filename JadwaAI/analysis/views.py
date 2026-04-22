@@ -295,15 +295,29 @@ def generate_recs(request, result_id):
 
     project = get_object_or_404(Projects, id=result_obj.project_id)
     project_data = build_project_data(project)
-
+    print("========== PROJECT DATA SENT TO AI ==========")
+    for k, v in project_data.items():
+        print(f"{k}: {v}")
+    print("============================================")
     try:
         set_recs_by_lang(result_obj, lang, "", "generating")
         result_obj.save(update_fields=["recommendations_status_ar", "recommendations_status_en"])
 
         out = analyze_project(project_data, include_recommendations=True, lang=lang)
+        print("========== AI OUTPUT ==========")
+        print(out)
+        print("================================")
         raw_text = (out.get("recommendations") or "").strip()
 
+        raw_text = (out.get("recommendations") or "").strip()
+        print("========== RAW RECOMMENDATIONS ==========")
+        print(raw_text)
+        print("=========================================")
+
         recs_text = normalize_recommendations_text(result_obj, lang, raw_text)
+        print("========== FINAL SAVED RECOMMENDATIONS ==========")
+        print(recs_text)
+        print("=================================================")
         set_recs_by_lang(result_obj, lang, recs_text, "ready")
 
     except Exception as e:

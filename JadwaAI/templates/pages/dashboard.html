@@ -533,6 +533,46 @@ html[dir="rtl"] .project-meta{
 html[dir="rtl"] .project-empty{
   text-align: right;
 }
+.top-actions-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+  padding-right:10px;
+}
+
+.top-actions-row .top-action-btn{
+  width:180px;
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  margin-right:0;
+  box-sizing:border-box;
+}
+
+.profile-header-row .btn-outline{
+  width:180px;
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  box-sizing:border-box;
+}
+
+.same-btn{
+  width:180px;
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  padding:10px 16px;
+  border-radius:999px;
+  text-align:center;
+  box-sizing:border-box;
+}
+.top-actions-row{
+  padding-right:300px;
+}
 </style>
 
 {% if messages %}
@@ -593,12 +633,25 @@ html[dir="rtl"] .project-empty{
       -->
     </div>
 
-  <a href="{% url 'project_new' %}"
+  <!-- <a href="{% url 'project_new' %}"
    class="btn"
    style="padding:10px 16px; font-size:14px; border-radius:999px; min-width:180px; text-align:center;">
       {% trans "Add Project" %}
-    </a>
+    </a> -->
+
+    <!-- <a href="{% url 'project_new' %}"
+   class="btn top-action-btn"
+   style="padding:10px 16px; font-size:14px; border-radius:999px; text-align:center;">
+  {% trans "Add Project" %}
+</a> -->
+
+<a href="{% url 'project_new' %}"
+   class="btn btn-primary same-btn"
+   style="margin-right:10px;">
+  {% trans "Add Project" %}
+</a>
   </div>
+  
 
   <div style="background:#fff; border:1px solid rgba(15,23,42,.10); border-radius:16px; padding:16px 18px; margin-bottom:14px;">
 <div class="profile-header-row" style="display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; align-items:center;">
@@ -642,11 +695,16 @@ html[dir="rtl"] .project-empty{
         </div>
       </div>
 
-      <a href="{% url 'edit_profile' %}"
+      <!-- <a href="{% url 'edit_profile' %}"
          class="btn btn-outline"
          style="padding:10px 16px; font-size:14px; border-radius:999px; min-width:180px; text-align:center;">
         {% trans "Edit Profile" %}
-      </a>
+      </a> -->
+
+      <a href="{% url 'edit_profile' %}"
+   class="btn btn-outline same-btn">
+  {% trans "Edit Profile" %}
+</a>
 
     </div>
   </div>
