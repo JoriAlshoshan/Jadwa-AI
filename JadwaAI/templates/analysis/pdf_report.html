@@ -4,7 +4,7 @@
       dir="{% if request.LANGUAGE_CODE|slice:":2" == 'ar' %}rtl{% else %}ltr{% endif %}">
 <head>
   <meta charset="utf-8">
-  <style>
+  <!-- <style>
     body{
       font-family: {% if request.LANGUAGE_CODE|slice:":2" == 'ar' %}"Cairo", sans-serif{% else %}Arial, sans-serif{% endif %};
       direction: {% if request.LANGUAGE_CODE|slice:":2" == 'ar' %}rtl{% else %}ltr{% endif %};
@@ -41,7 +41,68 @@
     }
     .recs.ltr{ direction:ltr; text-align:left; }
     .recs.rtl{ direction:rtl; text-align:right; }
-  </style>
+  </style> -->
+
+  <style>
+  body{
+    font-family: {% if request.LANGUAGE_CODE|slice:":2" == 'ar' %}"Cairo", sans-serif{% else %}Arial, sans-serif{% endif %};
+    direction: {% if request.LANGUAGE_CODE|slice:":2" == 'ar' %}rtl{% else %}ltr{% endif %};
+    margin: 35px; /* كان صغير */
+    color: #111;
+    max-width: 900px;   /* 🔥 يخلي المحتوى ما يكون ضايع */
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  h1{
+    margin:0 0 15px;
+    font-size: 26px; /* تكبير بسيط */
+    text-align: center; /* يخليه مرتب */
+  }
+
+  h2{
+    margin:20px 0 12px;
+    font-size:18px;
+  }
+
+  .box{
+    border:1px solid #ddd;
+    padding:18px; /* تكبير */
+    border-radius:12px;
+    margin-bottom:20px; /* مسافة بين البوكسات */
+  }
+
+  .muted{ color:#555; font-size:14px; }
+
+  .badge{
+    padding:8px 18px;
+    border-radius:999px;
+    font-weight:800;
+    display:inline-block;
+    font-size:15px;
+    margin-inline-start:10px;
+  }
+
+  .badge.ok{ background:#e9f7ef; color:#1e7e34; }
+  .badge.no{ background:#fdecea; color:#b02a37; }
+
+  .recs{
+    white-space: pre-wrap;
+    line-height:1.9;
+    unicode-bidi: plaintext;
+    font-size:15px;
+  }
+
+  .recs.ltr{ direction:ltr; text-align:left; }
+  .recs.rtl{ direction:rtl; text-align:right; }
+
+  /* 🔥 أهم سطرين للـ PDF */
+  @media print {
+    body {
+      zoom: 1.25;   /* يكبر كل شيء */
+    }
+  }
+</style>
 </head>
 
 <body>

@@ -523,11 +523,11 @@ def analysis_pdf(request, result_id):
             try:
                 logo = ImageReader(logo_path)
                 lw, lh = logo.getSize()
-                target_w = 1.5 * cm
+                target_w = 3 * cm
                 scale = target_w / float(lw)
                 target_h = lh * scale
                 x = left
-                y = page_h - margin - target_h + 0.15 * cm
+                y = page_h - margin - target_h + 0.6 * cm
                 p.drawImage(logo, x, y, width=target_w, height=target_h, mask="auto")
             except Exception:
                 pass
@@ -609,13 +609,16 @@ def analysis_pdf(request, result_id):
 
     title = display(_("Analysis Result"))
     p.setFillColor(TEXT)
-    p.setFont(pick_font(title, bold=True), 20)
+    # p.setFont(pick_font(title, bold=True), 20)
+    p.setFont(pick_font(title, bold=True), 18)
     p.drawCentredString(page_w / 2, y, title)
-    y -= 0.55 * cm
+    # y -= 0.55 * cm
+    y -= 0.8 * cm
 
     sub = display(_("AI-powered feasibility insights for your project"))
     p.setFillColor(MUTED)
-    p.setFont(pick_font(sub), 10.5)
+    # p.setFont(pick_font(sub), 10.5)
+    p.setFont(pick_font(sub), 9.5)
     p.drawCentredString(page_w / 2, y, sub)
     y -= 0.85 * cm
 
@@ -630,8 +633,10 @@ def analysis_pdf(request, result_id):
         proj_x = left
         rec_x = left + col_w + gap
 
-    proj_h = 6.95 * cm
-    rec_h = 6.95 * cm
+    # proj_h = 6.95 * cm
+    # rec_h = 6.95 * cm
+    proj_h = 8.2 * cm
+    rec_h = 8.2 * cm
 
     card(proj_x, cards_top_y, col_w, proj_h)
     card(rec_x, cards_top_y, col_w, rec_h)
@@ -640,16 +645,264 @@ def analysis_pdf(request, result_id):
     proj_left = proj_x + proj_pad
     proj_right = proj_x + col_w - proj_pad
 
-    rec_pad = 0.5 * cm
+    # rec_pad = 0.5 * cm
+    rec_pad = 0.38 * cm
     rec_left = rec_x + rec_pad
     rec_right = rec_x + col_w - rec_pad
 
-    line_text(proj_left, proj_right, cards_top_y - 0.72 * cm, _("Project Overview"), size=12.5, color=TEXT, bold=True)
-    line_text(proj_left, proj_right, cards_top_y - 1.35 * cm, f"{_('Project')}: {result.project_name or ''}", size=10.2, color=MUTED)
-    line_text(proj_left, proj_right, cards_top_y - 2.05 * cm, f"{_('Feasibility Probability')}: {feasibility_percent:.2f}%", size=10.4, color=PRIMARY, bold=True)
+    # line_text(proj_left, proj_right, cards_top_y - 0.72 * cm, _("Project Overview"), size=12.5, color=TEXT, bold=True)
+    # # line_text(proj_left, proj_right, cards_top_y - 1.35 * cm, f"{_('Project')}: {result.project_name or ''}", size=10.2, color=MUTED)
+    # # line_text(proj_left, proj_right, cards_top_y - 2.05 * cm, f"{_('Feasibility Probability')}: {feasibility_percent:.2f}%", size=10.4, color=PRIMARY, bold=True)
+    # # line_text(proj_left, proj_right, cards_top_y - 1.35 * cm, f"{_('Project')}: {result.project_name or ''}", size=10.8, color=MUTED)
+    # # project_label = f"{_('Project')}: {result.project_name or ''}"
 
-    current_y = cards_top_y - 2.75 * cm
+    # # project_lines = wrap_lines(
+    # #     project_label,
+    # #     (col_w - 2 * proj_pad) - 0.4 * cm,
+    # #     AR_FONT if has_arabic(project_label) else EN_FONT,
+    # #     10.2
+    # # )
+    
+    # proj_name_y = cards_top_y - 1.35 * cm
 
+    # for line in project_lines[:3]:
+    #     shown_line = display(line)
+    #     p.setFillColor(MUTED)
+    #     p.setFont(pick_font(shown_line), 10.2)
+
+    #     if has_arabic(line):
+    #         p.drawRightString(proj_right, proj_name_y, shown_line)
+    #     else:
+    #         p.drawString(proj_left, proj_name_y, shown_line)
+
+    #     proj_name_y -= 0.42 * cm
+    
+    # # line_text(proj_left, proj_right, cards_top_y - 2.05 * cm, f"{_('Feasibility Probability')}: {feasibility_percent:.2f}%", size=11.6, color=PRIMARY, bold=True)
+    # # current_y = cards_top_y - 2.75 * cm
+    # # project_label = f"{_('Project')}: {result.project_name or ''}"
+    #     line_text(
+    #     proj_left,
+    #     proj_right,
+    #     cards_top_y - 1.35 * cm,
+    #     f"{_('Project')}:",
+    #     size=10.2,
+    #     color=MUTED
+    # )
+
+    # project_name = result.project_name or ""
+    # project_lines = wrap_lines(
+    #     project_name,
+    #     (col_w - 2 * proj_pad) - 0.4 * cm,
+    #     EN_FONT,
+    #     10.2
+    # )
+
+    # proj_name_y = cards_top_y - 1.78 * cm
+
+    # for line in project_lines[:3]:
+    #     p.setFillColor(MUTED)
+    #     p.setFont(EN_FONT, 10.2)
+    #     p.drawString(proj_left, proj_name_y, line)
+    #     proj_name_y -= 0.42 * cm
+    #     project_lines = wrap_lines(
+    #         project_label,
+    #         (col_w - 2 * proj_pad) - 0.4 * cm,
+    #         AR_FONT if has_arabic(project_label) else EN_FONT,
+    #         10.2
+    #     )
+
+    # proj_name_y = cards_top_y - 1.35 * cm
+
+    # for line in project_lines[:3]:
+    #     shown_line = display(line)
+    #     p.setFillColor(MUTED)
+    #     p.setFont(pick_font(shown_line), 10.2)
+
+    #     if has_arabic(line):
+    #         p.drawRightString(proj_right, proj_name_y, shown_line)
+    #     else:
+    #         p.drawString(proj_left, proj_name_y, shown_line)
+
+    #     proj_name_y -= 0.42 * cm
+
+
+    # # ✅ هنا برا اللوب (هذا الصح)
+    # line_text(
+    #     proj_left,
+    #     proj_right,
+    #     proj_name_y - 0.5 * cm,
+    #     f"{_('Feasibility Probability')}: {feasibility_percent:.2f}%",
+    #     size=11.6,
+    #     color=PRIMARY,
+    #     bold=True
+    # )
+
+    # current_y = proj_name_y - 0.85 * cm
+    # line_text(proj_left, proj_right, cards_top_y - 0.72 * cm, _("Project Overview"), size=12.5, color=TEXT, bold=True)
+
+    # # line_text(
+    # #     proj_left,
+    # #     proj_right,
+    # #     cards_top_y - 1.35 * cm,
+    # #     f"{_('Project')}:",
+    # #     size=10.2,
+    # #     color=MUTED
+    # # )
+    #     # label
+    # line_text(
+    #     proj_left,
+    #     proj_right,
+    #     proj_name_y - 0.5 * cm,
+    #     f"{_('Feasibility Probability')}:",
+    #     size=10.5,
+    #     color=MUTED,
+    # )
+
+    # # value
+    # line_text(
+    #     proj_left,
+    #     proj_right,
+    #     proj_name_y - 1.0 * cm,
+    #     f"{feasibility_percent:.2f}%",
+    #     size=12,
+    #     color=PRIMARY,
+    #     bold=True
+    # )
+
+    # project_name = result.project_name or ""
+    # project_lines = wrap_lines(
+    #     project_name,
+    #     (col_w - 2 * proj_pad) - 0.4 * cm,
+    #     EN_FONT,
+    #     10.2
+    # )
+
+    # proj_name_y = cards_top_y - 1.78 * cm
+
+    # for line in project_lines[:3]:
+    #     p.setFillColor(MUTED)
+    #     p.setFont(EN_FONT, 10.2)
+    #     p.drawString(proj_left, proj_name_y, line)
+    #     proj_name_y -= 0.42 * cm
+
+    # line_text(
+    #     proj_left,
+    #     proj_right,
+    #     proj_name_y - 0.5 * cm,
+    #     f"{_('Feasibility Probability')}: {feasibility_percent:.2f}%",
+    #     size=11.6,
+    #     color=PRIMARY,
+    #     bold=True
+    # )
+    # عنوان
+    line_text(proj_left, proj_right, cards_top_y - 0.72 * cm,
+            _("Project Overview"), size=11.5, color=TEXT, bold=True)
+
+    # Project label
+    line_text(
+        proj_left,
+        proj_right,
+        cards_top_y - 1.5 * cm,
+        f"{_('Project')}:",
+        size=9.5,
+        color=MUTED
+    )
+
+    # اسم المشروع
+    project_name = result.project_name or ""
+
+    project_lines = wrap_lines(
+        project_name,
+        (col_w - 2 * proj_pad) - 0.4 * cm,
+        EN_FONT,
+        9.5
+    )
+
+    proj_name_y = cards_top_y - 1.95 * cm
+
+    for line in project_lines[:3]:
+        p.setFillColor(TEXT)
+        p.setFont(EN_FONT, 9.5)
+        p.drawString(proj_left, proj_name_y, line)
+        proj_name_y -= 0.42 * cm
+
+    # # Feasibility label
+    # line_text(
+    #     proj_left,
+    #     proj_right,
+    #     proj_name_y - 0.6 * cm,
+    #     f"{_('Feasibility Probability')}:",
+    #     size=9.5,
+    #     color=MUTED
+    # )
+
+    # # Feasibility value
+    # line_text(
+    #     proj_left,
+    #     proj_right,
+    #     proj_name_y - 1.1 * cm,
+    #     f"{feasibility_percent:.2f}%",
+    #     size=11,
+    #     color=PRIMARY,
+    #     bold=True
+    # )
+
+        # Feasibility label
+    line_text(
+        proj_left,
+        proj_right,
+        proj_name_y - 0.5 * cm,
+        f"{_('Feasibility Probability')}:",
+        size=9.5,
+        color=MUTED
+    )
+
+    # Feasibility value
+    # line_text(
+    #     proj_left,
+    #     proj_right,
+    #     proj_name_y - 0.95 * cm,
+    #     f"{feasibility_percent:.2f}%",
+    #     size=11,
+    #     color=PRIMARY,
+    #     bold=True
+    # )
+    # value = f"{feasibility_percent:.2f}%"
+
+    # p.setFillColor(PRIMARY)
+    # p.setFont(EN_FONT_BOLD, 11)
+
+    # # نفس محاذاة الرقم اللي داخل البوكس
+    # p.drawString(proj_left + 0.28 * cm, proj_name_y - 0.95 * cm, value)
+    # value = f"{feasibility_percent:.2f}%"
+
+    # p.setFillColor(PRIMARY)
+    # p.setFont(EN_FONT_BOLD, 11)
+
+    # # نفس مكان الرقم داخل البوكس
+    # p.drawRightString(proj_right - 0.28 * cm, proj_name_y - 0.95 * cm, value)
+
+    value = f"{feasibility_percent:.2f}%"
+
+    p.setFillColor(PRIMARY)
+    p.setFont(EN_FONT_BOLD, 11)
+
+    # نفس محاذاة الرقم اللي داخل البوكس في العربي والإنجليزي
+    # p.drawRightString(proj_right - 0.28 * cm, proj_name_y - 0.95 * cm, value)
+    # p.drawString(proj_left + 0.28 * cm, proj_name_y - 0.95 * cm, value)
+    if is_ar_ui:
+        p.drawString(proj_left + 0.28 * cm, proj_name_y - 0.95 * cm, value)
+    else:
+        p.drawRightString(proj_right - 0.28 * cm, proj_name_y - 0.95 * cm, value)
+        # نزّل البوكس اللي تحت أكثر
+    # current_y = proj_name_y - 2.4 * cm
+    # current_y = proj_name_y - 3.2 * cm
+    # # current_y = proj_name_y - 1.7 * cm
+    # current_y = proj_name_y - 2.6 * cm
+    # current_y = proj_name_y - 0.85 * cm
+    current_y = proj_name_y - 1.5 * cm
+    # current_y = proj_name_y - 2.6 * cm
+    proj_name_y -= 0.45 * cm  # بدل 0.42
     if previous_result:
         box_h = 1.95 * cm
         inner_box(proj_left, current_y, col_w - 2 * proj_pad, box_h)
@@ -726,10 +979,21 @@ def analysis_pdf(request, result_id):
     status_label = f"{_('')} "
     line_text(proj_left, proj_right, current_y - 0.82 * cm, status_label, size=10.4, color=TEXT, bold=True)
 
+    # if is_ar_ui:
+    #     badge_x = proj_right - 1.8 * cm
+    # else:
+    #     badge_x = proj_left + text_width(status_label, 10.4, bold=True) + 10
+
+    status_text_display = display(status_text)
+
+    badge_width = text_width(status_text_display, 9.2, bold=True) + 18
+
     if is_ar_ui:
-        badge_x = proj_right - 1.8 * cm
+        # العربي → نحسبه من اليمين وندخله شوي
+        badge_x = proj_right - badge_width - 0.35 * cm
     else:
-        badge_x = proj_left + text_width(status_label, 10.4, bold=True) + 10
+        # الإنجليزي → من اليسار
+        badge_x = proj_left + 0.35 * cm
 
     badge(badge_x, current_y - 0.73 * cm, status_text, STATUS_BG, STATUS_COLOR)
 
@@ -743,19 +1007,29 @@ def analysis_pdf(request, result_id):
     text_left = rec_left + 0.35 * cm
     text_right = rec_right - 0.35 * cm
 
-    first_page_font_size = 9.4
-    first_page_line_gap = 0.38 * cm
+    # first_page_font_size = 9.4
+    # first_page_line_gap = 0.38 * cm
 
+    first_page_font_size = 10.6
+    first_page_line_gap = 0.46 * cm
     if recs_is_ar:
         all_lines = wrap_lines(recs, text_w, AR_FONT, first_page_font_size)
     else:
         all_lines = wrap_lines(recs, text_w, EN_FONT, first_page_font_size)
 
-    yy = text_box_top - 0.46 * cm
-    bottom_limit = (text_box_top - text_box_h) + 0.75 * cm
+    # yy = text_box_top - 0.46 * cm
+    # bottom_limit = (text_box_top - text_box_h) + 0.75 * cm
+
+    # idx = 0
+    # while idx < len(all_lines) and yy >= bottom_limit:
+    yy = text_box_top - 0.55 * cm
+    bottom_limit = (text_box_top - text_box_h) + 2.2 * cm
 
     idx = 0
-    while idx < len(all_lines) and yy >= bottom_limit:
+    max_first_page_lines = 8
+    lines_drawn = 0
+
+    while idx < len(all_lines) and yy >= bottom_limit and lines_drawn < max_first_page_lines:
         ln = all_lines[idx]
         if ln == "":
             yy -= first_page_line_gap
@@ -774,6 +1048,7 @@ def analysis_pdf(request, result_id):
 
         yy -= first_page_line_gap
         idx += 1
+        lines_drawn += 1
 
     if idx < len(all_lines):
         more_text = display(_("Continued on next page..."))
