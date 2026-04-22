@@ -153,13 +153,41 @@ def build_project_data(project: Projects) -> dict:
 
     months = int(getattr(project, "project_duration", 0) or 0)
 
+    # return {
+    #     "type_project": getattr(project, "Project_type", "Service"),
+    #     "region_project": location_for_ml,
+    #     "budget_project": float(getattr(project, "project_budget", 0) or 0),
+    #     "project_duration_days": months * 30,  # ✅ هنا التعديل
+    #     "num_saudi_employees": int(getattr(project, "number_of_employees", 0) or 0),
+    # }
+    econ_map = {
+    "Low": 1,
+    "Medium": 2,
+    "High": 3
+}
+
+    econ_value = getattr(project, "economic_indicator", 2)
+    print("project_name:", project.project_name)
+    print("type:", project.Project_type)
+    print("region:", project.project_region)
+    print("city:", project.project_city)
+    print("budget:", project.project_budget)
+    print("duration:", project.project_duration)
+    print("employees:", project.number_of_employees)
+    print("description:", project.description)
     return {
         "type_project": getattr(project, "Project_type", "Service"),
         "region_project": location_for_ml,
         "budget_project": float(getattr(project, "project_budget", 0) or 0),
-        "project_duration_days": months * 30,  # ✅ هنا التعديل
+        "project_duration_days": months * 30,
         "num_saudi_employees": int(getattr(project, "number_of_employees", 0) or 0),
-    }
+
+        "description": (getattr(project, "description", "") or "").strip(),
+        # "num_enterprises": int(getattr(project, "num_enterprises", 0) or 0),
+        "num_of_similar_enterprises": int(getattr(project, "num_of_similar_enterprises", 0) or 0),
+        # ✅ هنا الحل
+        "economic_indicator": econ_map.get(econ_value, 2),
+    }   
 
 @login_required
 def run_analysis(request, project_id):
@@ -250,6 +278,7 @@ def analysis_result(request, result_id):
 
 @login_required
 def generate_recs(request, result_id):
+    print("🔥 دخلنا generate_recs")
     from ai.services.analyzer import analyze_project
     from django.utils.translation import get_language_from_request
 
