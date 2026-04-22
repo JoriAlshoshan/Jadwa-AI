@@ -43,6 +43,8 @@ Additional Constraints When Description is Missing:
   (project, solution, service, operational model).
 - Ensure all recommendations remain flexible and applicable to multiple business types.
 
+If the project name clearly indicates a specific business type (e.g., coffee shop, restaurant, delivery service), you may use it as context even if the description is missing. However, do not assume additional details beyond what is implied by the name.
+
 STRICT INSTRUCTIONS:
 
 * Tailor ALL recommendations specifically to this project. Avoid generic advice.
