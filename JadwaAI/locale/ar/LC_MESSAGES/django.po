@@ -1681,3 +1681,6 @@ msgid "Please write a more detailed description (at least 20 characters)."
 msgstr "يرجى كتابة وصف أكثر تفصيلاً (20 حرفًا على الأقل)."
 msgid "Describe your project idea, target customers, competitors, and what makes it unique."
 msgstr "اشرح فكرة مشروعك، والفئة المستهدفة، والمنافسين، وما الذي يميز مشروعك."
+
+msgid "Market size (dataset)"
+msgstr "حجم السوق (من قاعدة البيانات)"

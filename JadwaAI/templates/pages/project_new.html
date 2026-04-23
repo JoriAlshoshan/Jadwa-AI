@@ -536,12 +536,18 @@ document.getElementById("projectForm")?.addEventListener("change", function(e){
      Region -> Filter Cities + Other toggle
 ========================== -->
 <script>
+// (function () {
+//   const regionSelect = document.getElementById("id_project_region");
+//   const citySelect   = document.getElementById("id_project_city");
+//   const otherRow     = document.getElementById("row_location_other");
+//   if (!regionSelect || !citySelect) return;
 (function () {
   const regionSelect = document.getElementById("id_project_region");
   const citySelect   = document.getElementById("id_project_city");
   const otherRow     = document.getElementById("row_location_other");
   if (!regionSelect || !citySelect) return;
 
+  const initialCityValue = citySelect.value;
   const allCityOptions = Array.from(citySelect.options).map(opt => ({
     value: opt.value,
     label: opt.text
@@ -561,28 +567,57 @@ document.getElementById("projectForm")?.addEventListener("change", function(e){
     REGION_TO_CITIES_NORM[norm(k)] = window.REGION_TO_CITIES[k];
   });
 
+  // function updateCities(resetCity = true) {
+  //   const regionKey = norm(regionSelect.value);
+  //   const allowed = REGION_TO_CITIES_NORM[regionKey] || [];
+
+  //   citySelect.innerHTML = "";
+
+  //   const source = allCityOptions.length
+  //     ? allCityOptions
+  //     : [{value:"", label:"----"}, {value:"other", label: TXT_OTHER}];
+
+  //   source.forEach(opt => {
+  //     const v = opt.value;
+  //     if (v === "" || !allowed.length || allowed.includes(v)) {
+  //       const o = document.createElement("option");
+  //       o.value = opt.value;
+  //       o.textContent = opt.label;
+  //       citySelect.appendChild(o);
+  //     }
+  //   });
+
+  //   if (resetCity) citySelect.value = "";
+  // }
+
   function updateCities(resetCity = true) {
-    const regionKey = norm(regionSelect.value);
-    const allowed = REGION_TO_CITIES_NORM[regionKey] || [];
+  const regionKey = norm(regionSelect.value);
+  const allowed = REGION_TO_CITIES_NORM[regionKey] || [];
+  const selectedCity = resetCity ? "" : initialCityValue;
 
-    citySelect.innerHTML = "";
+  citySelect.innerHTML = "";
 
-    const source = allCityOptions.length
-      ? allCityOptions
-      : [{value:"", label:"----"}, {value:"other", label: TXT_OTHER}];
+  const source = allCityOptions.length
+    ? allCityOptions
+    : [{value:"", label:"----"}, {value:"other", label: TXT_OTHER}];
 
-    source.forEach(opt => {
-      const v = opt.value;
-      if (v === "" || !allowed.length || allowed.includes(v)) {
-        const o = document.createElement("option");
-        o.value = opt.value;
-        o.textContent = opt.label;
-        citySelect.appendChild(o);
+  source.forEach(opt => {
+    const v = opt.value;
+    if (v === "" || !allowed.length || allowed.includes(v)) {
+      const o = document.createElement("option");
+      o.value = opt.value;
+      o.textContent = opt.label;
+
+      if (!resetCity && opt.value === selectedCity) {
+        o.selected = true;
       }
-    });
 
-    if (resetCity) citySelect.value = "";
-  }
+      citySelect.appendChild(o);
+    }
+  });
+
+  if (resetCity) citySelect.value = "";
+}
 
   function toggleOther() {
   const show = norm(regionSelect.value) === "other" || norm(citySelect.value) === "other";
