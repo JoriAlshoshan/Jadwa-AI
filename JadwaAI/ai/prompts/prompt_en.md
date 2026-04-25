@@ -18,7 +18,7 @@ Region: {region_project}
 Budget (SAR): {budget_project}
 Project duration (months): {project_duration_months}
 Number of Saudi employees: {num_saudi_employees}
-Similar enterprises (dataset): {num_enterprises}
+Market activity indicator (dataset): {num_enterprises}
 Economic indicator: {economic_indicator}
 
 Prediction Result:
@@ -55,6 +55,8 @@ In this case:
   
 STRICT INSTRUCTIONS:
 
+* Interpret the market activity indicator as a signal of overall market dynamics, not exact competition or demand.
+
 * Tailor ALL recommendations specifically to this project. Avoid generic advice.
 
 * Use the project description as the main source to understand the business idea.
@@ -81,11 +83,11 @@ STRICT INSTRUCTIONS:
 
 * Use number of employees to suggest realistic operational planning.
 
-* If similar enterprises (dataset) = 0 AND the project is NOT real estate, highlight this as a risk and suggest defining a clear target market.
+* If market activity indicator (dataset) = 0 AND the project is NOT real estate, highlight this as a risk and suggest defining a clear target market.
 
 * Make recommendations actionable, realistic, and specific.
 
-* When possible, structure recommendations across phases (e.g., first 3 months, next 6 months).
+* When structuring phases, use clear and non-repetitive time ranges (e.g., months 1–2, 3–4, 5–6).
 
 * Use professional business terminology (e.g., rental, sales, ROI) and avoid incorrect or literal translations.
 

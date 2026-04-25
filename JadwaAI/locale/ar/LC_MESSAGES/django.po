@@ -1682,5 +1682,7 @@ msgstr "يرجى كتابة وصف أكثر تفصيلاً (20 حرفًا على
 msgid "Describe your project idea, target customers, competitors, and what makes it unique."
 msgstr "اشرح فكرة مشروعك، والفئة المستهدفة، والمنافسين، وما الذي يميز مشروعك."
 
-msgid "Market size (dataset)"
-msgstr "حجم السوق (من قاعدة البيانات)"
+
+
+msgid "Market activity indicator (dataset)"
+msgstr "مؤشر نشاط السوق (من قاعدة البيانات)"
