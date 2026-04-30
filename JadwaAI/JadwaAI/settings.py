@@ -28,6 +28,18 @@ CSRF_TRUSTED_ORIGINS = [
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
 
+# INSTALLED_APPS = [
+#     'django.contrib.admin',
+#     'django.contrib.auth',
+#     'django.contrib.contenttypes',
+#     'django.contrib.sessions',
+#     'django.contrib.messages',
+#     'django.contrib.staticfiles',
+#     'django.contrib.sitemaps',
+#     'JADWA_AI',
+#     'analysis',
+#     'django.contrib.sites',
+# ]
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -36,9 +48,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
+    'django.contrib.sites',
+
+    'storages',
+
     'JADWA_AI',
     'analysis',
-    'django.contrib.sites',
 ]
 
 MIDDLEWARE = [
@@ -147,9 +162,33 @@ AUTHENTICATION_BACKENDS = [
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+# MEDIA_URL = "/media/"
+# MEDIA_ROOT = BASE_DIR / "media"
 
+
+AZURE_ACCOUNT_NAME = os.environ.get("AZURE_ACCOUNT_NAME")
+AZURE_CONNECTION_STRING = os.environ.get("AZURE_CONNECTION_STRING")
+AZURE_CONTAINER = os.environ.get("AZURE_CONTAINER", "media")
+
+if AZURE_CONNECTION_STRING:
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.azure_storage.AzureStorage",
+            "OPTIONS": {
+                "connection_string": AZURE_CONNECTION_STRING,
+                "azure_container": AZURE_CONTAINER,
+            },
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
+
+    MEDIA_URL = f"https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/{AZURE_CONTAINER}/"
+else:
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = BASE_DIR / "media"
+    
 SITE_ID = 1
 
 if not DEBUG:
