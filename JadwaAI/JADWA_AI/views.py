@@ -176,10 +176,14 @@ def edit_profile(request):
     else:
         form = EditProfileForm(instance=user)
 
+    # profile_image_url = None
+    # if getattr(user, "profile_image", None) and user.profile_image.name:
+    #     if default_storage.exists(user.profile_image.name):
+    #         profile_image_url = user.profile_image.url
     profile_image_url = None
+
     if getattr(user, "profile_image", None) and user.profile_image.name:
-        if default_storage.exists(user.profile_image.name):
-            profile_image_url = user.profile_image.url
+     profile_image_url = user.profile_image.url
 
     return render(request, "pages/edit_profile.html", {
         "form": form,
