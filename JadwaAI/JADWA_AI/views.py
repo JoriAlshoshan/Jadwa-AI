@@ -594,10 +594,14 @@ def user_dashboard(request):
     if city_label in bad_vals:
         city_label = ""
 
+    # profile_image_url = None
+    # if getattr(u, "profile_image", None) and u.profile_image.name:
+    #     if default_storage.exists(u.profile_image.name):
+    #         profile_image_url = u.profile_image.url
     profile_image_url = None
+
     if getattr(u, "profile_image", None) and u.profile_image.name:
-        if default_storage.exists(u.profile_image.name):
-            profile_image_url = u.profile_image.url
+        profile_image_url = u.profile_image.url
 
     projects_count = qs.count()
     analyses_qs = AnalysisResult.objects.filter(user=request.user)
