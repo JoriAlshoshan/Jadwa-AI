@@ -498,9 +498,13 @@ def analysis_pdf(request, result_id):
     STATUS_COLOR = SUCCESS if is_feasible else DANGER
     STATUS_BG = SUCCESS_BG if is_feasible else DANGER_BG
 
+    # AR_FONT = "ArabicFont"
+    # EN_FONT = "Helvetica"
+    # EN_FONT_BOLD = "Helvetica-Bold"
+
     AR_FONT = "ArabicFont"
-    EN_FONT = "Helvetica"
-    EN_FONT_BOLD = "Helvetica-Bold"
+    EN_FONT = "ArabicFont"
+    EN_FONT_BOLD = "ArabicFont"
 
     def static_path(rel_path: str) -> str:
         pth2 = os.path.join(settings.BASE_DIR, "static", rel_path)
