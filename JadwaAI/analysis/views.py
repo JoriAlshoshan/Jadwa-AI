@@ -39,6 +39,28 @@ _BIDI_CTRL_RE = re.compile(r"[\u200E\u200F\u202A-\u202E\u2066-\u2069\uFEFF]")
 def strip_bidi_controls(text: str) -> str:
     return _BIDI_CTRL_RE.sub("", text or "")
 
+def clean_pdf_text(text: str) -> str:  ####
+    text = text or ""
+    replacements = {
+        "–": "-",
+        "—": "-",
+        "−": "-",
+        "’": "'",
+        "‘": "'",
+        "“": '"',
+        "”": '"',
+        "•": "-",
+        "…": "...",
+        "\u00A0": " ",
+        "\u200B": "",
+        "\u200C": "",
+        "\u200D": "",
+    }
+
+    for old, new in replacements.items():
+        text = text.replace(old, new)
+
+    return text
 
 def has_arabic(text: str) -> bool:
     return bool(ARABIC_RE.search(text or ""))
@@ -423,6 +445,7 @@ def analysis_pdf(request, result_id):
     is_ar_ui = str(lang).startswith("ar")
     status_text = feasibility_label_by_lang(result, lang)
     recs = get_recs_by_lang(result, lang) or _("No recommendations generated yet.")
+    recs = clean_pdf_text(recs) ####
     recs = strip_bidi_controls(recs)
     recs_is_ar = has_arabic(recs)
 
