@@ -99,14 +99,15 @@ Cloud deployment ensures reliability, real-world applicability, and future scala
 ---
 
 ## Technologies Used
-
-- Python
-- Scikit-learn
-- Django
-- OpenAI API
-- HTML / CSS / JavaScript
-- Microsoft Azure
-- Git / GitHub
+- Backend: Python, Django
+- Machine Learning: Scikit-learn (Random Forest)
+- AI Integration: OpenAI API
+- Frontend: HTML, CSS, JavaScript
+- Cloud & Deployment: Microsoft Azure (App Service, Blob Storage)
+- Version Control: Git, GitHub
+- Email Services: Zoho Mail (SMTP)
+- Domain & DNS: GoDaddy
+- SEO & Analytics: Google Search Console
 
 ---
 
