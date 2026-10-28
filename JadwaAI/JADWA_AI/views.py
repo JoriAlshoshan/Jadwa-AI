@@ -422,7 +422,7 @@ def reset_password(request):
         "content": SiteContent.objects.get_or_create(id=1)[0],
     })
 
-# Project Create
+# Project Creation
 @login_required
 def project_new(request):
     if request.method == "POST":
