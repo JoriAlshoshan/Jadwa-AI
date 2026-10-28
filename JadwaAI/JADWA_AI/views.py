@@ -422,9 +422,7 @@ def reset_password(request):
         "content": SiteContent.objects.get_or_create(id=1)[0],
     })
 
-# =======================
-# Project Create (After Login)
-# =======================
+# Project Create
 @login_required
 def project_new(request):
     if request.method == "POST":
@@ -432,8 +430,8 @@ def project_new(request):
         if form.is_valid():
             project = form.save(commit=False)
             project.user = request.user
-
-            # ✅ خذي القيم من الفورم (عشان project_type مو موجود بالموديل)
+            
+            # Extract the project sector and region from the validated form data.
             sector = form.cleaned_data.get("Project_type") or form.cleaned_data.get("project_type")
             region_loc = form.cleaned_data.get("project_region")
 
