@@ -428,6 +428,7 @@ def project_new(request):
     if request.method == "POST":
         form = ProjectInformationForm(request.POST)
         if form.is_valid():
+            # Prepare the project without saving it to the database yet.
             project = form.save(commit=False)
             project.user = request.user
             
@@ -435,8 +436,10 @@ def project_new(request):
             sector = form.cleaned_data.get("Project_type") or form.cleaned_data.get("project_type")
             region_loc = form.cleaned_data.get("project_region")
 
+            # Estimate the number of similar enterprises using the dataset.
             project.num_of_similar_enterprises = get_similar_enterprises(sector, region_loc)
 
+            # Save the project and redirect to the analysis page.
             project.save()
             return redirect("run_analysis", project_id=project.pk)
 
