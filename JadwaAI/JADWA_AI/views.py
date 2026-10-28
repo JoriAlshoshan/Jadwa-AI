@@ -439,7 +439,7 @@ def project_new(request):
             # Estimate the number of similar enterprises using the dataset.
             project.num_of_similar_enterprises = get_similar_enterprises(sector, region_loc)
 
-            # Save the project and redirect to the analysis page.
+            # Save the project and redirect to the analysis route.
             project.save()
             return redirect("run_analysis", project_id=project.pk)
 
