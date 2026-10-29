@@ -4,6 +4,7 @@ from ai.services.recommendations import build_prompt
 from ai.services.generative_ai import generate_recommendations
 
 def analyze_project(project_dict: dict, include_recommendations: bool = True, lang: str = "en") -> dict:
+    # Get ML prediction
     ml_result = predict_project(project_dict)
 
     raw_label = ml_result.get("label")
@@ -13,14 +14,16 @@ def analyze_project(project_dict: dict, include_recommendations: bool = True, la
         label_text = "قابل للتنفيذ" if is_feasible else "غير قابل للتنفيذ"
     else:
         label_text = "Feasible" if is_feasible else "Not Feasible"
-
+   
+    # Prepare the result
     output = {
         "probability": ml_result.get("probability", 0.0),
         "threshold": ml_result.get("threshold", 0.5),
         "label": label_text,
         "recommendations": "",
     }
-
+    
+    # Generate AI recommendations if requested
     if include_recommendations:
         prompt = build_prompt(project_dict, ml_result, lang=lang)
         output["recommendations"] = generate_recommendations(prompt)
