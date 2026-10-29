@@ -1,5 +1,4 @@
 # ai/services/recommendations.py
-
 from pathlib import Path
 
 PROMPT_AR = Path(__file__).resolve().parents[1] / "prompts" / "prompt_ar.md"
