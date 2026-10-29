@@ -6,6 +6,7 @@ from openai import OpenAI
 load_dotenv()
 
 def generate_recommendations(prompt: str, timeout: int | None = None) -> str:
+    # Load API key from environment variables
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         return "OPENAI_API_KEY is missing."
@@ -14,7 +15,8 @@ def generate_recommendations(prompt: str, timeout: int | None = None) -> str:
 
     if timeout is None:
         timeout = int(os.getenv("OPENAI_TIMEOUT", "60"))
-
+  
+    # Call OpenAI API to generate recommendations
     last_err = None
     for attempt in range(2):  
         try:
@@ -24,7 +26,8 @@ def generate_recommendations(prompt: str, timeout: int | None = None) -> str:
                 timeout=timeout,
             )
             return (resp.output_text or "").strip()
-
+  
+        # Retry once if the API request fails
         except Exception as e:
             last_err = e
             if attempt == 0:
