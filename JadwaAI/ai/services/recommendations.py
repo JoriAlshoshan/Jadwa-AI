@@ -30,7 +30,6 @@ def build_prompt(project_dict: dict, ml_result: dict, lang: str = "en") -> str:
         "label": ml_result.get("label", 0),
     }
 
-
     # Fill the template with actual values
     try:
         final_prompt = template.format(**safe_data)
