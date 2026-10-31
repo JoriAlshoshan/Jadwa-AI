@@ -14,15 +14,6 @@ FEATURES_PATH = os.path.join(AI_DIR, "models", "feature_columns.pkl")
 model = joblib.load(MODEL_PATH)
 feature_columns = joblib.load(FEATURES_PATH)
 
-
-# def dynamic_threshold(budget):
-#     if budget < 100000:
-#         return 0.90   # Micro-scale (high risk)
-#     elif budget < 500000:
-#         return 0.85   # Small-scale (still risky)
-#     else:
-#         return 0.60   # Medium & Large-scale
-
 def dynamic_threshold(budget):
     if budget < 100000:
         return 0.75   # Small projects
@@ -31,34 +22,6 @@ def dynamic_threshold(budget):
     else:
         return 0.70   # Large projects
 
-
-# def predict_project(project_dict):
-#     # Convert input to DataFrame
-#     x = pd.DataFrame([project_dict])
-
-#     # Ensure all required columns exist
-#     for col in feature_columns:
-#         if col not in x.columns:
-#             x[col] = np.nan
-
-#     # Reorder columns
-#     x = x[feature_columns]
-#     x = x.fillna(0)
-#     # Predict probability
-#     probability = float(model.predict_proba(x)[0][1])
-
-#     # Threshold
-#     budget = float(project_dict.get("budget_project", 0))
-#     threshold = dynamic_threshold(budget)
-
-#     # Final label
-#     label = int(probability >= threshold)
-
-#     return {
-#         "probability": probability,
-#         "threshold": threshold,
-#         "label": label
-#     }
 
 def predict_project(project_dict):
     x = pd.DataFrame([project_dict])
